@@ -19,6 +19,6 @@ public class MoveAction implements Action {
     }
     @Override
     public String getDescription() {
-        return "MOVE to " + destinationRoom;
+        return "Moved to " + destinationRoom;
     }
 }

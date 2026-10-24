@@ -1,8 +1,8 @@
 package ca.ACOII.lockstep.engine;
 
-public record Event(int stepNum, String description) {
+public record Event(int stepNum, String description, String actorId) {
     @Override
     public String toString() {
-        return "[Step " + stepNum + "] " + description;
+        return "[Step " + stepNum + "] " + actorId + ": " + description;
     }
 }

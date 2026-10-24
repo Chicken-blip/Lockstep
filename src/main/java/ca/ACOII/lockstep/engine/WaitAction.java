@@ -12,6 +12,6 @@ public class WaitAction implements Action {
 
     @Override
     public String getDescription() {
-        return "WAIT";
+        return "Waiting...";
     }
 }

@@ -7,21 +7,43 @@ import ca.ACOII.lockstep.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {//verifyLoading(x);
+
+public class Main {
     public static void main(String[] args) {
 
         Definitions x = new Definitions();
 
-
         EventLog log = new EventLog();
+
+        ArrayList<CrewMemberState> crew = new ArrayList<>();
+        crew.add(new CrewMemberState(x.crew.getFirst()));
+        crew.getLast().setId("Thief A");
+        crew.getLast().setCurrentRoom("OUTSIDE");
+        crew.add(new CrewMemberState(x.crew.getFirst()));
+        crew.getLast().setId("Thief B");
+        crew.getLast().setCurrentRoom("OUTSIDE");
+
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1));
         actions.add(new WaitAction(2));
         actions.add(new MoveAction("VAULT", 1));
-        ActionQueue queue = new ActionQueue(actions);
-        HeistRunner run = new HeistRunner(new ArrayList<>(List.of(x.crew.getFirst())), queue, "OUTSIDE");
+        actions.add(new WaitAction(1));
+        ActionQueue queue1 = new ActionQueue(actions);
+
+        actions = new ArrayList<>();
+        actions.add(new WaitAction(1));
+        actions.add(new MoveAction("LOBBY", 1));
+        actions.add(new MoveAction("VAULT", 1));
+        actions.add(new WaitAction(2));
+        ActionQueue queue2 = new ActionQueue(actions);
+
+        List<ActionQueue> queues = new ArrayList<>();
+        queues.add(queue1);
+        queues.add(queue2);
+
+        Target target = x.targets.getLast();
+
+        HeistRunner run = new HeistRunner(crew, queues, target);
         run.run();
 
     }
