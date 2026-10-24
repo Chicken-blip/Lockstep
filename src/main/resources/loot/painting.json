@@ -1,0 +1,8 @@
+{
+  "id": "painting",
+  "name": "Painting",
+  "grabCost": 1,
+  "pieceValue": 25,
+  "set": null,
+  "isMainScore": false
+}

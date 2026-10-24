@@ -1,0 +1,7 @@
+{
+  "id": "thief",
+  "name": "The Thief",
+  "skills": {"pick": 2, "crack": 1},
+  "recruitFee": 0,
+  "dayAvailability": 0
+}

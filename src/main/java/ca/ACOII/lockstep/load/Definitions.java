@@ -1,0 +1,32 @@
+package ca.ACOII.lockstep.load;
+
+import ca.ACOII.lockstep.model.*;
+
+import java.util.List;
+import java.util.Objects;
+
+public class Definitions {
+    public final SetList sets;
+    public final SkillList skills;
+    public final GearList gear;
+    public final List<LootItem> lootItems;
+    public final List<CrewMember> crew;
+    public final List<Target> targets;
+
+    public Definitions() {
+        sets = new SetLoader().load();
+        skills = new SkillLoader().load();
+        gear = new GearLoader(skills).load();
+        lootItems = new LootLoader(sets).loadAll();
+        crew = new CrewLoader(skills).loadAll();
+        targets = new TargetLoader().loadAll();
+    }
+    public LootItem findLoot(String key) {
+        for (LootItem i : lootItems) {
+            if (Objects.equals(i.getId(), key)) {
+                return i;
+            }
+        }
+        return null;
+    }
+}

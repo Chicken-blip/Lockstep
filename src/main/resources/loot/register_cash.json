@@ -1,0 +1,8 @@
+{
+  "id": "register_cash",
+  "name": "Register Cash",
+  "grabCost": 1,
+  "pieceValue": 15,
+  "set": null,
+  "isMainScore": false
+}

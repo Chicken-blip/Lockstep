@@ -1,0 +1,34 @@
+{
+  "id": "corner_gallery",
+  "name": "Corner Gallery",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 3,
+  "availableFrom": 0,
+  "availabilityDuration": 0,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "OUTSIDE", "roomLoot": {}, "roomContainers": []},
+    {"id": "LOBBY", "roomLoot": {"register_cash": 1.0}, "roomContainers": []},
+    {"id": "OFFICE", "roomLoot": {"candelabra_a": 1.0}, "roomContainers": []},
+    {"id": "VAULT", "roomLoot": {"candelabra_b": 1.0}, "roomContainers": [
+      {"type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "OFFICE", "moveCost": 1, "lock": null},
+    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 2}},
+    {"id": "d4", "roomOrigin": "OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": null}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "OFFICE", "duration": 3},
+        {"room": "LOBBY", "duration": 2},
+        {"room": "OFFICE", "duration": 1}
+      ]
+    }
+  ]
+}

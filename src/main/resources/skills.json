@@ -1,0 +1,6 @@
+{
+  "skills": [
+    {"id": "pick", "name": "Lock picking"},
+    {"id": "crack", "name": "Safe Cracking"}
+  ]
+}

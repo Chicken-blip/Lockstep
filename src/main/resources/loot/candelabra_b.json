@@ -1,0 +1,8 @@
+{
+  "id": "candelabra_b",
+  "name": "Candelabra B",
+  "grabCost": 1,
+  "pieceValue": 10,
+  "set": "candelabra",
+  "isMainScore": false
+}
