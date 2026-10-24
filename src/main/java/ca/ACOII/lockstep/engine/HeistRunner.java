@@ -1,8 +1,8 @@
 package ca.ACOII.lockstep.engine;
 
-import ca.ACOII.lockstep.model.CrewMember;
 import ca.ACOII.lockstep.model.Patrol;
 import ca.ACOII.lockstep.model.Target;
+import ca.ACOII.lockstep.model.LootItem;
 
 import java.util.*;
 
@@ -11,7 +11,9 @@ public class HeistRunner {
     int currentStep, alarmTimer;
     Map<CrewMemberState, ActionQueue> crewQueues;
     public List<Guard> guards;
+    Set<String> unlockedDoors, openContainers;
     Target t;
+    boolean isCompleted = false;
 
     public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t) {
         currentStep = 1;
@@ -28,19 +30,41 @@ public class HeistRunner {
         }
         this.t = t;
         alarmTimer = -1;
+        unlockedDoors = new HashSet<>();
+        openContainers = new HashSet<>();
     }
-
     public void run() {
         boolean running = true;
         while (running) {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     Action a = crewQueues.get(c).tick();
-                    EventType e;
+                    EventType e = null;
 
                     if (a instanceof MoveAction move) {
                         c.setCurrentRoom(move.getDestinationRoom());
                         e = EventType.MOVE;
+                    } else if (a instanceof PickLockAction pick) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            unlockedDoors.add(pick.doorId);
+                            e = EventType.PICK_LOCK;
+                        } else {
+                            a = null;
+                        }
+                    } else if (a instanceof GrabAction grab) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            c.addToInventory(grab.item);
+                            e = EventType.GRAB;
+                        } else {
+                            a = null;
+                        }
+                    } else if (a instanceof CrackAction crack) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            openContainers.add(crack.containerId);
+                            e = EventType.CRACK;
+                        } else {
+                            a = null;
+                        }
                     } else {
                         e = EventType.WAIT;
                     }
@@ -56,21 +80,39 @@ public class HeistRunner {
             }
             for (Guard g : guards) {
                 g.tick();
+
+                //Print guard location each step
+                //System.out.println("[Step " + currentStep + "] Guard " + g.getId() + " in room " + g.getCurrentRoom());
             }
             securityCheck();
+
+            for (CrewMemberState c : crewQueues.keySet()) {
+                if (c.status == CrewMemberState.Status.ESCAPED) {
+                    for (LootItem i : c.inventory) {
+                        if (i.isMainScore()) {
+                            isCompleted = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
             running = false;
+            if (isCompleted) {
+                log.print();
+                return;
+            }
             for (CrewMemberState c : crewQueues.keySet()) {
                 //Check if any members are still active
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     running = true;
+                    break;
                 }
             }
             currentStep++;
         }
         log.print();
     }
-
-
     public void securityCheck() {
         if (alarmTimer > 0) alarmTimer--;
         if (alarmTimer == 0) {
@@ -97,4 +139,5 @@ public class HeistRunner {
             }
         }
     }
+
 }

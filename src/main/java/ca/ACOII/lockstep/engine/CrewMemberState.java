@@ -1,16 +1,23 @@
 package ca.ACOII.lockstep.engine;
 
 import ca.ACOII.lockstep.model.CrewMember;
+import ca.ACOII.lockstep.model.LootItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CrewMemberState {
     CrewMember data;
     String id, currentRoom;
-    enum Status { ACTIVE, ESCAPED, CAUGHT };
+
+    enum Status { ACTIVE, ESCAPED, CAUGHT }
     Status status = Status.ACTIVE;
     boolean spotted = false;
+    List<LootItem> inventory;
 
     public CrewMemberState(CrewMember data) {
         this.data = data;
+        inventory = new ArrayList<>();
     }
 
     public String getCurrentRoom() {
@@ -27,5 +34,8 @@ public class CrewMemberState {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public void addToInventory(LootItem item) {
+        inventory.add(item);
     }
 }

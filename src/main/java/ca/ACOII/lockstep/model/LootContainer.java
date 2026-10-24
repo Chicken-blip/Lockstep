@@ -11,6 +11,7 @@ import java.util.List;
 })
 
 public abstract class LootContainer {
+    private String id;
     private List<String> contents;
 
     public LootContainer() {
@@ -22,6 +23,14 @@ public abstract class LootContainer {
 
     public void setContents(List<String> contents) {
         this.contents = contents;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public abstract void unlock(); //TODO: Add argument

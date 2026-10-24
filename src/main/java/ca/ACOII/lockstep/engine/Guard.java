@@ -8,9 +8,9 @@ public class Guard {
     String currentRoom;
     public Guard(Patrol patrol) {
         patrolData = patrol;
-        currIndex = 0;
-        currentRoom = patrol.getPatrolRoute().getFirst().getRoom();
-        remainingSteps = patrol.getPatrolRoute().getFirst().getDuration();
+        currIndex = -1;
+        currentRoom = null;
+        remainingSteps = 1;
     }
     public void tick() {
         if (remainingSteps == 1) {
