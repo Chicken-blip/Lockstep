@@ -5,6 +5,9 @@ import ca.ACOII.lockstep.model.CrewMember;
 public class CrewMemberState {
     CrewMember data;
     String id, currentRoom;
+    enum Status { ACTIVE, ESCAPED, CAUGHT };
+    Status status = Status.ACTIVE;
+    boolean spotted = false;
 
     public CrewMemberState(CrewMember data) {
         this.data = data;

@@ -18,14 +18,13 @@ public class Main {
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
         crew.getLast().setId("Thief A");
-        crew.getLast().setCurrentRoom("OUTSIDE");
         crew.add(new CrewMemberState(x.crew.getFirst()));
         crew.getLast().setId("Thief B");
-        crew.getLast().setCurrentRoom("OUTSIDE");
 
         List<Action> actions = new ArrayList<>();
-        actions.add(new MoveAction("LOBBY", 1));
-        actions.add(new WaitAction(2));
+        actions.add(new WaitAction(1));
+        actions.add(new MoveAction("OFFICE", 1));
+        actions.add(new WaitAction(1));
         actions.add(new MoveAction("VAULT", 1));
         actions.add(new WaitAction(1));
         ActionQueue queue1 = new ActionQueue(actions);
@@ -34,7 +33,8 @@ public class Main {
         actions.add(new WaitAction(1));
         actions.add(new MoveAction("LOBBY", 1));
         actions.add(new MoveAction("VAULT", 1));
-        actions.add(new WaitAction(2));
+        actions.add(new WaitAction(1));
+        actions.add(new MoveAction("OUTSIDE", 1));
         ActionQueue queue2 = new ActionQueue(actions);
 
         List<ActionQueue> queues = new ArrayList<>();

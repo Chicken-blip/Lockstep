@@ -12,7 +12,6 @@ public class EventLog {
     public void addEvent(Event evt) {
         events.add(evt);
     }
-
     public void print() {
         for (Event e : events) {
             System.out.println(e.toString());
