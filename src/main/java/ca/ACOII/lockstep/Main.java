@@ -1,13 +1,32 @@
 package ca.ACOII.lockstep;
 
+import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
+public class Main {//verifyLoading(x);
     public static void main(String[] args) {
+
         Definitions x = new Definitions();
+
+
+        EventLog log = new EventLog();
+        List<Action> actions = new ArrayList<>();
+        actions.add(new MoveAction("LOBBY", 1));
+        actions.add(new WaitAction(2));
+        actions.add(new MoveAction("VAULT", 1));
+        ActionQueue queue = new ActionQueue(actions);
+        HeistRunner run = new HeistRunner(new ArrayList<>(List.of(x.crew.getFirst())), queue, "OUTSIDE");
+        run.run();
+
+    }
+
+    private static void verifyLoading(Definitions x) {
         for (Skill skill : x.skills.getSkills()) {
             System.out.println(skill.getId() + " | " + skill.getName());
         }
@@ -33,6 +52,5 @@ public class Main {
                 }
             }
         }
-
     }
 }
