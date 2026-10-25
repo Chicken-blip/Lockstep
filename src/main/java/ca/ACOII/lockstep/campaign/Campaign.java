@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.SequencedCollection;
 
 public class Campaign {
-    Calendar calendar;
+    public Calendar calendar;
     Stash stash;
     List<RosterEntry> crew;
 

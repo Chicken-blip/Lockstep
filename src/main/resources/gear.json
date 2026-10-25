@@ -3,7 +3,7 @@
     {
       "id": "fine_lockpicks",
       "name": "Fine Lockpicks",
-      "price": 0,
+      "price": 15,
       "effects": [
         {"skill": "pick", "stepDelta": -1}
       ]

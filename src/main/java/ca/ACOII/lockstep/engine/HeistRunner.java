@@ -16,16 +16,14 @@ public class HeistRunner {
     boolean isCompleted = false;
     Campaign campaign;
 
-    public HeistRunner(List<ActionQueue> queues, Target t, Campaign campaign) {
+    public HeistRunner(Map<RosterEntry, ActionQueue> queues, Target t, Campaign campaign) {
         currentStep = 1;
         crewQueues = new HashMap<>();
-        List<CrewMember> crew = new ArrayList<>();
-        for (int i = campaign.getCrew().size() - 1; i > -1; i--) {
-            RosterEntry e = campaign.getCrew().get(i);
+        for (RosterEntry e : queues.keySet()) {
             CrewMember member = e.getData();
             CrewMemberState state = new CrewMemberState(member, e.getGear());
             state.setCurrentRoom(t.getEntryRoom());
-            crewQueues.put(state, queues.get(i));
+            crewQueues.put(state, queues.get(e));
         }
         log = new EventLog();
         guards = new ArrayList<>();
@@ -107,7 +105,6 @@ public class HeistRunner {
 
             running = false;
             if (isCompleted) {
-                log.print();
                 getStash();
                 return;
             }
@@ -120,7 +117,6 @@ public class HeistRunner {
             }
             currentStep++;
         }
-        log.print();
         getStash();
     }
 
@@ -203,5 +199,9 @@ public class HeistRunner {
 
     public Campaign getCampaign() {
         return campaign;
+    }
+
+    public EventLog getLog() {
+        return log;
     }
 }
