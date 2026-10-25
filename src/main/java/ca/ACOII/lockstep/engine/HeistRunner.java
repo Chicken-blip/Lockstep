@@ -1,6 +1,7 @@
 package ca.ACOII.lockstep.engine;
 
-import ca.ACOII.lockstep.campaign.Stash;
+import ca.ACOII.lockstep.campaign.*;
+import ca.ACOII.lockstep.campaign.Calendar;
 import ca.ACOII.lockstep.model.*;
 
 import java.util.*;
@@ -8,14 +9,14 @@ import java.util.*;
 public class HeistRunner {
     EventLog log;
     int currentStep, alarmTimer;
-    Map<CrewMemberState, ActionQueue> crewQueues;
+    public Map<CrewMemberState, ActionQueue> crewQueues;
     public List<Guard> guards;
     Set<String> unlockedDoors, openContainers;
     Target t;
     boolean isCompleted = false;
-    Stash stash;
+    Campaign campaign;
 
-    public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t, Stash stash) {
+    public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t, Campaign campaign) {
         currentStep = 1;
         crewQueues = new HashMap<>();
         for (int i = crew.size() - 1; i > -1; i--) {
@@ -33,7 +34,7 @@ public class HeistRunner {
         unlockedDoors = new HashSet<>();
         openContainers = new HashSet<>();
 
-        this.stash = stash;
+        this.campaign = campaign;
     }
     public void run() {
         boolean running = true;
@@ -122,7 +123,7 @@ public class HeistRunner {
     private void getStash() {
         for (CrewMemberState c : crewQueues.keySet()) {
             if (c.status == CrewMemberState.Status.ESCAPED) {
-                stash.addItems(c.inventory);
+                campaign.getStash().addItems(c.inventory);
             }
         }
     }
@@ -173,6 +174,8 @@ public class HeistRunner {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     c.status = CrewMemberState.Status.CAUGHT;
+                    c.wasArrested = true;
+
                     log.addEvent(new Event(currentStep, null, c.getId(), EventType.CAUGHT));
                 }
             }
@@ -194,4 +197,7 @@ public class HeistRunner {
         }
     }
 
+    public Campaign getCampaign() {
+        return campaign;
+    }
 }

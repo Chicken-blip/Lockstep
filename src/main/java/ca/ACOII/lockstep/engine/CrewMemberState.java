@@ -12,12 +12,14 @@ public class CrewMemberState {
 
     enum Status { ACTIVE, ESCAPED, CAUGHT }
     Status status = Status.ACTIVE;
-    boolean spotted = false;
+    boolean spotted = false, wasArrested;
     List<LootItem> inventory;
 
     public CrewMemberState(CrewMember data) {
         this.data = data;
+        this.id = data.getId();
         inventory = new ArrayList<>();
+        wasArrested = false;
     }
 
     public String getCurrentRoom() {
@@ -42,5 +44,13 @@ public class CrewMemberState {
 
     public void addToInventory(LootItem item) {
         inventory.add(item);
+    }
+
+    public boolean arrested() {
+        return wasArrested;
+    }
+
+    public CrewMember getData() {
+        return data;
     }
 }

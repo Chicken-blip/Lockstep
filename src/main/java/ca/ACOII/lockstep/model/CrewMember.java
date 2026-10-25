@@ -4,10 +4,19 @@ import java.util.Map;
 
 public class CrewMember {
     private String id, name;
-    private int recruitFee, dayAvailability;
+    private int recruitFee, dayAvailability, releaseDate;
     Map<String, Integer> skills;
 
     public CrewMember() {
+        releaseDate = 0;
+    }
+    public CrewMember(CrewMember c) {
+        this.id = c.id;
+        this.name = c.name;
+        this.recruitFee = c.recruitFee;
+        this.dayAvailability = c.dayAvailability;
+        this.skills = c.skills;
+        releaseDate = 0;
     }
 
     public String getId() {
@@ -48,5 +57,9 @@ public class CrewMember {
 
     public void setSkills(Map<String, Integer> skills) {
         this.skills = skills;
+    }
+
+    public int getReleaseDate() {
+        return releaseDate;
     }
 }

@@ -1,5 +1,8 @@
 package ca.ACOII.lockstep;
 
+import ca.ACOII.lockstep.campaign.Calendar;
+import ca.ACOII.lockstep.campaign.Campaign;
+import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.campaign.Stash;
 import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
@@ -10,9 +13,23 @@ import java.util.List;
 
 
 public class Main {
-    public static void main(String[] args) {
 
+
+
+    public static void main(String[] args) {
         Definitions x = new Definitions();
+        Campaign campaign = new Campaign(new Calendar(), new Stash(x), new ArrayList<>());
+    }
+
+    private static void multi_member_arrest_testing(Definitions x, Campaign campaign) {
+        multi_member_syncing_test(x, campaign);
+        for (int i = 0; i < 4; i ++) {
+            campaign.nextDay();
+            System.out.println("\nDay " + campaign.getDate() + ": ");
+            for (RosterEntry e : campaign.getCrew()) {
+                System.out.println(e.getData().getId() + " in jail? " + (e.getReleaseDate() > campaign.getDate()));
+            }
+        }
     }
 
     private static void selling_test(Definitions x) {
@@ -28,10 +45,14 @@ public class Main {
         stash.printStash();
     }
 
-    private static void corner_gallery_solo_error_run(Definitions x) {
+    private static void corner_gallery_solo_error_run(Definitions x, Campaign campaign) {
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
         crew.getLast().setId("Thief");
+
+        ArrayList<CrewMember> crewMembers = new ArrayList<>();
+        crewMembers.add(crew.getFirst().getData());
+        campaign.setCrew(crewMembers);
 
         List<Action> actions = new ArrayList<>();
         actions.add(new GrabAction(x.findLoot("safe_contents")));
@@ -50,15 +71,20 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target, new Stash(x));
+        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
         runner.run();
+        campaign.settleHeist(runner,3);
     }
 
-    private static void corner_gallery_solo_perfect_run(Definitions x) {
+    private static void corner_gallery_solo_perfect_run(Definitions x, Campaign campaign) {
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
         crew.getLast().setId("Thief");
+
+        ArrayList<CrewMember> crewMembers = new ArrayList<>();
+        crewMembers.add(crew.getFirst().getData());
+        campaign.setCrew(crewMembers);
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1));
@@ -77,17 +103,23 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target, new Stash(x));
+        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
         runner.run();
+        campaign.settleHeist(runner,3);
     }
 
-    private static void multi_member_syncing_test(Definitions x) {
+    private static void multi_member_syncing_test(Definitions x, Campaign campaign) {
+
+        ArrayList<CrewMember> crewMembers = new ArrayList<>();
+        crewMembers.add(new CrewMember(x.crew.getFirst()));
+        crewMembers.getLast().setId("Thief A");
+        crewMembers.add(new CrewMember(x.crew.getFirst()));
+        crewMembers.getLast().setId("Thief B");
+        campaign.setCrew(crewMembers);
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();
-        crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().setId("Thief A");
-        crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().setId("Thief B");
+        crew.add(new CrewMemberState(crewMembers.get(0)));
+        crew.add(new CrewMemberState(crewMembers.get(1)));
 
         List<Action> actions = new ArrayList<>();
         actions.add(new WaitAction(1));
@@ -111,8 +143,9 @@ public class Main {
 
         Target target = x.targets.getLast();
 
-        HeistRunner run = new HeistRunner(crew, queues, target, new Stash(x));
-        run.run();
+        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
+        runner.run();
+        campaign.settleHeist(runner,3);
     }
 
     private static void verifyLoading(Definitions x) {
