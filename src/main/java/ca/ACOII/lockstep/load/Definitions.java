@@ -29,4 +29,12 @@ public class Definitions {
         }
         return null;
     }
+    public CrewMember findCrew(String key) {
+        for (CrewMember c : crew) {
+            if (Objects.equals(c.getId(), key)) {
+                return c;
+            }
+        }
+        return null;
+    }
 }

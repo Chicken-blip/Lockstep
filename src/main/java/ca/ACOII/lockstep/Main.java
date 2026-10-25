@@ -1,9 +1,6 @@
 package ca.ACOII.lockstep;
 
-import ca.ACOII.lockstep.campaign.Calendar;
-import ca.ACOII.lockstep.campaign.Campaign;
-import ca.ACOII.lockstep.campaign.RosterEntry;
-import ca.ACOII.lockstep.campaign.Stash;
+import ca.ACOII.lockstep.campaign.*;
 import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.*;
@@ -18,7 +15,13 @@ public class Main {
 
     public static void main(String[] args) {
         Definitions x = new Definitions();
-        Campaign campaign = new Campaign(new Calendar(), new Stash(x), new ArrayList<>());
+        Campaign campaign = new Campaign(new Calendar(), new Stash(x), new ArrayList<>(), 0);
+
+        multi_member_arrest_testing(x, campaign);
+        SaveManager save = new SaveManager();
+        save.saveGame(campaign, "save.json");
+        campaign = save.loadGame("save.json", x);
+        System.out.println("Day: " + campaign.getDate() + " | Money: " + campaign.getStash().getMoney());
     }
 
     private static void multi_member_arrest_testing(Definitions x, Campaign campaign) {
@@ -27,7 +30,7 @@ public class Main {
             campaign.nextDay();
             System.out.println("\nDay " + campaign.getDate() + ": ");
             for (RosterEntry e : campaign.getCrew()) {
-                System.out.println(e.getData().getId() + " in jail? " + (e.getReleaseDate() > campaign.getDate()));
+                System.out.println(e.getData().getName() + " in jail? " + (e.getReleaseDate() > campaign.getDate()));
             }
         }
     }
@@ -48,7 +51,7 @@ public class Main {
     private static void corner_gallery_solo_error_run(Definitions x, Campaign campaign) {
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().setId("Thief");
+        crew.getLast().getData().setName("Thief");
 
         ArrayList<CrewMember> crewMembers = new ArrayList<>();
         crewMembers.add(crew.getFirst().getData());
@@ -80,7 +83,7 @@ public class Main {
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().setId("Thief");
+        crew.getLast().getData().setName("Thief");
 
         ArrayList<CrewMember> crewMembers = new ArrayList<>();
         crewMembers.add(crew.getFirst().getData());
@@ -112,9 +115,9 @@ public class Main {
 
         ArrayList<CrewMember> crewMembers = new ArrayList<>();
         crewMembers.add(new CrewMember(x.crew.getFirst()));
-        crewMembers.getLast().setId("Thief A");
+        crewMembers.getLast().setName("Thief A");
         crewMembers.add(new CrewMember(x.crew.getFirst()));
-        crewMembers.getLast().setId("Thief B");
+        crewMembers.getLast().setName("Thief B");
         campaign.setCrew(crewMembers);
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();

@@ -22,6 +22,9 @@ public class Stash {
     public void addItems(List<LootItem> items) {
         this.items.addAll(items);
     }
+    public void addItem(LootItem item) {
+        this.items.add(item);
+    }
     public int getMoney() {
         return money;
     }

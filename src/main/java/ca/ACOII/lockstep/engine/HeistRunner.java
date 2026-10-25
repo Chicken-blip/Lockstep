@@ -73,11 +73,11 @@ public class HeistRunner {
                         e = EventType.WAIT;
                     }
 
-                    if (a != null) log.addEvent(new Event(currentStep, a.getDescription(), c.getId(), e));
+                    if (a != null) log.addEvent(new Event(currentStep, a.getDescription(), c.getData().getName(), e));
                     if (a instanceof MoveAction move) {
                         if (t.getExitRooms().contains(move.getDestinationRoom())) {
                             c.status = CrewMemberState.Status.ESCAPED;
-                            log.addEvent(new Event(currentStep, null, c.getId(), EventType.ESCAPED));
+                            log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ESCAPED));
                         }
                     }
                 }
@@ -176,7 +176,7 @@ public class HeistRunner {
                     c.status = CrewMemberState.Status.CAUGHT;
                     c.wasArrested = true;
 
-                    log.addEvent(new Event(currentStep, null, c.getId(), EventType.CAUGHT));
+                    log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.CAUGHT));
                 }
             }
         } else {
@@ -185,10 +185,10 @@ public class HeistRunner {
                     for (Guard g : guards) {
                         if (Objects.equals(c.getCurrentRoom(), g.getCurrentRoom()) && !c.spotted) {
                             c.spotted = true;
-                            log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getId(), EventType.SPOTTED));
+                            log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.SPOTTED));
                             if (alarmTimer == -1) {
                                 alarmTimer = t.getAlarmCountdown();
-                                log.addEvent(new Event(currentStep, null, c.getId(), EventType.ALARM_RAISED));
+                                log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
                             }
                         }
                     }

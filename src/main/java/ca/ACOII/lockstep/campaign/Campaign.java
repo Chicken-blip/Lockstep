@@ -12,13 +12,19 @@ public class Campaign {
     Stash stash;
     List<RosterEntry> crew;
 
-    public Campaign(Calendar calendar, Stash stash, List<CrewMember> crew) {
+    public Campaign(Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
         this.calendar = calendar;
         this.stash = stash;
         this.crew = new ArrayList<>();
         for (CrewMember c : crew) {
             this.crew.add(new RosterEntry(c));
         }
+    }
+
+    public Campaign(Calendar calendar, Stash stash, List<RosterEntry> crew) {
+        this.calendar = calendar;
+        this.stash = stash;
+        this.crew = crew;
     }
 
     public void settleHeist(HeistRunner runner, int arrestDuration) {
