@@ -2,6 +2,7 @@ package ca.ACOII.lockstep.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Target {
     private String id, name, entryRoom;
@@ -112,5 +113,34 @@ public class Target {
 
     public void setPatrols(List<Patrol> patrols) {
         this.patrols = patrols;
+    }
+
+    public Room findRoom(String id) {
+        for (Room r : rooms) {
+            if (Objects.equals(r.getId(), id)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    public LootContainer findContainer(String containerId) {
+        for (Room r : rooms) {
+            for (LootContainer c : r.getRoomContainers()) {
+                if (Objects.equals(c.getId(), containerId)) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Door findDoor(String doorId) {
+        for (Door d : doors) {
+            if (Objects.equals(d.getId(), doorId)) {
+                return d;
+            }
+        }
+        return null;
     }
 }

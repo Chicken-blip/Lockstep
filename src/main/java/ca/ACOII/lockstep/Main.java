@@ -13,7 +13,35 @@ public class Main {
 
         Definitions x = new Definitions();
 
-        EventLog log = new EventLog();
+    }
+
+    private static void corner_gallery_solo_error_run(Definitions x) {
+        ArrayList<CrewMemberState> crew = new ArrayList<>();
+        crew.add(new CrewMemberState(x.crew.getFirst()));
+        crew.getLast().setId("Thief");
+
+        List<Action> actions = new ArrayList<>();
+        actions.add(new GrabAction(x.findLoot("safe_contents")));
+        actions.add(new MoveAction("LOBBY", 1));
+        actions.add(new PickLockAction("d3", 2));
+        actions.add(new MoveAction("VAULT", 1));
+        actions.add(new CrackAction("Vault Safe", 3));
+        actions.add(new GrabAction(x.findLoot("candelabra_b")));
+        actions.add(new WaitAction(2));
+        actions.add(new MoveAction("LOBBY", 1));
+        actions.add(new MoveAction("OUTSIDE", 1));
+        ActionQueue queue = new ActionQueue(actions);
+
+        List<ActionQueue> queues = new ArrayList<>();
+        queues.add(queue);
+
+        Target target = x.targets.getFirst();
+
+        HeistRunner runner = new HeistRunner(crew, queues, target);
+        runner.run();
+    }
+
+    private static void corner_gallery_solo_perfect_run(Definitions x) {
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));
@@ -38,11 +66,9 @@ public class Main {
 
         HeistRunner runner = new HeistRunner(crew, queues, target);
         runner.run();
-
     }
 
     private static void multi_member_syncing_test(Definitions x) {
-        EventLog log = new EventLog();
 
         ArrayList<CrewMemberState> crew = new ArrayList<>();
         crew.add(new CrewMemberState(x.crew.getFirst()));

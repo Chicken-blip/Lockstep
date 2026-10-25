@@ -1,8 +1,6 @@
 package ca.ACOII.lockstep.engine;
 
-import ca.ACOII.lockstep.model.Patrol;
-import ca.ACOII.lockstep.model.Target;
-import ca.ACOII.lockstep.model.LootItem;
+import ca.ACOII.lockstep.model.*;
 
 import java.util.*;
 
@@ -39,6 +37,7 @@ public class HeistRunner {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     Action a = crewQueues.get(c).tick();
+                    validateAction(c, a);
                     EventType e = null;
 
                     if (a instanceof MoveAction move) {
@@ -113,6 +112,47 @@ public class HeistRunner {
         }
         log.print();
     }
+
+    private void validateAction (CrewMemberState crew, Action action) {
+        if (action instanceof GrabAction grab) {
+            Room curr = t.findRoom(crew.currentRoom);
+            //Check if the current room has the directed item
+            if (curr.getRoomLoot().containsKey(grab.item.getId())) {
+                return;
+            } else {
+                //Check each container within the room
+                for (LootContainer container : curr.getRoomContainers()) {
+                    //Check if the specified container is unlocked and has the item
+                    if (container.getContents().contains(grab.item.getId()) && openContainers.contains(container.getId())) {
+                        return;
+                    }
+                }
+            }
+            throw new RuntimeException("Attempt at grabbing unavailable item occurred");
+        } else if (action instanceof CrackAction crack) {
+            Room curr = t.findRoom(crew.currentRoom);
+            LootContainer container = t.findContainer(crack.containerId);
+            if (container == null) {
+                throw new RuntimeException("Attempt at cracking nonexistent container occurred");
+            } if (!curr.getRoomContainers().contains(container)) {
+                throw new RuntimeException("Attempt at cracking unavailable container occurred");
+            }
+            if (openContainers.contains(container.getId())) {
+                throw new RuntimeException("Attempt at cracking unlocked container occurred");
+            }
+        } else if (action instanceof PickLockAction pick) {
+            Room curr = t.findRoom(crew.currentRoom);
+            Door d = t.findDoor(pick.doorId);
+            if (d == null) {
+                throw new RuntimeException("Attempt at picking nonexistent door occurred");
+            } if (!(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
+                throw new RuntimeException("Attempt at unlocking door in different room occurred");
+            } if (unlockedDoors.contains(d.getId())) {
+                throw new RuntimeException("Attempt at unlocking unlocked door occurred");
+            }
+        }
+    }
+
     public void securityCheck() {
         if (alarmTimer > 0) alarmTimer--;
         if (alarmTimer == 0) {
