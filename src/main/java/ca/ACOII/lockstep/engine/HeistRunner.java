@@ -1,5 +1,6 @@
 package ca.ACOII.lockstep.engine;
 
+import ca.ACOII.lockstep.campaign.Stash;
 import ca.ACOII.lockstep.model.*;
 
 import java.util.*;
@@ -12,8 +13,9 @@ public class HeistRunner {
     Set<String> unlockedDoors, openContainers;
     Target t;
     boolean isCompleted = false;
+    Stash stash;
 
-    public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t) {
+    public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t, Stash stash) {
         currentStep = 1;
         crewQueues = new HashMap<>();
         for (int i = crew.size() - 1; i > -1; i--) {
@@ -30,6 +32,8 @@ public class HeistRunner {
         alarmTimer = -1;
         unlockedDoors = new HashSet<>();
         openContainers = new HashSet<>();
+
+        this.stash = stash;
     }
     public void run() {
         boolean running = true;
@@ -99,6 +103,7 @@ public class HeistRunner {
             running = false;
             if (isCompleted) {
                 log.print();
+                getStash();
                 return;
             }
             for (CrewMemberState c : crewQueues.keySet()) {
@@ -111,6 +116,15 @@ public class HeistRunner {
             currentStep++;
         }
         log.print();
+        getStash();
+    }
+
+    private void getStash() {
+        for (CrewMemberState c : crewQueues.keySet()) {
+            if (c.status == CrewMemberState.Status.ESCAPED) {
+                stash.addItems(c.inventory);
+            }
+        }
     }
 
     private void validateAction (CrewMemberState crew, Action action) {

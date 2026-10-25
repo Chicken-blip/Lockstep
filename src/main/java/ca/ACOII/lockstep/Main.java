@@ -1,5 +1,6 @@
 package ca.ACOII.lockstep;
 
+import ca.ACOII.lockstep.campaign.Stash;
 import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.*;
@@ -12,7 +13,19 @@ public class Main {
     public static void main(String[] args) {
 
         Definitions x = new Definitions();
+    }
 
+    private static void selling_test(Definitions x) {
+        CrewMemberState c = new CrewMemberState(x.crew.getFirst());
+        c.addToInventory(x.findLoot("candelabra_a"));
+        c.addToInventory(x.findLoot("candelabra_b"));
+
+        Stash stash = new Stash(x);
+        stash.addItems(c.getInventory());
+        stash.sellSet(x.sets.getSets().getFirst());
+        System.out.println("Money: " + stash.getMoney());
+        System.out.println("Contents:");
+        stash.printStash();
     }
 
     private static void corner_gallery_solo_error_run(Definitions x) {
@@ -37,7 +50,7 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target);
+        HeistRunner runner = new HeistRunner(crew, queues, target, new Stash(x));
         runner.run();
     }
 
@@ -64,7 +77,7 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target);
+        HeistRunner runner = new HeistRunner(crew, queues, target, new Stash(x));
         runner.run();
     }
 
@@ -98,7 +111,7 @@ public class Main {
 
         Target target = x.targets.getLast();
 
-        HeistRunner run = new HeistRunner(crew, queues, target);
+        HeistRunner run = new HeistRunner(crew, queues, target, new Stash(x));
         run.run();
     }
 

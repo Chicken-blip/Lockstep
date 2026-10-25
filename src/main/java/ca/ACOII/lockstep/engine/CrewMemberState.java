@@ -35,6 +35,11 @@ public class CrewMemberState {
     public void setId(String id) {
         this.id = id;
     }
+
+    public List<LootItem> getInventory() {
+        return inventory;
+    }
+
     public void addToInventory(LootItem item) {
         inventory.add(item);
     }
