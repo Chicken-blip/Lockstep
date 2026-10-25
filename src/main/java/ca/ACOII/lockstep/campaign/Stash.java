@@ -68,4 +68,12 @@ public class Stash {
             System.out.println(i.getName());
         }
     }
+
+    public void deductMoney(int deduction) {
+        money -= deduction;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
 }

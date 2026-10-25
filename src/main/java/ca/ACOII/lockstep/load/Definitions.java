@@ -37,4 +37,22 @@ public class Definitions {
         }
         return null;
     }
+
+    public Gear findGear(String key) {
+        for (Gear g : gear.getGear()) {
+            if (Objects.equals(g.getId(), key)) {
+                return g;
+            }
+        }
+        return null;
+    }
+
+    public Skill findSkill(String key) {
+        for (Skill s : skills.getSkills()) {
+            if (Objects.equals(s.getId(), key)) {
+                return s;
+            }
+        }
+        return null;
+    }
 }

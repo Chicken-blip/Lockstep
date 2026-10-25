@@ -2,13 +2,15 @@ package ca.ACOII.lockstep.campaign;
 
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.CrewMember;
-import ca.ACOII.lockstep.model.LootItem;
+import ca.ACOII.lockstep.model.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SaveManager {
     private final ObjectMapper mapper = new ObjectMapper();
@@ -23,7 +25,15 @@ public class SaveManager {
         }
         save.crew = new ArrayList<>();
         for (RosterEntry e : campaign.crew) {
-            save.crew.add(new CrewMemberStateData(e.getData().getId(), e.getData().getName(), e.releaseDate));
+            List<String> gearIds = new ArrayList<>();
+            for (Gear g : e.getGear()) {
+                gearIds.add(g.getId());
+            }
+            Map<String, Integer> skills = new HashMap<>();
+            for (String str : e.getData().getSkills().keySet()) {
+                skills.put(str, e.getData().getSkills().get(str));
+            }
+            save.crew.add(new CrewMemberData(e.getData().getId(), e.getData().getName(), e.releaseDate, gearIds, skills));
         }
 
         try {
@@ -34,9 +44,9 @@ public class SaveManager {
     }
 
     public Campaign loadGame(String filename, Definitions x) {
-        SaveState save = null;
+        SaveState save;
         try {
-            save = mapper.readValue(new File("save.json"), SaveState.class);
+            save = mapper.readValue(new File(filename), SaveState.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -51,11 +61,17 @@ public class SaveManager {
         calendar.currentDay = save.currentDay;
 
         List<RosterEntry> list = new ArrayList<>();
-        for (CrewMemberStateData c : save.crew) {
+        for (CrewMemberData c : save.crew) {
             CrewMember member = new CrewMember(x.findCrew(c.id()));
             member.setName(c.name());
             RosterEntry entry = new RosterEntry(member);
             entry.releaseDate = c.releaseDate();
+            for (String id : c.gear()) {
+                entry.addGear(x.findGear(id));
+            }
+            for (String id : c.skillMap().keySet()) {
+                entry.getData().addSkill(x.findSkill(id), c.skillMap().get(id));
+            }
             list.add(entry);
         }
 

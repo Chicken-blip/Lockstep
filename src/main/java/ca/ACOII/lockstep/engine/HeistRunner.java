@@ -16,12 +16,16 @@ public class HeistRunner {
     boolean isCompleted = false;
     Campaign campaign;
 
-    public HeistRunner(List<CrewMemberState> crew, List<ActionQueue> queues, Target t, Campaign campaign) {
+    public HeistRunner(List<ActionQueue> queues, Target t, Campaign campaign) {
         currentStep = 1;
         crewQueues = new HashMap<>();
-        for (int i = crew.size() - 1; i > -1; i--) {
-            crew.get(i).setCurrentRoom(t.getEntryRoom());
-            crewQueues.put(crew.get(i), queues.get(i));
+        List<CrewMember> crew = new ArrayList<>();
+        for (int i = campaign.getCrew().size() - 1; i > -1; i--) {
+            RosterEntry e = campaign.getCrew().get(i);
+            CrewMember member = e.getData();
+            CrewMemberState state = new CrewMemberState(member, e.getGear());
+            state.setCurrentRoom(t.getEntryRoom());
+            crewQueues.put(state, queues.get(i));
         }
         log = new EventLog();
         guards = new ArrayList<>();

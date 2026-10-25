@@ -5,7 +5,7 @@ import java.util.List;
 public class SaveState {
     public int currentDay, money;
     public List<String> stashIds;
-    public List<CrewMemberStateData> crew;
+    public List<CrewMemberData> crew;
 
     public SaveState() {
     }

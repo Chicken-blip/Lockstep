@@ -1,6 +1,7 @@
 package ca.ACOII.lockstep.engine;
 
 import ca.ACOII.lockstep.model.CrewMember;
+import ca.ACOII.lockstep.model.Gear;
 import ca.ACOII.lockstep.model.LootItem;
 
 import java.util.ArrayList;
@@ -14,12 +15,15 @@ public class CrewMemberState {
     Status status = Status.ACTIVE;
     boolean spotted = false, wasArrested;
     List<LootItem> inventory;
+    List<Gear> equippedGear;
 
-    public CrewMemberState(CrewMember data) {
+    public CrewMemberState(CrewMember data, List<Gear> gear) {
         this.data = data;
         this.id = data.getId();
         inventory = new ArrayList<>();
         wasArrested = false;
+        equippedGear = new ArrayList<>();
+        equippedGear.addAll(gear);
     }
 
     public String getCurrentRoom() {

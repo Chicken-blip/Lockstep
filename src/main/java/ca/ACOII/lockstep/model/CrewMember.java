@@ -62,4 +62,8 @@ public class CrewMember {
     public int getReleaseDate() {
         return releaseDate;
     }
+
+    public void addSkill(Skill s, Integer lvl) {
+        skills.put(s.getId(), lvl);
+    }
 }

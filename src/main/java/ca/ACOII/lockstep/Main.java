@@ -18,10 +18,26 @@ public class Main {
         Campaign campaign = new Campaign(new Calendar(), new Stash(x), new ArrayList<>(), 0);
 
         multi_member_arrest_testing(x, campaign);
+    }
+
+    private static void training_and_saving_test(Campaign campaign, Definitions x) {
+        campaign.getStash().setMoney(100);
+
+        campaign.recruitMember(x.crew.getFirst().getId(), x, "Thief");
+
+
+        System.out.println("Level before training: " + campaign.getRoster().getFirst().getData().getSkills().get("pick"));
+
+        campaign.trainSkill(campaign.getRoster().getFirst().getData(), "pick", 10);
+
+        System.out.println("Level before save: " + campaign.getRoster().getFirst().getData().getSkills().get("pick"));
+
         SaveManager save = new SaveManager();
         save.saveGame(campaign, "save.json");
         campaign = save.loadGame("save.json", x);
-        System.out.println("Day: " + campaign.getDate() + " | Money: " + campaign.getStash().getMoney());
+
+
+        System.out.println("Level after save: " + campaign.getRoster().getFirst().getData().getSkills().get("pick"));
     }
 
     private static void multi_member_arrest_testing(Definitions x, Campaign campaign) {
@@ -36,7 +52,7 @@ public class Main {
     }
 
     private static void selling_test(Definitions x) {
-        CrewMemberState c = new CrewMemberState(x.crew.getFirst());
+        CrewMemberState c = new CrewMemberState(x.crew.getFirst(), new ArrayList<>());
         c.addToInventory(x.findLoot("candelabra_a"));
         c.addToInventory(x.findLoot("candelabra_b"));
 
@@ -49,13 +65,9 @@ public class Main {
     }
 
     private static void corner_gallery_solo_error_run(Definitions x, Campaign campaign) {
-        ArrayList<CrewMemberState> crew = new ArrayList<>();
-        crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().getData().setName("Thief");
+        campaign.getStash().setMoney(100);
 
-        ArrayList<CrewMember> crewMembers = new ArrayList<>();
-        crewMembers.add(crew.getFirst().getData());
-        campaign.setCrew(crewMembers);
+        campaign.recruitMember("thief", x, "Thief");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new GrabAction(x.findLoot("safe_contents")));
@@ -74,20 +86,15 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
+        HeistRunner runner = new HeistRunner(queues, target, campaign);
         runner.run();
         campaign.settleHeist(runner,3);
     }
 
     private static void corner_gallery_solo_perfect_run(Definitions x, Campaign campaign) {
+        campaign.getStash().setMoney(100);
 
-        ArrayList<CrewMemberState> crew = new ArrayList<>();
-        crew.add(new CrewMemberState(x.crew.getFirst()));
-        crew.getLast().getData().setName("Thief");
-
-        ArrayList<CrewMember> crewMembers = new ArrayList<>();
-        crewMembers.add(crew.getFirst().getData());
-        campaign.setCrew(crewMembers);
+        campaign.recruitMember("thief", x, "Thief");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1));
@@ -106,23 +113,16 @@ public class Main {
 
         Target target = x.targets.getFirst();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
+        HeistRunner runner = new HeistRunner(queues, target, campaign);
         runner.run();
         campaign.settleHeist(runner,3);
     }
 
     private static void multi_member_syncing_test(Definitions x, Campaign campaign) {
+        campaign.getStash().setMoney(100);
 
-        ArrayList<CrewMember> crewMembers = new ArrayList<>();
-        crewMembers.add(new CrewMember(x.crew.getFirst()));
-        crewMembers.getLast().setName("Thief A");
-        crewMembers.add(new CrewMember(x.crew.getFirst()));
-        crewMembers.getLast().setName("Thief B");
-        campaign.setCrew(crewMembers);
-
-        ArrayList<CrewMemberState> crew = new ArrayList<>();
-        crew.add(new CrewMemberState(crewMembers.get(0)));
-        crew.add(new CrewMemberState(crewMembers.get(1)));
+        campaign.recruitMember("thief", x, "Thief A");
+        campaign.recruitMember("thief", x, "Thief B");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new WaitAction(1));
@@ -146,7 +146,7 @@ public class Main {
 
         Target target = x.targets.getLast();
 
-        HeistRunner runner = new HeistRunner(crew, queues, target, campaign);
+        HeistRunner runner = new HeistRunner(queues, target, campaign);
         runner.run();
         campaign.settleHeist(runner,3);
     }
