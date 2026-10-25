@@ -76,4 +76,8 @@ public class Stash {
     public void setMoney(int money) {
         this.money = money;
     }
+
+    public List<LootItem> getItems() {
+        return items;
+    }
 }

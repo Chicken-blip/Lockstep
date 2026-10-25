@@ -17,4 +17,8 @@ public class EventLog {
             System.out.println(e.toString());
         }
     }
+
+    public List<Event> getEvents() {
+        return events;
+    }
 }

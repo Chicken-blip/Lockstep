@@ -19,16 +19,24 @@ public class Game {
     Definitions def;
     Campaign campaign;
     String saveFile;
-    public Game() {
+    EventLog log;
+    public Game(boolean toLoad) {
         def = new Definitions();
         saveFile = "save.json";
 
-        try {
-            SaveState save = new ObjectMapper().readValue(new File(saveFile), SaveState.class);
-            campaign = new SaveManager().loadGame(saveFile, def);
-        } catch (IOException e) {
+        if (toLoad) {
+
+            try {
+                SaveState save = new ObjectMapper().readValue(new File(saveFile), SaveState.class);
+                campaign = new SaveManager().loadGame(saveFile, def);
+            } catch (IOException e) {
+                campaign = new Campaign(new Calendar(), new Stash(def), new ArrayList<>(), 0);
+            }
+        } else {
             campaign = new Campaign(new Calendar(), new Stash(def), new ArrayList<>(), 0);
         }
+
+        log = null;
 
     }
 
@@ -48,9 +56,8 @@ public class Game {
         campaign.nextDay();
         save();
 
-        EventLog log = heist.getLog();
-        //TODO: Change print() to return string collection instead of directly printing
-        log.print();
+        log = heist.getLog();
+        printLog();
     }
 
     public void train(RosterEntry e, String skillId, int cost) {
@@ -80,4 +87,15 @@ public class Game {
     public void setMoney(int i) {
         campaign.getStash().setMoney(i);
     }
+
+    public EventLog getLog() {
+        return log;
+    }
+
+    private void printLog() {
+        log.print();
+    }
+
+    public Stash getStash() {return campaign.getStash();}
+    public Calendar getCalendar() {return campaign.calendar;}
 }
