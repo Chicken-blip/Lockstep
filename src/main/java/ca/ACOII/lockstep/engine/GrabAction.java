@@ -12,6 +12,10 @@ public class GrabAction implements Action {
         return item.getGrabCost();
     }
 
+    public LootItem getItem() {
+        return item;
+    }
+
     @Override
     public String getDescription() {
         return "Grabbed " + item.getName();

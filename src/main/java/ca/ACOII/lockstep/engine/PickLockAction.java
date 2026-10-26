@@ -13,6 +13,10 @@ public class PickLockAction implements Action {
         return duration;
     }
 
+    public String getDoorId() {
+        return doorId;
+    }
+
     @Override
     public String getDescription() {
         return "Picked lock on door " + doorId;

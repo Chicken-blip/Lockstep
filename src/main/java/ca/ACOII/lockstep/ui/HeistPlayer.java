@@ -29,6 +29,7 @@ public class HeistPlayer {
     }
 
     public void play() {
+        timeline.stop();
         timelineIndex = 0;
         timeline.play();
     }

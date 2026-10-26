@@ -12,6 +12,10 @@ public class CrackAction implements Action {
         return duration;
     }
 
+    public String getContainerId() {
+        return containerId;
+    }
+
     @Override
     public String getDescription() {
         return "Cracked safe " + containerId;
