@@ -9,6 +9,7 @@ public class Room {
     private String id;
     private Map<String, Double> roomLoot;
     private List<LootContainer> roomContainers;
+    private int x, y;
 
     public Room() {
         id = null;
@@ -38,5 +39,21 @@ public class Room {
 
     public void setRoomContainers(List<LootContainer> roomContainers) {
         this.roomContainers = roomContainers;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 }

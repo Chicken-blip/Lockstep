@@ -28,11 +28,11 @@ before any screen exists.
 
 ## Technology
 
-- Java 27
+- Java 21
 - Maven
 - Jackson (JSON data definitions)
 - JUnit 5 (scripted tests)
-- JavaFX 27 (planned UI shell)
+- JavaFX (planned UI shell)
 
 ## Building and testing
 
