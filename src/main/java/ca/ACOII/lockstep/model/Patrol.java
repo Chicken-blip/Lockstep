@@ -27,4 +27,19 @@ public class Patrol {
     public void setPatrolRoute(List<PatrolEntry> patrolRoute) {
         this.patrolRoute = patrolRoute;
     }
+
+    public String roomAt(int index) {
+        if (index < 0) return null;
+        int loopLen = 0;
+        for (PatrolEntry e : patrolRoute) {
+            loopLen += e.getDuration();
+        }
+        index = index % loopLen;
+        int sum = 0;
+        for (PatrolEntry e : patrolRoute) {
+            if (index < sum + e.getDuration()) return e.getRoom();
+            sum += e.getDuration();
+        }
+        return null;
+    }
 }

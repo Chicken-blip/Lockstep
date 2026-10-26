@@ -16,11 +16,7 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-
         App.main(args);
-
-        Definitions x = new Definitions();
-        Game game = new Game(false);
 
 
     }

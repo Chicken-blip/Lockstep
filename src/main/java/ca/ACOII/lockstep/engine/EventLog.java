@@ -21,4 +21,5 @@ public class EventLog {
     public List<Event> getEvents() {
         return events;
     }
+
 }

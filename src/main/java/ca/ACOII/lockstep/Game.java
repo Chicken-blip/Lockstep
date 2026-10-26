@@ -57,7 +57,6 @@ public class Game {
         save();
 
         log = heist.getLog();
-        printLog();
     }
 
     public void train(RosterEntry e, String skillId, int cost) {
