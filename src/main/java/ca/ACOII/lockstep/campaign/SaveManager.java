@@ -22,6 +22,7 @@ public class SaveManager {
         save.stashIds = new ArrayList<>();
         save.seed = campaign.seed;
         save.currentTargetId = campaign.currentTargetId;
+        save.completedTargetIds = campaign.completedTargetIds;
         for (LootItem i : campaign.stash.items) {
             save.stashIds.add(i.getId());
         }
@@ -80,6 +81,7 @@ public class SaveManager {
         Campaign c = new Campaign(x, calendar, stash, list);
         c.seed = save.seed;
         c.currentTargetId = save.currentTargetId;
+        c.completedTargetIds = save.completedTargetIds;
         return c;
     }
 }

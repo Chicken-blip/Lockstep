@@ -108,6 +108,7 @@ public class HeistRunner {
             running = false;
             if (isCompleted) {
                 getStash();
+                campaign.completedTargetIds.add(instance.getTarget().getId());
                 return;
             }
             for (CrewMemberState c : crewQueues.keySet()) {

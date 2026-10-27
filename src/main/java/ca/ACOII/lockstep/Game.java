@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class Game {
     Definitions def;
@@ -44,7 +45,13 @@ public class Game {
     }
 
     public List<Target> getAvailableTargets() {
-        return campaign.calendar.getAvailableTargets(def.targets);
+        List<Target> list = campaign.calendar.getAvailableTargets(def.targets);
+        return list.stream().filter(new Predicate<>() {
+            @Override
+            public boolean test(Target target) {
+                return !campaign.completedTargetIds.contains(target.getId());
+            }
+        }).toList();
     }
 
     public List<RosterEntry> getRoster() {
@@ -67,8 +74,8 @@ public class Game {
         log = heist.getLog();
     }
 
-    public void train(RosterEntry e, String skillId, int cost) {
-        campaign.trainSkill(e.getData(), skillId, cost);
+    public void train(RosterEntry e, String skillId) {
+        campaign.trainSkill(e.getData(), skillId);
         campaign.nextDay();
         save();
     }

@@ -62,8 +62,7 @@ public class MenuView extends BorderPane {
 
         Button train = new Button("Train Skill");
         train.setOnAction(e -> {
-            //TODO: Change cost to dependent on Definitions cost
-            game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId(), 15);
+            game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId());
             refresh();
         });
         skillBox.getChildren().addAll(skills, train);

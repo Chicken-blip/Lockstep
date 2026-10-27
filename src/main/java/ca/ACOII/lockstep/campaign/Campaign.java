@@ -17,9 +17,11 @@ public class Campaign {
     public Definitions definitions;
     public long seed;
     public String currentTargetId;
+    public List<String> completedTargetIds;
 
     public Campaign(Definitions def, Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
         this.calendar = calendar;
+        completedTargetIds = new ArrayList<>();
         this.stash = stash;
         this.crew = new ArrayList<>();
         for (CrewMember c : crew) {
@@ -30,6 +32,7 @@ public class Campaign {
 
     public Campaign(Definitions def, Calendar calendar, Stash stash, List<RosterEntry> crew) {
         this.calendar = calendar;
+        completedTargetIds = new ArrayList<>();
         this.stash = stash;
         this.crew = crew;
         this.definitions = def;
@@ -93,8 +96,9 @@ public class Campaign {
         e.addGear(gear);
     }
 
-    public void trainSkill(CrewMember member, String skillId, int cost) {
+    public void trainSkill(CrewMember member, String skillId) {
         RosterEntry e  = getFromRoster(member);
+        int cost = definitions.findSkill(skillId).getTrainingCost() * (e.getData().getSkills().get(skillId) + 1);
         if (stash.getMoney() < cost) throw new RuntimeException("Not enough money for " + skillId + " training");
         stash.deductMoney(cost);
         e.getData().getSkills().put(skillId,e.getData().getSkills().get(skillId) + 1);
