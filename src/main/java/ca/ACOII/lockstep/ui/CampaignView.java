@@ -39,6 +39,8 @@ public class CampaignView extends BorderPane {
             if (fullCrew.getSelectionModel().getSelectedItems() == null || fullCrew.getSelectionModel().getSelectedItems().isEmpty()) {
                 System.out.println("Select at least one crew member!");
                 return;
+            } else if (fullCrew.getSelectionModel().getSelectedItems().size() > targets.getSelectionModel().getSelectedItem().getMaxCrew()) {
+                System.out.println("You can't select more than " + targets.getSelectionModel().getSelectedItem().getMaxCrew() + " - try again");
             }
             app.startHeist(targets.getSelectionModel().getSelectedItem(), fullCrew.getSelectionModel().getSelectedItems());
         });

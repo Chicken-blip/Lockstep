@@ -11,7 +11,7 @@ constantly shifting campaign calendar.
 
 ## Status
 
-Early development. implementation in progress. Not playable yet.
+Early development. JavaFX implemented & playable
 
 ## Design principles
 

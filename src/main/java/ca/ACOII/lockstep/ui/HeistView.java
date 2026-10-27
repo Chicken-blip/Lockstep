@@ -132,13 +132,13 @@ public class HeistView extends BorderPane {
                 }
                 case "PICK LOCK" -> {
                     Door door = target.findDoor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
-                    //TODO: Add consideration for skill level
-                    act = new PickLockAction(door.getId(), door.getLock().getPickDifficulty());
+                    int dur = ActDurationCalculator.pickLockDuration(door, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new PickLockAction(door.getId(), dur);
                 }
                 case "CRACK SAFE" -> {
                     SafeContainer safe = (SafeContainer) target.findContainer(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
-                    act = new CrackAction(safe.getId(), safe.getCrackDifficulty());
-                    //TODO: Add consideration for skill level
+                    int dur = ActDurationCalculator.crackDuration(safe, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new CrackAction(safe.getId(), dur);
                 }
                 case "GRAB" -> {
                     LootItem item = app.def.findLoot(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
