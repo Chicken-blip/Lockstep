@@ -29,6 +29,7 @@ public class HeistView extends BorderPane {
     private static final List<String> ACTIONS = List.of(
             "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "GRAB"
     );
+    ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
 
     public HeistView(Target target, List<RosterEntry> entries, App app) {
@@ -44,11 +45,6 @@ public class HeistView extends BorderPane {
     }
 
     private void build() {
-        ComboBox<RosterEntry> heistCrew = new ComboBox<>();
-        for (RosterEntry e : entries) {
-            heistCrew.getItems().add(e);
-            heistCrew.getSelectionModel().selectFirst();
-        }
         this.setCenter(mapPane());
         this.setLeft(actionBuilderPane());
         executionPane = executeQueuePane();
@@ -59,7 +55,7 @@ public class HeistView extends BorderPane {
     private VBox mapPane() {
         VBox pane = new VBox();
 
-        FloorPlanView plan = new FloorPlanView(target, game);
+        FloorPlanView plan = new FloorPlanView(target, game, app.def);
         mapPane = plan;
         ScrollPane scroll = new ScrollPane(plan);
         scroll.setPannable(true);
@@ -73,16 +69,48 @@ public class HeistView extends BorderPane {
     private VBox actionBuilderPane() {
         VBox actionSelectionPane = new VBox(10);
 
+        heistCrew = new ComboBox<>();
+        heistCrew.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(RosterEntry entry, boolean empty) {
+                super.updateItem(entry, empty);
+                if (empty || entry == null) {
+                    setText(null);
+                } else {
+                    setText(entry.getData().getName());
+                }
+            }
+        });
+        heistCrew.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(RosterEntry entry, boolean empty) {
+                super.updateItem(entry, empty);
+                if (empty || entry == null) {
+                    setText(null);
+                } else {
+                    setText(entry.getData().getName());
+                }
+            }
+        });
+        for (RosterEntry e : entries) {
+            heistCrew.getItems().add(e);
+        }
+        heistCrew.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            resetActionList(newVal);
+        });
+        heistCrew.getSelectionModel().selectFirst();
+        actionSelectionPane.getChildren().add(heistCrew);
+
         Label title = new Label("Add Action");
         actionSelectionPane.getChildren().add(title);
 
         ComboBox<String> actionTypes = new ComboBox<>();
         actionTypes.getItems().addAll(ACTIONS);
         actionTypes.setOnAction(e -> {
-            if (actionSelectionPane.getChildren().size() == 4) {
-                actionSelectionPane.getChildren().remove(2);
+            if (actionSelectionPane.getChildren().size() == 5) {
+                actionSelectionPane.getChildren().remove(3);
             }
-            actionSelectionPane.getChildren().add(2, formFor(actionTypes.getValue()));
+            actionSelectionPane.getChildren().add(3, formFor(actionTypes.getValue()));
         });
         actionTypes.getSelectionModel().selectFirst();
         actionSelectionPane.getChildren().add(actionTypes);
@@ -91,7 +119,7 @@ public class HeistView extends BorderPane {
         Button add = new Button("Add Action");
         add.setOnAction(e -> {
             String value = actionTypes.getValue();
-            VBox pane = ((VBox) actionSelectionPane.getChildren().get(2));;
+            VBox pane = ((VBox) actionSelectionPane.getChildren().get(3));;
             Action act = null;
             switch (value) {
                 case "MOVE" -> {
@@ -115,9 +143,8 @@ public class HeistView extends BorderPane {
                     act = new GrabAction(item);
                 }
             }
-            //TODO: Change to get selected crew member
-            plans.get(game.getRoster().getFirst().getData().getName()).add(act);
-            resetActionList();
+            plans.get(heistCrew.getSelectionModel().getSelectedItem().getData().getName()).add(act);
+            resetActionList(heistCrew.getSelectionModel().getSelectedItem());
         });
         actionSelectionPane.getChildren().add(add);
 
@@ -248,11 +275,19 @@ public class HeistView extends BorderPane {
                 return;
             }
 
-            game.runHeist(target, Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+
+            Map<RosterEntry, ActionQueue> map = new HashMap<>();
+            for (RosterEntry entry : entries) {
+                map.put(entry, new ActionQueue(plans.get(entry.getData().getName())));
+            }
+            game.runHeist(target, map);
 
             plans = new HashMap<>();
-            plans.put(game.getRoster().getFirst().getData().getName(), new ArrayList<>());
-            resetActionList();
+            for (RosterEntry entry : entries) {
+                plans.put(entry.getData().getName(), new ArrayList<>());
+            }
+            heistCrew.getSelectionModel().selectFirst();
+            resetActionList(heistCrew.getSelectionModel().getSelectedItem());
 
             HeistPlayer player = new HeistPlayer(mapPane, game.getLog(), target, new Runnable() {
                 @Override
@@ -265,10 +300,11 @@ public class HeistView extends BorderPane {
 
         });
 
-        return new VBox(actionList, executeBtn, returnBtn);
+        executionPane = new VBox(actionList, executeBtn, returnBtn);
+        return executionPane;
     }
 
-    private void resetActionList() {
+    private void resetActionList(RosterEntry entry) {
         actionList = new ListView<>();
         actionList.setCellFactory(lv -> new ListCell<>() {
             @Override
@@ -295,10 +331,10 @@ public class HeistView extends BorderPane {
                 }
             }
         });
-        actionList.getItems().addAll(plans.get(game.getRoster().getFirst().getData().getName()));
+        actionList.getItems().addAll(plans.get(entry.getData().getName()));
         actionList.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            plans.get(game.getRoster().getFirst().getData().getName()).remove(newVal);
-            resetActionList();
+            plans.get(entry.getData().getName()).remove(newVal);
+            resetActionList(entry);
         });
         executionPane.getChildren().removeFirst();
         executionPane.getChildren().addFirst(actionList);

@@ -3,8 +3,7 @@ package ca.ACOII.lockstep.ui;
 import ca.ACOII.lockstep.engine.Event;
 import ca.ACOII.lockstep.engine.EventLog;
 import ca.ACOII.lockstep.engine.EventType;
-import ca.ACOII.lockstep.model.Patrol;
-import ca.ACOII.lockstep.model.Target;
+import ca.ACOII.lockstep.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -39,6 +38,20 @@ public class HeistPlayer {
     private String getRoomDest(Event e) {
         return e.evtType() == EventType.MOVE ? (e.description().substring(e.description().lastIndexOf("to ") + 2)).trim() : null;
     }
+    private LootItem getItem(Event e) {
+        if (e.evtType() != EventType.GRAB) return null;
+        String itemName = e.description().substring(e.description().lastIndexOf("Grabbed ") + 7).trim();
+        return plan.def.findLoot(plan.def.lootNameToId(itemName));
+    }
+    private Room getRoomParent(LootItem i) {
+        for (Room r : plan.target.getRooms()) {
+            if (r.getRoomLoot().containsKey(i.getId())) return r;
+            for (LootContainer container : r.getRoomContainers()) {
+                if (container.getContents().contains(i.getId())) return r;
+            }
+        }
+        return null;
+    }
 
     private void tick() {
         //TODO: Edit to handle steps with no actions
@@ -49,9 +62,12 @@ public class HeistPlayer {
         }
         Event e = log.getEvents().get(timelineIndex);
         if (e != null) {
-            System.out.println(e.toString());
+            System.out.println(e);
             if (getRoomDest(e) != null) {
                 plan.moveActor(e.actorId(), getRoomDest(e), t);
+            }
+            if (getItem(e) != null && getRoomParent(getItem(e)) != null) {
+                plan.updateRoomContents(getItem(e).getId(), getRoomParent(getItem(e)).getId());
             }
         }
         for (Patrol p : t.getPatrols()) {

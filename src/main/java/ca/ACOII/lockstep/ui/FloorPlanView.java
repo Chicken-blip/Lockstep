@@ -2,12 +2,10 @@ package ca.ACOII.lockstep.ui;
 
 import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
-import ca.ACOII.lockstep.load.Definitions;
-import ca.ACOII.lockstep.model.Door;
-import ca.ACOII.lockstep.model.Patrol;
-import ca.ACOII.lockstep.model.Room;
-import ca.ACOII.lockstep.model.Target;
+import ca.ACOII.lockstep.load.*;
+import ca.ACOII.lockstep.model.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -15,19 +13,31 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.*;
+
 
 public class FloorPlanView extends Pane {
     private static final double ROOM_WIDTH = 150, ROOM_HEIGHT = 100;
     Map<String, Circle> actors;
     Map<String, List<String>> actorsPerRoom;
+    Map<String, Rectangle> rooms;
+    Map<String, Tooltip> roomTooltips;
+    List<String> removedItemIds;
     Double[] offsetX = new Double[]{-15d, 15d, -15d, 15d};
     Double[] offsetY = new Double[]{-15d, -15d, 15d, 15d};
-    public FloorPlanView(Target t, Game g) {
+    Definitions def;
+    Target target;
+    public FloorPlanView(Target t, Game g, Definitions def) {
         super();
+        this.def = def;
+        target = t;
         actors = new HashMap<>();
         actorsPerRoom = new HashMap<>();
+        rooms = new HashMap<>();
+        roomTooltips = new HashMap<>();
+        removedItemIds = new ArrayList<>();
         for (Door d : t.getDoors()) {
             Line connection = new Line(t.findRoom(d.getRoomOrigin()).getX() + ROOM_WIDTH / 2,
                     t.findRoom(d.getRoomOrigin()).getY() + ROOM_HEIGHT / 2,
@@ -44,6 +54,13 @@ public class FloorPlanView extends Pane {
             label.setLayoutX(r.getX() + 10);
             label.setLayoutY(r.getY() + 20);
             label.setTextFill(Color.BLACK);
+            label.setMouseTransparent(true);
+            Tooltip roomContents = new Tooltip();
+            roomContents.setText(getRoomTooltipContent(r.getId()).toString());
+            roomContents.setShowDelay(Duration.millis(200));
+            Tooltip.install(room, roomContents);
+            rooms.put(r.getId(), room);
+            roomTooltips.put(r.getId(), roomContents);
             this.getChildren().add(room);
             this.getChildren().add(label);
         }
@@ -55,8 +72,69 @@ public class FloorPlanView extends Pane {
             addActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), Color.BLUE, t);
         }
 
-        //TODO: Add item tooltips per room
 
+    }
+
+    private StringBuilder getRoomTooltipContent(String roomId) {
+        Room r = target.findRoom(roomId);
+        List<String> roomLoot;
+        Map<String, List<String>> containerLoot;
+        roomLoot = new ArrayList<>();
+        for (String id : r.getRoomLoot().keySet()) {
+            if (!removedItemIds.contains(id)) roomLoot.add(id);
+        }
+        containerLoot = new HashMap<>();
+        for (LootContainer container : r.getRoomContainers()) {
+            List<String> containerIds = new ArrayList<>();
+            for (String id : container.getContents()) {
+                if (!removedItemIds.contains(id)) containerIds.add(id);
+            }
+            containerLoot.put(container.getId(), containerIds);
+        }
+
+        StringBuilder txt = new StringBuilder(r.getId() + "\n");
+        if (roomLoot.isEmpty() && containerLoot.isEmpty()) {
+            txt.append("(EMPTY)");
+        } else if (roomLoot.isEmpty()) {
+            for (LootContainer container : r.getRoomContainers()) {
+                txt.append(container.getId()).append(": ");
+                if (containerLoot.get(container.getId()).isEmpty()) {
+                    txt.append("(EMPTY)");
+                } else {
+                    for (String id : containerLoot.get(container.getId())) {
+                        txt.append(def.findLoot(id).getName()).append(", ");
+                    }
+                    txt = new StringBuilder(txt.substring(0, txt.length() - 2)).append("\n");
+                }
+            }
+        } else if (containerLoot.isEmpty()) {
+            txt.append("LOOT: ");
+            for (String str : roomLoot) {
+                txt.append(def.findLoot(str).getName()).append(", ");
+            }
+            txt = new StringBuilder(txt.substring(0, txt.length() - 2));
+        } else {
+            txt.append("LOOT: ");
+
+            for (String str : roomLoot) {
+                txt.append(def.findLoot(str).getName()).append(", ");
+            }
+
+            txt = new StringBuilder(txt.substring(0, txt.length() - 2)).append("\n");
+
+            for (LootContainer container : r.getRoomContainers()) {
+                txt.append(container.getId()).append(": ");
+                if (containerLoot.get(container.getId()).isEmpty()) {
+                    txt.append("(EMPTY)");
+                } else {
+                    for (String id : containerLoot.get(container.getId())) {
+                        txt.append(def.findLoot(id).getName()).append(", ");
+                    }
+                    txt = new StringBuilder(txt.substring(0, txt.length() - 2)).append("\n");
+                }
+            }
+        }
+        return txt;
     }
 
     public void addActor(String actorId, String roomId, Color color, Target target) {
@@ -132,5 +210,11 @@ public class FloorPlanView extends Pane {
         for (Room r : target.getRooms()) {
             relayoutRoom(r.getId(), target);
         }
+    }
+
+    public void updateRoomContents(String itemId, String roomId) {
+        removedItemIds.add(itemId);
+        Tooltip tip = roomTooltips.get(roomId);
+        tip.setText(getRoomTooltipContent(roomId).toString());
     }
 }

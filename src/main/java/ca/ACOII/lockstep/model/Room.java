@@ -32,7 +32,6 @@ public class Room {
     public void setRoomLoot(Map<String, Double> roomLoot) {
         this.roomLoot = roomLoot;
     }
-
     public List<LootContainer> getRoomContainers() {
         return roomContainers;
     }
@@ -56,4 +55,6 @@ public class Room {
     public void setY(int y) {
         this.y = y;
     }
+
+
 }

@@ -5,10 +5,7 @@ import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.model.Target;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 import java.util.List;
@@ -17,6 +14,7 @@ public class CampaignView extends BorderPane {
     App app;
     Game game;
     ListView<Target> targets;
+    ListView<RosterEntry> fullCrew;
 
     public CampaignView(App app) {
         this.app = app;
@@ -27,13 +25,22 @@ public class CampaignView extends BorderPane {
     private void build() {
         setBanner();
         setTargetList();
+        setCrewSelection();
         setFooter();
     }
 
     private void setFooter() {
-        Button btn = new Button("Enter Heist");
-        btn.setOnAction(e -> {
-            app.startHeist(targets.getSelectionModel().getSelectedItem(), game.getRoster());
+        Button heistBtn = new Button("Enter Heist");
+        heistBtn.setOnAction(e -> {
+            if (targets.getSelectionModel().getSelectedItem() == null) {
+                System.out.println("Select a target");
+                return;
+            }
+            if (fullCrew.getSelectionModel().getSelectedItems() == null || fullCrew.getSelectionModel().getSelectedItems().isEmpty()) {
+                System.out.println("Select at least one crew member!");
+                return;
+            }
+            app.startHeist(targets.getSelectionModel().getSelectedItem(), fullCrew.getSelectionModel().getSelectedItems());
         });
         HBox buttonBox = new HBox(10);
         buttonBox.setPadding(new Insets(50));
@@ -44,8 +51,44 @@ public class CampaignView extends BorderPane {
         HBox.setHgrow(space1, Priority.ALWAYS);
         HBox.setHgrow(space2, Priority.ALWAYS);
 
-        buttonBox.getChildren().addAll(space1, btn, space2);
+        buttonBox.getChildren().addAll(space1, heistBtn, space2);
         setBottom(buttonBox);
+    }
+
+    private void setCrewSelection() {
+        VBox container = new VBox(10);
+        container.setPadding(new Insets(50, 100, 50, 10));
+
+        fullCrew = new ListView<>();
+        fullCrew.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(RosterEntry entry, boolean empty) {
+                super.updateItem(entry, empty);
+                if (empty || entry == null) {
+                    setText(null);
+                } else {
+                    StringBuilder txt = new StringBuilder();
+                    for (String s : entry.getData().getSkills().keySet()) {
+                        txt.append(s).append(": ").append(entry.getData().getSkills().get(s)).append(" | ");
+                    }
+                    txt = new StringBuilder(txt.substring(0, txt.length() - 2));
+                    setText(entry.getData().getName() + " (" + txt.toString().trim() + ")");
+                }
+            }
+        });
+        fullCrew.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        for (RosterEntry e : game.getRoster()) {
+            if (e.getReleaseDate() <= game.getCalendar().getCurrentDay()) {
+                fullCrew.getItems().add(e);
+            }
+        }
+        fullCrew.getSelectionModel().selectAll();
+
+        container.getChildren().add(fullCrew);
+
+        setRight(container);
+
+
     }
 
     private void setTargetList() {

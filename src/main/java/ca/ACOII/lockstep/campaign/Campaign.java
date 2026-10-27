@@ -14,20 +14,23 @@ public class Campaign {
     public Calendar calendar;
     Stash stash;
     List<RosterEntry> crew;
+    public Definitions definitions;
 
-    public Campaign(Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
+    public Campaign(Definitions def, Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
         this.calendar = calendar;
         this.stash = stash;
         this.crew = new ArrayList<>();
         for (CrewMember c : crew) {
             this.crew.add(new RosterEntry(c));
         }
+        this.definitions = def;
     }
 
-    public Campaign(Calendar calendar, Stash stash, List<RosterEntry> crew) {
+    public Campaign(Definitions def, Calendar calendar, Stash stash, List<RosterEntry> crew) {
         this.calendar = calendar;
         this.stash = stash;
         this.crew = crew;
+        this.definitions = def;
     }
 
     public void settleHeist(HeistRunner runner, int arrestDuration) {

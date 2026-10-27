@@ -30,10 +30,10 @@ public class Game {
                 SaveState save = new ObjectMapper().readValue(new File(saveFile), SaveState.class);
                 campaign = new SaveManager().loadGame(saveFile, def);
             } catch (IOException e) {
-                campaign = new Campaign(new Calendar(), new Stash(def), new ArrayList<>(), 0);
+                campaign = new Campaign(def, new Calendar(), new Stash(def), new ArrayList<>(), 0);
             }
         } else {
-            campaign = new Campaign(new Calendar(), new Stash(def), new ArrayList<>(), 0);
+            campaign = new Campaign(def, new Calendar(), new Stash(def), new ArrayList<>(), 0);
         }
 
         log = null;

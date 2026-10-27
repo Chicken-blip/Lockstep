@@ -75,7 +75,7 @@ public class SaveManager {
             list.add(entry);
         }
 
-        return new Campaign(calendar, stash, list);
+        return new Campaign(x, calendar, stash, list);
 
     }
 }

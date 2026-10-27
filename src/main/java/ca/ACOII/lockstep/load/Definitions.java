@@ -29,6 +29,14 @@ public class Definitions {
         }
         return null;
     }
+    public String lootNameToId(String name) {
+        for (LootItem i : lootItems) {
+            if (Objects.equals(i.getName(), name)) {
+                return i.getId();
+            }
+        }
+        return null;
+    }
     public CrewMember findCrew(String key) {
         for (CrewMember c : crew) {
             if (Objects.equals(c.getId(), key)) {
