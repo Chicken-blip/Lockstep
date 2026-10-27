@@ -9,7 +9,7 @@
   "maxCrew": 1,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 250, "roomLoot": {}, "roomContainers": []},
-    {"id": "LOBBY", "x": 250, "y": 250, "roomLoot": {"register_cash": 1.0}, "roomContainers": []},
+    {"id": "LOBBY", "x": 250, "y": 250, "roomLoot": {"register_cash": 0.6}, "roomContainers": []},
     {"id": "OFFICE", "x": 450, "y": 100, "roomLoot": {"candelabra_a": 1.0}, "roomContainers": []},
     {"id": "VAULT", "x": 450, "y": 400, "roomLoot": {"candelabra_b": 1.0}, "roomContainers": [
       {"id": "Vault Safe", "type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}

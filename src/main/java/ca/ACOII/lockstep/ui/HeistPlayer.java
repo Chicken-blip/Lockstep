@@ -44,7 +44,7 @@ public class HeistPlayer {
         return plan.def.findLoot(plan.def.lootNameToId(itemName));
     }
     private Room getRoomParent(LootItem i) {
-        for (Room r : plan.target.getRooms()) {
+        for (Room r : plan.instance.getTarget().getRooms()) {
             if (r.getRoomLoot().containsKey(i.getId())) return r;
             for (LootContainer container : r.getRoomContainers()) {
                 if (container.getContents().contains(i.getId())) return r;

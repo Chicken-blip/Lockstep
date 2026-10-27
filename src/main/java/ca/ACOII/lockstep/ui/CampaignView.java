@@ -105,7 +105,7 @@ public class CampaignView extends BorderPane {
                     setText(target.getName() + " (Days " + target.getAvailableFrom()
                             + "- PRESENT)");
                 } else if (target.getAvailableFrom() == 0) {
-                    setText(target.getName() + " (Until Day " + target.getAvailabilityDuration());
+                    setText(target.getName() + " (Until Day " + target.getAvailabilityDuration() + ")");
                 } else  {
                     setText(target.getName() + " (Days " + target.getAvailableFrom()
                             + "–" + (target.getAvailableFrom() + target.getAvailabilityDuration()) + ")");

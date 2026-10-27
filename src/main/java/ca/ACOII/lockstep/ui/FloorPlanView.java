@@ -2,6 +2,7 @@ package ca.ACOII.lockstep.ui;
 
 import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
+import ca.ACOII.lockstep.engine.HeistInstance;
 import ca.ACOII.lockstep.load.*;
 import ca.ACOII.lockstep.model.*;
 import javafx.scene.control.Label;
@@ -11,8 +12,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -28,25 +27,25 @@ public class FloorPlanView extends Pane {
     Double[] offsetX = new Double[]{-15d, 15d, -15d, 15d};
     Double[] offsetY = new Double[]{-15d, -15d, 15d, 15d};
     Definitions def;
-    Target target;
-    public FloorPlanView(Target t, Game g, Definitions def) {
+    HeistInstance instance;
+    public FloorPlanView(HeistInstance instance, Game g, Definitions def) {
         super();
         this.def = def;
-        target = t;
+        this.instance = instance;
         actors = new HashMap<>();
         actorsPerRoom = new HashMap<>();
         rooms = new HashMap<>();
         roomTooltips = new HashMap<>();
         removedItemIds = new ArrayList<>();
-        for (Door d : t.getDoors()) {
-            Line connection = new Line(t.findRoom(d.getRoomOrigin()).getX() + ROOM_WIDTH / 2,
-                    t.findRoom(d.getRoomOrigin()).getY() + ROOM_HEIGHT / 2,
-                    t.findRoom(d.getRoomDest()).getX() + ROOM_WIDTH / 2,
-                    t.findRoom(d.getRoomDest()).getY() + ROOM_HEIGHT / 2);
+        for (Door d : instance.getTarget().getDoors()) {
+            Line connection = new Line(instance.getTarget().findRoom(d.getRoomOrigin()).getX() + ROOM_WIDTH / 2,
+                    instance.getTarget().findRoom(d.getRoomOrigin()).getY() + ROOM_HEIGHT / 2,
+                    instance.getTarget().findRoom(d.getRoomDest()).getX() + ROOM_WIDTH / 2,
+                    instance.getTarget().findRoom(d.getRoomDest()).getY() + ROOM_HEIGHT / 2);
             connection.setStroke(d.getLock() != null ? Color.RED : Color.BLACK);
             this.getChildren().add(connection);
         }
-        for (Room r : t.getRooms()) {
+        for (Room r : instance.getTarget().getRooms()) {
             Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
             room.setStroke(Color.BLACK);
             room.setFill(Color.WHITE);
@@ -66,27 +65,27 @@ public class FloorPlanView extends Pane {
         }
 
         for (RosterEntry e : g.getRoster()) {
-            addActor(e.getData().getName(), t.getEntryRoom(), Color.BLACK, t);
+            addActor(e.getData().getName(), instance.getTarget().getEntryRoom(), Color.BLACK, instance.getTarget());
         }
-        for (Patrol p : t.getPatrols()) {
-            addActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), Color.BLUE, t);
+        for (Patrol p : instance.getTarget().getPatrols()) {
+            addActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), Color.BLUE, instance.getTarget());
         }
 
 
     }
 
     private StringBuilder getRoomTooltipContent(String roomId) {
-        Room r = target.findRoom(roomId);
+        Room r = instance.getTarget().findRoom(roomId);
         List<String> roomLoot;
         Map<String, List<String>> containerLoot;
         roomLoot = new ArrayList<>();
-        for (String id : r.getRoomLoot().keySet()) {
+        for (String id : instance.getRoomLoot(roomId)) {
             if (!removedItemIds.contains(id)) roomLoot.add(id);
         }
         containerLoot = new HashMap<>();
         for (LootContainer container : r.getRoomContainers()) {
             List<String> containerIds = new ArrayList<>();
-            for (String id : container.getContents()) {
+            for (String id : instance.getContainerLoot(container.getId())) {
                 if (!removedItemIds.contains(id)) containerIds.add(id);
             }
             containerLoot.put(container.getId(), containerIds);

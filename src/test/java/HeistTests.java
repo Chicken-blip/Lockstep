@@ -6,10 +6,7 @@ import ca.ACOII.lockstep.model.Target;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +40,8 @@ public class HeistTests {
         actions.add(new MoveAction("LOBBY", 1 ));
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
-        game.runHeist(target, Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.prepareHeist(target);
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
             assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.SPOTTED);
@@ -77,7 +75,8 @@ public class HeistTests {
         actions.add(new MoveAction("LOBBY", 1 ));
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
-        game.runHeist(target, Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.prepareHeist(target);
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
             assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.SPOTTED);
@@ -107,7 +106,8 @@ public class HeistTests {
         actions.add(new MoveAction("LOBBY", 1 ));
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
-        game.runHeist(target, Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.prepareHeist(target);
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.CAUGHT, e.evtType());
@@ -139,7 +139,8 @@ public class HeistTests {
         actions.add(new MoveAction("LOBBY", 1));
         actions.add(new MoveAction("OUTSIDE", 1));
 
-        game.runHeist(target, Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.prepareHeist(target);
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         assertSame(EventType.SPOTTED, game.getLog().getEvents().get(7).evtType());
         assertSame(EventType.CAUGHT, game.getLog().getEvents().getLast().evtType());
@@ -176,7 +177,8 @@ public class HeistTests {
         actions.add(new MoveAction("OUTSIDE", 1));
         queues.put(game.getRoster().getLast(), new ActionQueue(actions));
 
-        game.runHeist(target, queues);
+        game.prepareHeist(target);
+        game.runHeist(queues);
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.SPOTTED, e.evtType());
         }
@@ -188,4 +190,30 @@ public class HeistTests {
         assertEquals(2, game.getCalendar().getCurrentDay());
 
     }
+
+    @Test
+    public void test1_heistInstanceGeneration() {
+        HeistInstance instance = HeistGenerator.generate(definitions.targets.getFirst(), definitions, 42L);
+        assertTrue(Objects.equals("safe_contents", instance.getMainScoreId()));
+        assertTrue(instance.getContainerLoot("Vault Safe").contains("safe_contents"));
+        instance = HeistGenerator.generate(definitions.targets.getFirst(), definitions, 42L);
+        assertTrue(Objects.equals("safe_contents", instance.getMainScoreId()));
+        assertTrue(instance.getContainerLoot("Vault Safe").contains("safe_contents"));
+    }
+
+    /*
+    @Test
+    public void test2_heistInstanceGeneration() {
+        HeistInstance instance = null;
+        Set<Boolean> bools = new HashSet<>();
+        int count = 0;
+        for (long i = 1L; Math.abs(i) < Long.MAX_VALUE;) {
+            instance = HeistGenerator.generate(definitions.targets.getFirst(), definitions, i);
+            bools.add(instance.getRoomLoot("LOBBY").contains("register_cash"));
+            count++;
+            if (count > 100) i = Long.MAX_VALUE; else  i += Long.MAX_VALUE / 100;
+        }
+        assertEquals(2, bools.size());
+    }
+     */
 }

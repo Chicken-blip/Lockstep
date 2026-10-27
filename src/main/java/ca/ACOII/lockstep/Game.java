@@ -1,9 +1,7 @@
 package ca.ACOII.lockstep;
 
 import ca.ACOII.lockstep.campaign.*;
-import ca.ACOII.lockstep.engine.ActionQueue;
-import ca.ACOII.lockstep.engine.EventLog;
-import ca.ACOII.lockstep.engine.HeistRunner;
+import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.Gear;
 import ca.ACOII.lockstep.model.Target;
@@ -14,12 +12,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Game {
     Definitions def;
     Campaign campaign;
     String saveFile;
     EventLog log;
+    HeistInstance instance;
     public Game(boolean toLoad) {
         def = new Definitions();
         saveFile = "save.json";
@@ -37,6 +37,9 @@ public class Game {
         }
 
         log = null;
+        if (campaign.currentTargetId != null) {
+            instance = new HeistInstance(def.findTarget(campaign.currentTargetId), def);
+        }
 
     }
 
@@ -48,8 +51,13 @@ public class Game {
         return campaign.getRoster();
     }
 
-    public void runHeist(Target t, Map<RosterEntry, ActionQueue> queues) {
-        HeistRunner heist = new HeistRunner(queues, t, campaign);
+    public void prepareHeist(Target target) {
+        campaign.seed = new Random().nextLong();
+        campaign.currentTargetId = target.getId();
+        instance = HeistGenerator.generate(target, def, campaign.seed);
+    }
+    public void runHeist(Map<RosterEntry, ActionQueue> queues) {
+        HeistRunner heist = new HeistRunner(queues, instance, campaign);
         heist.run();
         //TODO: Change arrestDuration to target-dependent value
         campaign.settleHeist(heist, 3);
@@ -97,4 +105,11 @@ public class Game {
 
     public Stash getStash() {return campaign.getStash();}
     public Calendar getCalendar() {return campaign.calendar;}
+
+    public HeistInstance getInstance() {
+        return this.instance;
+    }
+    public Campaign getCampaign() {
+        return this.campaign;
+    }
 }

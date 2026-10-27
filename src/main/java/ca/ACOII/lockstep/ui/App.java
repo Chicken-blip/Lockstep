@@ -33,16 +33,13 @@ public class App extends Application {
     private static final List<String> ACTIONS = List.of(
             "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "GRAB"
     );
-    Target target;
+    HeistInstance instance;
     List<RosterEntry> crew;
 
     Scene scene;
     public static void main(String[] args) {launch(args);}
     @Override
     public void start(Stage stage) {
-
-        target = def.targets.getFirst();
-
         game.setMoney(100);
         game.recruit("thief", "Thief A");
 
@@ -61,14 +58,15 @@ public class App extends Application {
 
     private Parent buildScreen(Screen screen) {
         return switch (screen) {
-            case HEIST -> new HeistView(target, crew, this);
+            case HEIST -> new HeistView(instance, crew, this);
             case CAMPAIGN -> new CampaignView(this);
             case MENU -> new MenuView(this);
         };
     }
 
     public void startHeist(Target target, List<RosterEntry> selectedCrew) {
-        this.target = target;
+        game.prepareHeist(target);
+        this.instance = game.getInstance();
         this.crew = selectedCrew;
         showScreen(Screen.HEIST);
     }

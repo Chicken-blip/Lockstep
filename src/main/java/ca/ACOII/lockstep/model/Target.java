@@ -1,5 +1,7 @@
 package ca.ACOII.lockstep.model;
 
+import ca.ACOII.lockstep.load.Definitions;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,7 +12,6 @@ public class Target {
     private int alarmCountdown, availableFrom, availabilityDuration, maxCrew;
     private List<Room> rooms;
     private List<Door> doors;
-    //TODO: Figure out how to select the main goal for the target
     private List<Patrol> patrols;
 
     public Target() {
@@ -145,5 +146,17 @@ public class Target {
     }
 
 
-
+    public String findMainScore(Definitions def) {
+        for (Room r : rooms) {
+            for (String id : r.getRoomLoot().keySet()) {
+                if (def.findLoot(id).isMainScore()) return id;
+            }
+            for (LootContainer container : r.getRoomContainers()) {
+                for (String id : container.getContents()) {
+                    if (def.findLoot(id).isMainScore()) return id;
+                }
+            }
+        }
+        return null;
+    }
 }

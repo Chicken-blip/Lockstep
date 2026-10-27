@@ -63,4 +63,11 @@ public class Definitions {
         }
         return null;
     }
+
+    public Target findTarget(String key) {
+        for (Target t : targets) {
+            if (Objects.equals(t.getId(), key)) return t;
+        }
+        return null;
+    }
 }

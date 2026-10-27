@@ -31,10 +31,12 @@ public class HeistView extends BorderPane {
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
+    HeistInstance instance;
 
-    public HeistView(Target target, List<RosterEntry> entries, App app) {
+    public HeistView(HeistInstance instance, List<RosterEntry> entries, App app) {
         this.game = app.game;
-        this.target = target;
+        this.instance = instance;
+        this.target = instance.getTarget();
         this.entries = entries;
         this.app = app;
         plans = new HashMap<>();
@@ -55,7 +57,7 @@ public class HeistView extends BorderPane {
     private VBox mapPane() {
         VBox pane = new VBox();
 
-        FloorPlanView plan = new FloorPlanView(target, game, app.def);
+        FloorPlanView plan = new FloorPlanView(instance, game, app.def);
         mapPane = plan;
         ScrollPane scroll = new ScrollPane(plan);
         scroll.setPannable(true);
@@ -237,12 +239,10 @@ public class HeistView extends BorderPane {
         ComboBox<String> itemSelect = new ComboBox<>();
 
         List<String> ids = new ArrayList<>();
-        target.getRooms().getFirst().getRoomLoot();
-        //TODO: Fix for items with appearance variance (chance in room.getLoot map < 1.0)
         for (Room r : target.getRooms()) {
-            ids.addAll(r.getRoomLoot().keySet());
+            ids.addAll(instance.getRoomLoot(r.getId()));
             for (LootContainer c : r.getRoomContainers()) {
-                ids.addAll(c.getContents());
+                ids.addAll(instance.getContainerLoot(c.getId()));
             }
         }
         itemSelect.getItems().addAll(ids);
@@ -259,6 +259,7 @@ public class HeistView extends BorderPane {
 
         Button returnBtn = new Button("Back");
         returnBtn.setOnAction(e -> {
+            game.getCampaign().currentTargetId = null;
             app.showScreen(Screen.CAMPAIGN);
         });
         Button executeBtn = new Button("Run Heist");
@@ -280,7 +281,8 @@ public class HeistView extends BorderPane {
             for (RosterEntry entry : entries) {
                 map.put(entry, new ActionQueue(plans.get(entry.getData().getName())));
             }
-            game.runHeist(target, map);
+            game.prepareHeist(target);
+            game.runHeist(map);
 
             plans = new HashMap<>();
             for (RosterEntry entry : entries) {
@@ -326,7 +328,7 @@ public class HeistView extends BorderPane {
                         setText("CRACK SAFE safe " + crack.getContainerId());
                     }
                     if (action instanceof GrabAction grab) {
-                        setText("GARB item " + grab.getItem().getName());
+                        setText("GRAB item " + grab.getItem().getName());
                     }
                 }
             }

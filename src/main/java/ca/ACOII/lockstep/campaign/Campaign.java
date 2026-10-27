@@ -15,6 +15,8 @@ public class Campaign {
     Stash stash;
     List<RosterEntry> crew;
     public Definitions definitions;
+    public long seed;
+    public String currentTargetId;
 
     public Campaign(Definitions def, Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
         this.calendar = calendar;

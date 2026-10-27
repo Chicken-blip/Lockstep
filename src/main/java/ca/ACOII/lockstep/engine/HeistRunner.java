@@ -13,11 +13,14 @@ public class HeistRunner {
     public List<Guard> guards;
     Set<String> unlockedDoors, openContainers;
     Target t;
+    HeistInstance instance;
     boolean isCompleted = false;
     Campaign campaign;
 
-    public HeistRunner(Map<RosterEntry, ActionQueue> queues, Target t, Campaign campaign) {
+    public HeistRunner(Map<RosterEntry, ActionQueue> queues, HeistInstance instance, Campaign campaign) {
         currentStep = 1;
+        this.t = instance.getTarget();
+        this.instance = instance;
         crewQueues = new HashMap<>();
         for (RosterEntry e : queues.keySet()) {
             CrewMember member = e.getData();
@@ -31,7 +34,6 @@ public class HeistRunner {
         for (Patrol p : t.getPatrols()) {
             guards.add(new Guard(p));
         }
-        this.t = t;
         alarmTimer = -1;
         unlockedDoors = new HashSet<>();
         openContainers = new HashSet<>();
@@ -95,7 +97,7 @@ public class HeistRunner {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ESCAPED) {
                     for (LootItem i : c.inventory) {
-                        if (i.isMainScore()) {
+                        if (Objects.equals(instance.getMainScoreId(), i.getId())) {
                             isCompleted = true;
                             break;
                         }
@@ -132,13 +134,13 @@ public class HeistRunner {
         if (action instanceof GrabAction grab) {
             Room curr = t.findRoom(crew.currentRoom);
             //Check if the current room has the directed item
-            if (curr.getRoomLoot().containsKey(grab.item.getId())) {
+            if (instance.getRoomLoot(curr.getId()).contains(grab.item.getId())) {
                 return;
             } else {
                 //Check each container within the room
                 for (LootContainer container : curr.getRoomContainers()) {
                     //Check if the specified container is unlocked and has the item
-                    if (container.getContents().contains(grab.item.getId()) && openContainers.contains(container.getId())) {
+                    if (instance.getContainerLoot(container.getId()).contains(grab.item.getId()) && openContainers.contains(container.getId())) {
                         return;
                     }
                 }
