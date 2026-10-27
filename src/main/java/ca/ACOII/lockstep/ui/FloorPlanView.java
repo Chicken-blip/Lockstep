@@ -55,6 +55,7 @@ public class FloorPlanView extends Pane {
             addActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), Color.BLUE, t);
         }
 
+        //TODO: Add item tooltips per room
 
     }
 

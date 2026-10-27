@@ -17,10 +17,12 @@ public class HeistPlayer {
     Timeline timeline;
     int timelineIndex;
     Target t;
+    Runnable onFinished;
 
-    public HeistPlayer(FloorPlanView plan, EventLog log, Target t)  {
+    public HeistPlayer(FloorPlanView plan, EventLog log, Target t, Runnable onComplete)  {
         this.plan = plan;
         this.log = log;
+        this.onFinished = onComplete;
         timeline = new Timeline(new KeyFrame(Duration.millis(1000), evt -> {
             tick();
         }));
@@ -42,6 +44,7 @@ public class HeistPlayer {
         //TODO: Edit to handle steps with no actions
         if (timelineIndex >= log.getEvents().size()) {
             timeline.stop();
+            onFinished.run();
             return;
         }
         Event e = log.getEvents().get(timelineIndex);

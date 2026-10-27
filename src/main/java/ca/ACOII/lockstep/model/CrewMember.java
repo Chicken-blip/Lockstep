@@ -1,5 +1,6 @@
 package ca.ACOII.lockstep.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CrewMember {
@@ -15,7 +16,10 @@ public class CrewMember {
         this.name = c.name;
         this.recruitFee = c.recruitFee;
         this.dayAvailability = c.dayAvailability;
-        this.skills = c.skills;
+        this.skills = new HashMap<>();
+        for (String str : c.skills.keySet()) {
+            this.skills.put(str, c.skills.get(str));
+        }
         releaseDate = 0;
     }
 
