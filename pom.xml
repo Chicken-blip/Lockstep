@@ -61,7 +61,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>ca.ACOII.lockstep.ui.Main</mainClass>
+                    <mainClass>ca.ACOII.lockstep.Main</mainClass>
                 </configuration>
             </plugin>
         </plugins>
