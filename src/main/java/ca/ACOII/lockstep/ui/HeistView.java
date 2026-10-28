@@ -5,11 +5,16 @@ import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +30,8 @@ public class HeistView extends BorderPane {
     Map<String, List<Action>> plans;
 
     VBox executionPane;
+    HBox logPane;
+    ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
             "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "GRAB"
@@ -43,6 +50,8 @@ public class HeistView extends BorderPane {
         for (RosterEntry e : entries) {
             plans.put(e.getData().getName(), new ArrayList<>());
         }
+        setPadding(new Insets(15));
+
         build();
     }
 
@@ -51,15 +60,36 @@ public class HeistView extends BorderPane {
         this.setLeft(actionBuilderPane());
         executionPane = executeQueuePane();
         this.setRight(executionPane);
+        logPane = executionLogPane();
+        this.setBottom(logPane);
+        for (Node node : this.getChildren()) {
+            if (node instanceof HBox h) h.setSpacing(20);
+            if (node instanceof VBox v) v.setSpacing(20);
+        }
 
     }
 
+    private HBox executionLogPane() {
+        HBox pane = new HBox();
+        pane.setPadding(new Insets(50, 10, 50, 10));
+
+        logList = new ListView<>();
+        logList.setMaxHeight(200);
+        logList.setMaxWidth(Double.MAX_VALUE);
+
+        pane.getChildren().add(logList);
+        pane.setAlignment(Pos.BOTTOM_CENTER);
+        HBox.setHgrow(logList, Priority.ALWAYS);
+        return pane;
+    }
+
     private VBox mapPane() {
-        VBox pane = new VBox();
+        VBox pane = new VBox(10);
 
         FloorPlanView plan = new FloorPlanView(game.getInstance(), game, entries, app.def);
         mapPane = plan;
-        ScrollPane scroll = new ScrollPane(plan);
+        mapPane.setPadding(new Insets(20));
+        ScrollPane scroll = new ScrollPane(mapPane);
         scroll.setPannable(true);
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
@@ -257,6 +287,8 @@ public class HeistView extends BorderPane {
     private VBox executeQueuePane() {
         actionList = new ListView<>();
 
+        HBox buttonBox = new HBox(10);
+
         Button returnBtn = new Button("Back");
         returnBtn.setOnAction(e -> {
             game.getCampaign().currentTargetId = null;
@@ -297,12 +329,14 @@ public class HeistView extends BorderPane {
                     returnBtn.setDisable(false);
                     returnBtn.setText("Continue");
                 }
-            });
+            }, game.getCampaign().maxStep, logList);
             player.play();
 
         });
 
-        executionPane = new VBox(actionList, executeBtn, returnBtn);
+        buttonBox.getChildren().addAll(executeBtn, returnBtn);
+        buttonBox.setAlignment(Pos.CENTER);
+        executionPane = new VBox(10, actionList, buttonBox);
         return executionPane;
     }
 
@@ -338,7 +372,9 @@ public class HeistView extends BorderPane {
             plans.get(entry.getData().getName()).remove(newVal);
             resetActionList(entry);
         });
-        executionPane.getChildren().removeFirst();
-        executionPane.getChildren().addFirst(actionList);
+        if (executionPane != null) {
+            executionPane.getChildren().removeFirst();
+            executionPane.getChildren().addFirst(actionList);
+        }
     }
 }

@@ -19,6 +19,9 @@ public class Campaign {
     public String currentTargetId;
     public List<String> completedTargetIds;
 
+    //NOTE: Solely for HeistRunner and Timeline replay
+    public int maxStep;
+
     public Campaign(Definitions def, Calendar calendar, Stash stash, List<CrewMember> crew, int val) {
         this.calendar = calendar;
         completedTargetIds = new ArrayList<>();

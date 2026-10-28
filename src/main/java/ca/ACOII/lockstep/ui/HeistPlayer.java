@@ -6,19 +6,25 @@ import ca.ACOII.lockstep.engine.EventType;
 import ca.ACOII.lockstep.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Node;
+import javafx.scene.control.ListView;
 import javafx.util.Duration;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 public class HeistPlayer {
     FloorPlanView plan;
     EventLog log;
     Timeline timeline;
-    int timelineIndex;
+    int step;
     Target t;
     Runnable onFinished;
+    int maxStep;
+    ListView<String> logDest;
 
-    public HeistPlayer(FloorPlanView plan, EventLog log, Target t, Runnable onComplete)  {
+    public HeistPlayer(FloorPlanView plan, EventLog log, Target t, Runnable onComplete, int len, ListView<String> printDestination)  {
         this.plan = plan;
         this.log = log;
         this.onFinished = onComplete;
@@ -27,11 +33,14 @@ public class HeistPlayer {
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         this.t = t;
+        maxStep = len;
+        logDest = printDestination;
+
     }
 
     public void play() {
         timeline.stop();
-        timelineIndex = 0;
+        step = 1;
         timeline.play();
     }
 
@@ -54,31 +63,39 @@ public class HeistPlayer {
     }
 
     private void tick() {
-        //TODO: Edit to handle steps with no actions
-        if (timelineIndex >= log.getEvents().size()) {
-            timeline.stop();
-            onFinished.run();
+        if (step != maxStep + 1) {
+            int finalStep = step;
+            List<Event> stepEvents = log.getEvents().stream().filter(new Predicate<Event>() {
+                @Override
+                public boolean test(Event event) {
+                    return event.stepNum() == finalStep;
+                }
+            }).toList();
+            for (Event e : stepEvents) {
+                //Check each event at this step
+                if (e != null) {
+                    logDest.getItems().add(String.valueOf(e));
+                    if (getRoomDest(e) != null) {
+                        plan.moveActor(e.actorId(), getRoomDest(e), t);
+                    }
+                    if (getItem(e) != null && getRoomParent(getItem(e)) != null) {
+                        plan.updateRoomContents(getItem(e).getId(), getRoomParent(getItem(e)).getId());
+                    }
+                }
+            }
+            for (Patrol p : t.getPatrols()) {
+                String roomId = p.roomAt(step - 1);
+                if (!Objects.equals(plan.actorRoom(p.getId()), roomId)) {
+                    plan.moveActor(p.getId(), roomId, t);
+                }
+            }
+            step++;
             return;
         }
-        Event e = log.getEvents().get(timelineIndex);
-        if (e != null) {
-            System.out.println(e);
-            if (getRoomDest(e) != null) {
-                plan.moveActor(e.actorId(), getRoomDest(e), t);
-            }
-            if (getItem(e) != null && getRoomParent(getItem(e)) != null) {
-                plan.updateRoomContents(getItem(e).getId(), getRoomParent(getItem(e)).getId());
-            }
-        }
-        for (Patrol p : t.getPatrols()) {
-            assert e != null;
-            String roomId = p.roomAt(e.stepNum() - 1);
-            if (!Objects.equals(plan.actorRoom(p.getId()), roomId)) {
-                plan.moveActor(p.getId(), roomId, t);
-            }
-        }
 
-        timelineIndex++;
+        timeline.stop();
+        onFinished.run();
+
 
     }
 }

@@ -49,6 +49,7 @@ public class HeistRunner {
                     validateAction(c, a);
                     if (!running) {
                         arrestRemainingActors();
+                        campaign.maxStep = currentStep;
                         return;
                     }
                     EventType e = null;
@@ -61,21 +62,21 @@ public class HeistRunner {
                             unlockedDoors.add(pick.doorId);
                             e = EventType.PICK_LOCK;
                         } else {
-                            a = null;
+                            e = EventType.PICK_LOCK_PROGRESS;
                         }
                     } else if (a instanceof GrabAction grab) {
                         if (crewQueues.get(c).remainingSteps == 0) {
                             c.addToInventory(grab.item);
                             e = EventType.GRAB;
                         } else {
-                            a = null;
+                            e = EventType.GRAB_PROGRESS;
                         }
                     } else if (a instanceof CrackAction crack) {
                         if (crewQueues.get(c).remainingSteps == 0) {
                             openContainers.add(crack.containerId);
                             e = EventType.CRACK;
                         } else {
-                            a = null;
+                            e = EventType.CRACK_PROGRESS;
                         }
                     } else {
                         e = EventType.WAIT;
@@ -113,6 +114,7 @@ public class HeistRunner {
             if (isCompleted) {
                 getStash();
                 campaign.completedTargetIds.add(instance.getTarget().getId());
+                campaign.maxStep = currentStep;
                 return;
             }
             for (CrewMemberState c : crewQueues.keySet()) {
@@ -126,6 +128,7 @@ public class HeistRunner {
         }
         getStash();
         arrestRemainingActors();
+        campaign.maxStep = currentStep;
     }
 
     private void arrestRemainingActors() {
