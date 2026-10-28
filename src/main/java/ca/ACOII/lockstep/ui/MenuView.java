@@ -47,25 +47,30 @@ public class MenuView extends BorderPane {
 
     private Tab rosterTab() {
         VBox content = new VBox(10);
+        HBox detailsList = new HBox(50);
 
         ListView<RosterEntry> entries = getRosterEntryListView();
         entries.getItems().addAll(game.getRoster());
-        entries.getSelectionModel().selectFirst();
+        entries.getSelectionModel().clearSelection();
 
+        TextArea entryDetails = new TextArea();
+        entryDetails.setEditable(false);
 
         HBox actionList = new HBox(50);
 
         VBox skillBox = new VBox(10);
         ComboBox<Skill> skills = getSkillComboBox();
+
         skills.getItems().addAll(app.def.skills.getSkills());
         skills.getSelectionModel().selectFirst();
+        skills.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> entries.getSelectionModel().clearSelection());
 
         Button train = new Button("Train Skill");
         train.setOnAction(e -> {
             game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId());
             refresh();
         });
-        skillBox.getChildren().addAll(skills, train);
+        train.setDisable(true);
         skillBox.setAlignment(Pos.CENTER);
 
         VBox gearBox = new VBox(10);
@@ -77,13 +82,32 @@ public class MenuView extends BorderPane {
             game.buyGear(entries.getSelectionModel().getSelectedItem(), gear.getSelectionModel().getSelectedItem());
             refresh();
         });
-        gearBox.getChildren().addAll(gear, buyGear);
+        buyGear.setDisable(true);
+        entries.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            Skill skill = skills.getSelectionModel().getSelectedItem();
+            if (newVal != null) {
+                String txt = skill.getName() + " (Cost: " + (skill.getTrainingCost()) * newVal.getData().getSkills().get(skill.getId()) + ")";
+                skills.getButtonCell().setText(txt);
+                entryDetails.setText(getEntryDetails(newVal));
+                buyGear.setDisable(false);
+                train.setDisable(false);
+            } else {
+                skills.getButtonCell().setText(skill.getName());
+                entryDetails.setText("");
+                buyGear.setDisable(true);
+                train.setDisable(true);
+            }
+        } );
         gearBox.setAlignment(Pos.CENTER);
 
+
+        skillBox.getChildren().addAll(skills, train);
+        gearBox.getChildren().addAll(gear, buyGear);
+        detailsList.getChildren().addAll(entries, entryDetails);
         actionList.getChildren().addAll(skillBox, gearBox);
         actionList.setAlignment(Pos.CENTER);
 
-        content.getChildren().addAll(entries, actionList);
+        content.getChildren().addAll(detailsList, actionList);
         content.setPadding(new Insets(30, 100, 30, 100));
 
         Tab tab = new Tab();
@@ -91,6 +115,24 @@ public class MenuView extends BorderPane {
         tab.setText("Roster");
         tab.setClosable(false);
         return tab;
+    }
+
+    private String getEntryDetails(RosterEntry entry) {
+        StringBuilder txt = new StringBuilder(entry.getData().getName() + " (" + entry.getData().getId() + ")");
+        txt.append("\n\nSkills:");
+        for (String str : entry.getData().getSkills().keySet()) {
+            Skill s = app.def.findSkill(str);
+            txt.append("\n").append(s.getName()).append(" level: ").append(entry.getData().getSkills().get(str));
+        }
+        txt.append("\n\nGear");
+        for (Gear g : entry.getGear()) {
+            txt.append("\n").append(g.getName()).append(" - ");
+            for (GearEffect eff : g.getEffects()) {
+                txt.append(app.def.findSkill(eff.getSkill()).getName()).append(": +").append(-eff.getStepDelta()).append(", ");
+            }
+            txt.delete(txt.length() - 2, txt.length());
+        }
+        return txt.toString();
     }
 
     private ListView<RosterEntry> getRosterEntryListView() {
@@ -104,11 +146,10 @@ public class MenuView extends BorderPane {
                     setText(null);
                 } else {
                     StringBuilder txt = new StringBuilder();
-                    for (String s : entry.getData().getSkills().keySet()) {
-                        txt.append(s).append(": ").append(entry.getData().getSkills().get(s)).append(" | ");
+                    if (entry.getReleaseDate() > game.getCalendar().getCurrentDay()) {
+                        txt.append(" [ARRESTED UNTIL Day ").append(entry.getReleaseDate()).append("]");
                     }
-                    txt = new StringBuilder(txt.substring(0, txt.length() - 2));
-                    setText(entry.getData().getName() + " (" + txt.toString().trim() + ")");
+                    setText(entry.getData().getName() + " " + txt.toString().trim());
                 }
             }
         });

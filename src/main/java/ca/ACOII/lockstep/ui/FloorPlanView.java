@@ -28,7 +28,7 @@ public class FloorPlanView extends Pane {
     Double[] offsetY = new Double[]{-15d, -15d, 15d, 15d};
     Definitions def;
     HeistInstance instance;
-    public FloorPlanView(HeistInstance instance, Game g, Definitions def) {
+    public FloorPlanView(HeistInstance instance, Game g, List<RosterEntry> entries, Definitions def) {
         super();
         this.def = def;
         this.instance = instance;
@@ -47,7 +47,7 @@ public class FloorPlanView extends Pane {
             connection.setPickOnBounds(true);
             Tooltip tip = new Tooltip();
             if (d.getLock() != null) {
-                tip.setText(d.getId() + " (LOCKED)");
+                tip.setText(d.getId() + " (LOCKED - Difficulty: " + d.getLock().getPickDifficulty() + ")");
             } else {
                 tip.setText(d.getId() + " (OPEN)");
             }
@@ -74,7 +74,7 @@ public class FloorPlanView extends Pane {
             this.getChildren().add(label);
         }
 
-        for (RosterEntry e : g.getRoster()) {
+        for (RosterEntry e : entries) {
             addActor(e.getData().getName(), instance.getTarget().getEntryRoom(), Color.BLACK, instance.getTarget());
         }
         for (Patrol p : instance.getTarget().getPatrols()) {
@@ -106,7 +106,9 @@ public class FloorPlanView extends Pane {
             txt.append("(EMPTY)");
         } else if (roomLoot.isEmpty()) {
             for (LootContainer container : r.getRoomContainers()) {
-                txt.append(container.getId()).append(": ");
+                if (container instanceof SafeContainer safe) {
+                    txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
+                }
                 if (containerLoot.get(container.getId()).isEmpty()) {
                     txt.append("(EMPTY)");
                 } else {
@@ -132,7 +134,9 @@ public class FloorPlanView extends Pane {
             txt = new StringBuilder(txt.substring(0, txt.length() - 2)).append("\n");
 
             for (LootContainer container : r.getRoomContainers()) {
-                txt.append(container.getId()).append(": ");
+                if (container instanceof SafeContainer safe) {
+                    txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
+                }
                 if (containerLoot.get(container.getId()).isEmpty()) {
                     txt.append("(EMPTY)");
                 } else {

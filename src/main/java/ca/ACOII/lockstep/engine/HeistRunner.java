@@ -14,7 +14,7 @@ public class HeistRunner {
     Set<String> unlockedDoors, openContainers;
     Target t;
     HeistInstance instance;
-    boolean isCompleted = false;
+    boolean isCompleted = false, running = true;
     Campaign campaign;
 
     public HeistRunner(Map<RosterEntry, ActionQueue> queues, HeistInstance instance, Campaign campaign) {
@@ -41,12 +41,16 @@ public class HeistRunner {
         this.campaign = campaign;
     }
     public void run() {
-        boolean running = true;
+        running = true;
         while (running) {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     Action a = crewQueues.get(c).tick();
                     validateAction(c, a);
+                    if (!running) {
+                        arrestRemainingActors();
+                        return;
+                    }
                     EventType e = null;
 
                     if (a instanceof MoveAction move) {
@@ -113,7 +117,7 @@ public class HeistRunner {
             }
             for (CrewMemberState c : crewQueues.keySet()) {
                 //Check if any members are still active
-                if (c.status == CrewMemberState.Status.ACTIVE) {
+                if (c.status == CrewMemberState.Status.ACTIVE && !crewQueues.get(c).isDone()) {
                     running = true;
                     break;
                 }
@@ -121,6 +125,18 @@ public class HeistRunner {
             currentStep++;
         }
         getStash();
+        arrestRemainingActors();
+    }
+
+    private void arrestRemainingActors() {
+        for (CrewMemberState crew : crewQueues.keySet()) {
+            if (crew.status != CrewMemberState.Status.ESCAPED && !crew.wasArrested) {
+                crew.status = CrewMemberState.Status.CAUGHT;
+                crew.wasArrested = true;
+
+                log.addEvent(new Event(currentStep, null, crew.getData().getName(), EventType.CAUGHT));
+            }
+        }
     }
 
     private void getStash() {
@@ -132,6 +148,10 @@ public class HeistRunner {
     }
 
     private void validateAction (CrewMemberState crew, Action action) {
+        if (action == null) {
+            System.out.println("Empty action - something's wrong");
+            running = false;
+        }
         if (action instanceof GrabAction grab) {
             Room curr = t.findRoom(crew.currentRoom);
             //Check if the current room has the directed item
@@ -141,32 +161,67 @@ public class HeistRunner {
                 //Check each container within the room
                 for (LootContainer container : curr.getRoomContainers()) {
                     //Check if the specified container is unlocked and has the item
-                    if (instance.getContainerLoot(container.getId()).contains(grab.item.getId()) && openContainers.contains(container.getId())) {
+                    List<String> containerLoot = instance.getContainerLoot(container.getId());
+                    if (containerLoot.contains(grab.item.getId()) && openContainers.contains(container.getId())) {
                         return;
                     }
                 }
             }
-            throw new RuntimeException("Attempt at grabbing unavailable item occurred");
+            System.out.println("Attempt at grabbing unavailable item occurred");
+            running = false;
         } else if (action instanceof CrackAction crack) {
             Room curr = t.findRoom(crew.currentRoom);
             LootContainer container = t.findContainer(crack.containerId);
             if (container == null) {
-                throw new RuntimeException("Attempt at cracking nonexistent container occurred");
+                System.out.println("Attempt at cracking nonexistent container occurred");
+                running = false;
+                return;
             } if (!curr.getRoomContainers().contains(container)) {
-                throw new RuntimeException("Attempt at cracking unavailable container occurred");
+                System.out.println("Attempt at cracking unavailable container occurred");
+                running = false;
+                return;
             }
             if (openContainers.contains(container.getId())) {
-                throw new RuntimeException("Attempt at cracking unlocked container occurred");
+                System.out.println("Attempt at cracking unlocked container occurred");
+                running = false;
             }
         } else if (action instanceof PickLockAction pick) {
             Room curr = t.findRoom(crew.currentRoom);
             Door d = t.findDoor(pick.doorId);
             if (d == null) {
-                throw new RuntimeException("Attempt at picking nonexistent door occurred");
+                System.out.println("Attempt at picking nonexistent door occurred");
+                running = false;
+                return;
             } if (!(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
-                throw new RuntimeException("Attempt at unlocking door in different room occurred");
+                System.out.println("Attempt at unlocking door in different room occurred");
+                running = false;
+                return;
             } if (unlockedDoors.contains(d.getId())) {
-                throw new RuntimeException("Attempt at unlocking unlocked door occurred");
+                System.out.println("Attempt at unlocking unlocked door occurred");
+                running = false;
+            }
+        } else if (action instanceof MoveAction move) {
+            if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
+                System.out.println("Invalid move destination");
+                running = false;
+                return;
+            }
+            Room destRoom = instance.getTarget().findRoom(move.getDestinationRoom());
+            Room originRoom = instance.getTarget().findRoom(crew.getCurrentRoom());
+            boolean foundDoor = false, validOrigin = false, validDestination = false;
+            for (Door d : instance.getTarget().getDoors()) {
+                validOrigin = Objects.equals(d.getRoomOrigin(), originRoom.getId()) || Objects.equals(d.getRoomDest(), originRoom.getId());
+                validDestination = Objects.equals(d.getRoomOrigin(), destRoom.getId()) || Objects.equals(d.getRoomDest(), destRoom.getId());
+                if (validOrigin && validDestination) {
+                    if (d.getLock() == null || unlockedDoors.contains(d.getId())) {
+                        foundDoor = true;
+                        break;
+                    }
+                }
+            }
+            if (!foundDoor) {
+                System.out.println("No valid path from origin to move destination");
+                running = false;
             }
         }
     }

@@ -57,7 +57,7 @@ public class HeistView extends BorderPane {
     private VBox mapPane() {
         VBox pane = new VBox();
 
-        FloorPlanView plan = new FloorPlanView(instance, game, app.def);
+        FloorPlanView plan = new FloorPlanView(game.getInstance(), game, entries, app.def);
         mapPane = plan;
         ScrollPane scroll = new ScrollPane(plan);
         scroll.setPannable(true);
@@ -268,12 +268,13 @@ public class HeistView extends BorderPane {
             returnBtn.setDisable(true);
             executeBtn.setDisable(true);
 
-            List<Action> actions = plans.get(game.getRoster().getFirst().getData().getName());
-            if (actions.isEmpty()) {
-                System.out.println("Build a plan first!");
-                returnBtn.setDisable(false);
-                executeBtn.setDisable(false);
-                return;
+            for (RosterEntry entry : entries) {
+                if (plans.get(entry.getData().getName()).isEmpty()) {
+                    System.out.println("Build a plan first!");
+                    returnBtn.setDisable(false);
+                    executeBtn.setDisable(false);
+                    return;
+                }
             }
 
 
@@ -281,7 +282,6 @@ public class HeistView extends BorderPane {
             for (RosterEntry entry : entries) {
                 map.put(entry, new ActionQueue(plans.get(entry.getData().getName())));
             }
-            game.prepareHeist(target);
             game.runHeist(map);
 
             plans = new HashMap<>();

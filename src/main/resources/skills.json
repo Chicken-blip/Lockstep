@@ -1,6 +1,6 @@
 {
   "skills": [
-    {"id": "pick", "name": "Lock picking", "trainingCost": 15},
+    {"id": "pick", "name": "Lock Picking", "trainingCost": 15},
     {"id": "crack", "name": "Safe Cracking", "trainingCost": 20}
   ]
 }

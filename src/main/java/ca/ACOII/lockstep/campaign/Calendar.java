@@ -23,7 +23,7 @@ public class Calendar {
     public List<Target> getAvailableTargets(List<Target> allTargets) {
         List<Target> available = new ArrayList<>();
         for (Target t : allTargets) {
-            if (t.getAvailableFrom() == 0 || t.getAvailableFrom() == currentDay) {
+            if (t.getAvailableFrom() == 0 || t.getAvailableFrom() <= currentDay) {
                 //Check duration if it's end date has already passed, or if it's infinite
                 if (t.getAvailabilityDuration() == 0 || t.getAvailableFrom() + t.getAvailabilityDuration() >= currentDay) {
                     available.add(t);

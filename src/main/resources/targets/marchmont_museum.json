@@ -5,7 +5,7 @@
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 4,
   "availableFrom": 4,
-  "availabilityDuration": 3,
+  "availabilityDuration": 5,
   "maxCrew": 2,
   "rooms": [
     {"id": "OUTSIDE", "x": 200, "y": 0, "roomLoot": {}, "roomContainers": []},
@@ -26,8 +26,8 @@
     {"id": "d4", "roomOrigin": "EAST GALLERY", "roomDest": "RESTORATION", "moveCost": 1, "lock": null},
     {"id": "d5", "roomOrigin": "RESTORATION", "roomDest": "VAULT", "moveCost": 1, "lock": null},
     {"id": "d6", "roomOrigin": "WEST GALLERY", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null},
-    {"id": "d3", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null},
-    {"id": "d", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}}
+    {"id": "d7", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null},
+    {"id": "d8", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}}
   ],
   "patrols": [
     {
@@ -44,9 +44,8 @@
       "patrolRoute": [
         {"room": "SECURITY OFFICE", "duration": 3},
         {"room": "STORAGE", "duration": 2},
-        {"room": "VAULT", "duration": 2},
+        {"room": "VAULT", "duration": 5},
         {"room": "STORAGE", "duration": 1},
-        {"room": "RESTORATION", "duration": 1},
         {"room": "SECURITY OFFICE", "duration": 1}
       ]
     }

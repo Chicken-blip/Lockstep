@@ -41,6 +41,7 @@ public class CampaignView extends BorderPane {
                 return;
             } else if (fullCrew.getSelectionModel().getSelectedItems().size() > targets.getSelectionModel().getSelectedItem().getMaxCrew()) {
                 System.out.println("You can't select more than " + targets.getSelectionModel().getSelectedItem().getMaxCrew() + " - try again");
+                return;
             }
             app.startHeist(targets.getSelectionModel().getSelectedItem(), fullCrew.getSelectionModel().getSelectedItems());
         });
@@ -86,12 +87,13 @@ public class CampaignView extends BorderPane {
             }
         });
         fullCrew.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        fullCrew.getSelectionModel().clearSelection();
         for (RosterEntry e : game.getRoster()) {
             if (e.getReleaseDate() <= game.getCalendar().getCurrentDay()) {
                 fullCrew.getItems().add(e);
             }
         }
-        fullCrew.getSelectionModel().selectAll();
+        fullCrew.getSelectionModel().clearSelection();
 
         container.getChildren().add(fullCrew);
 
