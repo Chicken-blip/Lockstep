@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 .kotlin
 save.json
+itemList.txt
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

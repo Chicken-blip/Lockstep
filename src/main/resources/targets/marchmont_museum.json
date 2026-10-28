@@ -1,0 +1,54 @@
+{
+  "id": "marchmont_museum",
+  "name": "Marchmont Museum",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 4,
+  "availableFrom": 4,
+  "availabilityDuration": 3,
+  "maxCrew": 2,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 200, "y": 0, "roomLoot": {}, "roomContainers": []},
+    {"id": "LOBBY", "x": 200, "y": 75, "roomLoot": {"register_cash": 0.4, "donation_box": 0.8}, "roomContainers": []},
+    {"id": "EAST GALLERY", "x": 50, "y": 150, "roomLoot": {"katana": 1.0}, "roomContainers": []},
+    {"id": "WEST GALLERY", "x": 350, "y": 150, "roomLoot": {"wakizashi": 1.0}, "roomContainers": []},
+    {"id": "RESTORATION", "x": 50, "y": 350, "roomLoot": {}, "roomContainers": []},
+    {"id": "SECURITY OFFICE", "x": 350, "y": 250, "roomLoot": {"office_cash_box": 0.4}, "roomContainers": []},
+    {"id": "STORAGE", "x": 350, "y": 350, "roomLoot": {"tanto": 1.0, "brass_lamp": 0.5, "wooden_pallet": 0.8, "linen_wrapping": 0.8, "iron_key_ring": 1.0}, "roomContainers": []},
+    {"id": "VAULT", "x": 200, "y": 500, "roomLoot": {}, "roomContainers": [
+      {"id": "Vault Safe", "type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "EAST GALLERY", "moveCost": 1, "lock": null},
+    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "WEST GALLERY", "moveCost": 1, "lock": null},
+    {"id": "d4", "roomOrigin": "EAST GALLERY", "roomDest": "RESTORATION", "moveCost": 1, "lock": null},
+    {"id": "d5", "roomOrigin": "RESTORATION", "roomDest": "VAULT", "moveCost": 1, "lock": null},
+    {"id": "d6", "roomOrigin": "WEST GALLERY", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null},
+    {"id": "d3", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null},
+    {"id": "d", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "LOBBY", "duration": 2},
+        {"room": "EAST GALLERY", "duration": 2},
+        {"room": "LOBBY", "duration": 2},
+        {"room": "WEST GALLERY", "duration": 2}
+      ]
+    },
+    {
+      "id": "p2",
+      "patrolRoute": [
+        {"room": "SECURITY OFFICE", "duration": 3},
+        {"room": "STORAGE", "duration": 2},
+        {"room": "VAULT", "duration": 2},
+        {"room": "STORAGE", "duration": 1},
+        {"room": "RESTORATION", "duration": 1},
+        {"room": "SECURITY OFFICE", "duration": 1}
+      ]
+    }
+  ]
+}

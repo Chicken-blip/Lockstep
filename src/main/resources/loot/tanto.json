@@ -1,0 +1,8 @@
+{
+  "id": "tanto",
+  "name": "Tanto",
+  "grabCost": 1,
+  "pieceValue": 45,
+  "set": "samurai",
+  "isMainScore": false
+}

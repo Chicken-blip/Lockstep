@@ -1,0 +1,8 @@
+{
+  "id": "royal_crown",
+  "name": "Royal Crown",
+  "grabCost": 1,
+  "pieceValue": 60,
+  "set": "royal_regalia",
+  "isMainScore": false
+}

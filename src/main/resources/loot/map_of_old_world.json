@@ -1,0 +1,8 @@
+{
+  "id": "map_of_the_old_world",
+  "name": "Map of the Old World",
+  "grabCost": 1,
+  "pieceValue": 22,
+  "set": "antique_maps",
+  "isMainScore": false
+}

@@ -1,5 +1,8 @@
 {
   "sets": [
-    {"id": "candelabra", "name": "Candelabra Pair", "setValue": 50}
+    {"id": "candelabra", "name": "Candelabra Pair", "setValue": 50},
+    {"id": "samurai", "name": "Samurai Set", "setValue": 220},
+    {"id": "royal_regalia", "name": "Royal Regalia", "setValue": 300},
+    {"id": "antique_maps", "name": "Antique Maps", "setValue": 70}
   ]
 }

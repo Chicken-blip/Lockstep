@@ -1,0 +1,8 @@
+{
+  "id": "wooden_pallet",
+  "name": "Wooden Pallet",
+  "grabCost": 1,
+  "pieceValue": 3,
+  "set": null,
+  "isMainScore": false
+}

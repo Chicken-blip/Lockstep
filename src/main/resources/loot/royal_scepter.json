@@ -1,0 +1,8 @@
+{
+  "id": "royal_scepter",
+  "name": "Royal Scepter",
+  "grabCost": 1,
+  "pieceValue": 60,
+  "set": "royal_regalia",
+  "isMainScore": false
+}

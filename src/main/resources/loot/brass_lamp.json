@@ -1,0 +1,8 @@
+{
+  "id": "brass_lamp",
+  "name": "Brass Lamp",
+  "grabCost": 1,
+  "pieceValue": 14,
+  "set": null,
+  "isMainScore": false
+}

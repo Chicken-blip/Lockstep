@@ -3,5 +3,19 @@
   "candelabra_b.json",
   "safe_contents.json",
   "painting.json",
-  "register_cash.json"
+  "register_cash.json",
+  "donation_box.json",
+  "office_cash_box.json",
+  "katana.json",
+  "wakizashi.json",
+  "tanto.json",
+  "royal_crown.json",
+  "royal_scepter.json",
+  "royal_orb.json",
+  "brass_lamp.json",
+  "linen_wrapping.json",
+  "iron_key_ring.json",
+  "wooden_pallet.json",
+  "map_of_new_world.json",
+  "map_of_old_world.json"
 ]

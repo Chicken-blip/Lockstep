@@ -1,0 +1,8 @@
+{
+  "id": "office_cash_box",
+  "name": "Office Cash Box",
+  "grabCost": 1,
+  "pieceValue": 25,
+  "set": null,
+  "isMainScore": false
+}

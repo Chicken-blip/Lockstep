@@ -1,0 +1,8 @@
+{
+  "id": "donation_box",
+  "name": "Donation Box",
+  "grabCost": 1,
+  "pieceValue": 12,
+  "set": null,
+  "isMainScore": false
+}

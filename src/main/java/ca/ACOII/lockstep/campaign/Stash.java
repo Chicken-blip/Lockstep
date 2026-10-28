@@ -43,7 +43,7 @@ public class Stash {
         for (LootItem i : items) {
             if (Objects.equals(i.getId(), id)) {
                 money += i.getPieceValue();
-                items.remove(i);
+                removeStashItem(i);
                 return i;
             }
         }
@@ -51,15 +51,36 @@ public class Stash {
     }
 
     public void sellSet(LootSet setData) {
-        for (LootItem i : setItems(setData.getId())) {
-            if (!items.contains(i)) {
-                throw new RuntimeException("Cannot sell incomplete set " + setData.getName());
-            }
+        if (!setIsComplete(setData.getId())) {
+            throw new RuntimeException("Cannot sell incomplete set " + setData.getName());
         }
         for (LootItem i : setItems(setData.getId())) {
-            items.remove(i);
+            removeStashItem(i);
         }
         money += setData.getSetValue();
+    }
+
+    private boolean removeStashItem(LootItem i) {
+        for (LootItem item : items) {
+            if (Objects.equals(item.getId(), i.getId())) {
+                items.remove(item);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean setIsComplete(String setId) {
+        for (LootItem item : setItems(setId)) {
+            boolean contained = false;
+            for (LootItem i : items) {
+                if (Objects.equals(i.getId(), item.getId())) {
+                    contained = true;
+                }
+            }
+            if (!contained) return false;
+        }
+        return true;
     }
 
     public void printStash() {

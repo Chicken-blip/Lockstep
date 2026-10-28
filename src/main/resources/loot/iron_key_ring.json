@@ -1,0 +1,8 @@
+{
+  "id": "iron_key_ring",
+  "name": "Iron Key Ring",
+  "grabCost": 1,
+  "pieceValue": 9,
+  "set": null,
+  "isMainScore": false
+}

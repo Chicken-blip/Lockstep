@@ -44,16 +44,23 @@ public class CampaignView extends BorderPane {
             }
             app.startHeist(targets.getSelectionModel().getSelectedItem(), fullCrew.getSelectionModel().getSelectedItems());
         });
+        Button skip = new Button("Next Day");
+        skip.setOnAction(e -> {
+            game.getCalendar().nextDay();
+            refresh();
+        });
         HBox buttonBox = new HBox(10);
         buttonBox.setPadding(new Insets(50));
 
 
         Region space1 = new Region();
         Region space2 = new Region();
+        Region space3 = new Region();
         HBox.setHgrow(space1, Priority.ALWAYS);
         HBox.setHgrow(space2, Priority.ALWAYS);
+        HBox.setHgrow(space3, Priority.ALWAYS);
 
-        buttonBox.getChildren().addAll(space1, heistBtn, space2);
+        buttonBox.getChildren().addAll(space1, heistBtn, space2, skip, space3);
         setBottom(buttonBox);
     }
 

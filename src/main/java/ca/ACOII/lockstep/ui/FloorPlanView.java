@@ -18,7 +18,7 @@ import java.util.*;
 
 
 public class FloorPlanView extends Pane {
-    private static final double ROOM_WIDTH = 150, ROOM_HEIGHT = 100;
+    private static final double ROOM_WIDTH = 75, ROOM_HEIGHT = 60;
     Map<String, Circle> actors;
     Map<String, List<String>> actorsPerRoom;
     Map<String, Rectangle> rooms;
@@ -43,6 +43,16 @@ public class FloorPlanView extends Pane {
                     instance.getTarget().findRoom(d.getRoomDest()).getX() + ROOM_WIDTH / 2,
                     instance.getTarget().findRoom(d.getRoomDest()).getY() + ROOM_HEIGHT / 2);
             connection.setStroke(d.getLock() != null ? Color.RED : Color.BLACK);
+            connection.setStrokeWidth(5);
+            connection.setPickOnBounds(true);
+            Tooltip tip = new Tooltip();
+            if (d.getLock() != null) {
+                tip.setText(d.getId() + " (LOCKED)");
+            } else {
+                tip.setText(d.getId() + " (OPEN)");
+            }
+            tip.setShowDelay(Duration.millis(50));
+            Tooltip.install(connection, tip);
             this.getChildren().add(connection);
         }
         for (Room r : instance.getTarget().getRooms()) {
@@ -50,8 +60,8 @@ public class FloorPlanView extends Pane {
             room.setStroke(Color.BLACK);
             room.setFill(Color.WHITE);
             Label label = new Label(r.getId());
-            label.setLayoutX(r.getX() + 10);
-            label.setLayoutY(r.getY() + 20);
+            label.setLayoutX(r.getX() + 5);
+            label.setLayoutY(r.getY() + 7);
             label.setTextFill(Color.BLACK);
             label.setMouseTransparent(true);
             Tooltip roomContents = new Tooltip();
@@ -149,6 +159,21 @@ public class FloorPlanView extends Pane {
         c.setRadius(5);
 
         c.setFill(color);
+
+        if (target.findPatrol(actorId) != null) {
+            Tooltip tip = new Tooltip();
+            Patrol p = target.findPatrol(actorId);
+
+            StringBuilder txt = new StringBuilder("GUARD\nPATROL: ");
+            for (PatrolEntry entry : p.getPatrolRoute()) {
+                txt.append(entry.getRoom() + " (" + entry.getDuration() + ") -> ");
+            }
+            txt = new StringBuilder(txt.substring(0, txt.length() - 3));
+
+            tip.setText(String.valueOf(txt));
+            tip.setShowDelay(Duration.millis(200));
+            Tooltip.install(c, tip);
+        }
 
         actors.put(actorId, c);
         List<String> list = actorsPerRoom.getOrDefault(roomId, new ArrayList<String>());

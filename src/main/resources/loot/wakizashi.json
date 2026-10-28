@@ -1,0 +1,8 @@
+{
+  "id": "wakizashi",
+  "name": "Wakizashi",
+  "grabCost": 1,
+  "pieceValue": 45,
+  "set": "samurai",
+  "isMainScore": false
+}

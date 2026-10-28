@@ -159,4 +159,11 @@ public class Target {
         }
         return null;
     }
+
+    public Patrol findPatrol(String key) {
+        for (Patrol p : getPatrols()) {
+            if (Objects.equals(p.getId(), key)) return p;
+        }
+        return null;
+    }
 }
