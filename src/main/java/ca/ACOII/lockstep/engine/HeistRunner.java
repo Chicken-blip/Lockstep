@@ -52,7 +52,7 @@ public class HeistRunner {
                         campaign.maxStep = currentStep;
                         return;
                     }
-                    EventType e = null;
+                    EventType e;
 
                     if (a instanceof MoveAction move) {
                         c.setCurrentRoom(move.getDestinationRoom());
@@ -77,6 +77,13 @@ public class HeistRunner {
                             e = EventType.CRACK;
                         } else {
                             e = EventType.CRACK_PROGRESS;
+                        }
+                    } else if (a instanceof PickCaseAction pick) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            openContainers.add(pick.containerId);
+                            e = EventType.PICK_CASE;
+                        } else {
+                            e = EventType.PICK_CASE_PROGRESS;
                         }
                     } else {
                         e = EventType.WAIT;
@@ -179,13 +186,30 @@ public class HeistRunner {
                 System.out.println("Attempt at cracking nonexistent container occurred");
                 running = false;
                 return;
-            } if (!curr.getRoomContainers().contains(container)) {
+            }
+            if (!curr.getRoomContainers().contains(container)) {
                 System.out.println("Attempt at cracking unavailable container occurred");
                 running = false;
                 return;
             }
             if (openContainers.contains(container.getId())) {
                 System.out.println("Attempt at cracking unlocked container occurred");
+                running = false;
+            }
+        } else if (action instanceof PickCaseAction pick) {
+            Room curr = t.findRoom(crew.currentRoom);
+            LootContainer container = t.findContainer(pick.containerId);
+            if (container == null) {
+                System.out.println("Attempt at picking nonexistent container occurred");
+                running = false;
+                return;
+            } if (!curr.getRoomContainers().contains(container)) {
+                System.out.println("Attempt at picking unavailable container occurred");
+                running = false;
+                return;
+            }
+            if (openContainers.contains(container.getId())) {
+                System.out.println("Attempt at picking unlocked container occurred");
                 running = false;
             }
         } else if (action instanceof PickLockAction pick) {

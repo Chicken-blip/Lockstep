@@ -1,0 +1,8 @@
+{
+  "id": "gold_chain",
+  "name": "Gold Chain",
+  "grabCost": 1,
+  "pieceValue": 75,
+  "set": null,
+  "isMainScore": false
+}

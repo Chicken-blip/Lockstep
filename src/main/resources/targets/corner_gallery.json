@@ -4,8 +4,8 @@
   "entryRoom": "OUTSIDE",
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 3,
-  "availableFrom": 0,
-  "availabilityDuration": 0,
+  "availableFrom": 5,
+  "availabilityDuration": 7,
   "maxCrew": 1,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},

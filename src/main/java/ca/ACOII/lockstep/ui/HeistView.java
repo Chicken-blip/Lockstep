@@ -34,11 +34,12 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "GRAB"
+            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
     HeistInstance instance;
+    boolean actionPossible;
 
     public HeistView(HeistInstance instance, List<RosterEntry> entries, App app) {
         this.game = app.game;
@@ -145,8 +146,6 @@ public class HeistView extends BorderPane {
             actionSelectionPane.getChildren().add(3, formFor(actionTypes.getValue()));
         });
         actionTypes.getSelectionModel().selectFirst();
-        actionSelectionPane.getChildren().add(actionTypes);
-        actionSelectionPane.getChildren().add(formFor(actionTypes.getValue()));
 
         Button add = new Button("Add Action");
         add.setOnAction(e -> {
@@ -170,6 +169,11 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.crackDuration(safe, heistCrew.getSelectionModel().getSelectedItem());
                     act = new CrackAction(safe.getId(), dur);
                 }
+                case "PICK CASE" -> {
+                    DisplayCaseContainer display = (DisplayCaseContainer) target.findContainer((((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem()));
+                    int dur = ActDurationCalculator.pickCaseDuration(display, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new PickCaseAction(display.getId(), dur);
+                }
                 case "GRAB" -> {
                     LootItem item = app.def.findLoot(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
                     act = new GrabAction(item);
@@ -178,6 +182,13 @@ public class HeistView extends BorderPane {
             plans.get(heistCrew.getSelectionModel().getSelectedItem().getData().getName()).add(act);
             resetActionList(heistCrew.getSelectionModel().getSelectedItem());
         });
+
+        actionTypes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            add.setDisable(!actionPossible);
+        });
+
+        actionSelectionPane.getChildren().add(actionTypes);
+        actionSelectionPane.getChildren().add(formFor(actionTypes.getValue()));
         actionSelectionPane.getChildren().add(add);
 
         actionSelectionPane.setAlignment(Pos.CENTER);
@@ -194,13 +205,13 @@ public class HeistView extends BorderPane {
             case "WAIT" -> buildWaitForm();
             case "PICK LOCK" -> buildPickLockForm();
             case "CRACK SAFE" -> buildCrackSafeForm();
+            case "PICK CASE" -> buildPickCaseForm();
             case "GRAB" -> buildGrabForm();
             default -> throw new IllegalStateException("Unexpected value: " + value);
         };
     }
 
     private VBox buildMoveForm() {
-        //TODO: Add functionality
         Label label = new Label("Destination: ");
         ComboBox<String> destSelect = new ComboBox<>();
         List<String> ids = new ArrayList<>();
@@ -209,6 +220,7 @@ public class HeistView extends BorderPane {
         }
         destSelect.getItems().addAll(ids);
         destSelect.getSelectionModel().selectFirst();
+        actionPossible = true;
 
         VBox box = new VBox();
         box.getChildren().addAll(label, destSelect);
@@ -219,6 +231,8 @@ public class HeistView extends BorderPane {
     private VBox buildWaitForm() {
         Label label = new Label("Duration:");
         Spinner<Integer> spinner = new Spinner<>(1, 99, 1);
+
+        actionPossible = true;
 
         VBox box = new VBox();
         box.getChildren().addAll(label, spinner);
@@ -235,7 +249,14 @@ public class HeistView extends BorderPane {
             if (d.getLock() != null) ids.add(d.getId());
         }
         doorSelect.getItems().addAll(ids);
-        doorSelect.getSelectionModel().selectFirst();
+        if (doorSelect.getItems().isEmpty()) {
+            doorSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            doorSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
 
         VBox box = new VBox();
         box.getChildren().addAll(label, doorSelect);
@@ -256,7 +277,14 @@ public class HeistView extends BorderPane {
             }
         }
         containerSelect.getItems().addAll(ids);
-        containerSelect.getSelectionModel().selectFirst();
+        if (containerSelect.getItems().isEmpty()) {
+            containerSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            containerSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
 
         VBox box = new VBox();
         box.getChildren().addAll(label, containerSelect);
@@ -276,10 +304,45 @@ public class HeistView extends BorderPane {
             }
         }
         itemSelect.getItems().addAll(ids);
-        itemSelect.getSelectionModel().selectFirst();
+        if (itemSelect.getItems().isEmpty()) {
+            itemSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            itemSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
 
         VBox box = new VBox();
         box.getChildren().addAll(label, itemSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
+    private VBox buildPickCaseForm() {
+        Label label = new Label("Container:");
+        ComboBox<String> containerSelect = new ComboBox<>();
+
+        List<String> ids = new ArrayList<>();
+        for (Room r : target.getRooms()) {
+            for (LootContainer c : r.getRoomContainers()) {
+                if (c instanceof DisplayCaseContainer display) {
+                    if (display.getPickDifficulty() > 0) ids.add(display.getId());
+                }
+            }
+        }
+        containerSelect.getItems().addAll(ids);
+        if (containerSelect.getItems().isEmpty()) {
+            containerSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            containerSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, containerSelect);
         box.setAlignment(Pos.CENTER);
         return box;
     }
@@ -361,9 +424,13 @@ public class HeistView extends BorderPane {
                     if (action instanceof CrackAction crack) {
                         setText("CRACK SAFE safe " + crack.getContainerId());
                     }
+                    if (action instanceof PickCaseAction pick) {
+                        setText("PICK CASE display case " + pick.getContainerId());
+                    }
                     if (action instanceof GrabAction grab) {
                         setText("GRAB item " + grab.getItem().getName());
                     }
+
                 }
             }
         });

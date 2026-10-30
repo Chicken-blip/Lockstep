@@ -1,0 +1,8 @@
+{
+  "id": "hunting_flask",
+  "name": "Hunting Flask",
+  "grabCost": 1,
+  "pieceValue": 90,
+  "set": "hunting_set",
+  "isMainScore": false
+}

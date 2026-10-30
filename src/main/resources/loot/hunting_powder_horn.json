@@ -1,0 +1,8 @@
+{
+  "id": "hunting_powder_horn",
+  "name": "Hunting Powder Horn",
+  "grabCost": 1,
+  "pieceValue": 100,
+  "set": "hunting_set",
+  "isMainScore": false
+}

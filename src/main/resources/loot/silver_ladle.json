@@ -1,0 +1,8 @@
+{
+  "id": "silver_ladle",
+  "name": "Silver Ladle",
+  "grabCost": 1,
+  "pieceValue": 40,
+  "set": "silver_cutlery_set",
+  "isMainScore": false
+}

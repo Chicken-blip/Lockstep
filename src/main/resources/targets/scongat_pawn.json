@@ -1,0 +1,34 @@
+{
+  "id": "scongat_pawn",
+  "name": "Scongat Pawn",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 3,
+  "availableFrom": 3,
+  "availabilityDuration": 4,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
+    {"id": "SHOWROOM", "x": 150, "y": 100, "roomLoot": {"trench_knife": 0.9, "gold_locket": 0.7}, "roomContainers": []},
+    {"id": "WORKROOM", "x": 150, "y": 100, "roomLoot": {"silver_spoon": 1.0, "tortoiseshell_comb": 0}, "roomContainers": []},
+    {"id": "SAFE ROOM", "x": 250, "y": 100, "roomLoot": {"map_of_the_new_world": 0.5}, "roomContainers": [
+      {"id": "Shop Safe", "type": "safe", "contents": ["silver_ladle", "royal_orb", "old_ledger"]}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "SHOWROOM", "moveCost": 1, "lock": null},
+    {"id": "d2", "roomOrigin": "SHOWROOM", "roomDest": "WORKROOM", "moveCost": 1, "lock": null},
+    {"id": "d3", "roomOrigin": "SHOWROOM", "roomDest": "SAFE ROOM", "moveCost": 1, "lock": {"pickDifficulty": 2}}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "SHOWROOM", "duration": 2},
+        {"room": "WORKROOM", "duration": 1},
+        {"room": "SHOWROOM", "duration": 2},
+        {"room": "SAFE ROOM", "duration": 1}
+      ]
+    }
+  ]
+}

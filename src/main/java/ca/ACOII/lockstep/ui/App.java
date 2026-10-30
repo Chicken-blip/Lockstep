@@ -41,7 +41,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) {
         game.setMoney(100);
-        game.recruit("thief", "Thief A");
 
         scene = new Scene(buildScreen(Screen.MENU), 800, 600);
 

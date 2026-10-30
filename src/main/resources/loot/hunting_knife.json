@@ -1,0 +1,8 @@
+{
+  "id": "hunting_knife",
+  "name": "Hunting Knife",
+  "grabCost": 1,
+  "pieceValue": 110,
+  "set": "hunting_set",
+  "isMainScore": false
+}

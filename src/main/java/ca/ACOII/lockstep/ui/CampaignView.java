@@ -2,6 +2,7 @@ package ca.ACOII.lockstep.ui;
 
 import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
+import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.Target;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -108,19 +109,23 @@ public class CampaignView extends BorderPane {
             @Override
             protected void updateItem(Target target, boolean empty) {
                 super.updateItem(target, empty);
+                StringBuilder txt = new StringBuilder();
                 if (empty || target == null) {
                     setText(null);
-                } else if (target.getAvailableFrom() == 0 && target.getAvailabilityDuration() == 0) {
-                    setText(target.getName() + " (~ PRESENT)");
-                } else if (target.getAvailabilityDuration() == 0) {
-                    setText(target.getName() + " (Days " + target.getAvailableFrom()
-                            + "- PRESENT)");
-                } else if (target.getAvailableFrom() == 0) {
-                    setText(target.getName() + " (Until Day " + target.getAvailabilityDuration() + ")");
-                } else  {
-                    setText(target.getName() + " (Days " + target.getAvailableFrom()
-                            + "–" + (target.getAvailableFrom() + target.getAvailabilityDuration()) + ")");
+                    return;
                 }
+                if (target.getAvailableFrom() == 0 && target.getAvailabilityDuration() == 0) {
+                    txt.append(target.getName()).append(" (~ PRESENT)");
+                } else if (target.getAvailabilityDuration() == 0) {
+                    txt.append(target.getName()).append(" (Days ").append(target.getAvailableFrom()).append("- PRESENT)");
+                } else if (target.getAvailableFrom() == 0) {
+                    txt.append(target.getName()).append(" (Until Day ").append(target.getAvailabilityDuration()).append(")");
+                } else  {
+                    txt.append(target.getName()).append(" (Days ").append(target.getAvailableFrom()).append("–").append(target.getAvailableFrom() + target.getAvailabilityDuration()).append(")");
+                }
+                Definitions def = game.getCampaign().definitions;
+                txt.append(" [Main Score: ").append(def.findLoot(target.findMainScore(def)).getName()).append("]");
+                setText(txt.toString());
             }
         });
         targets.getItems().setAll(game.getAvailableTargets());

@@ -1,0 +1,8 @@
+{
+  "id": "old_ledger",
+  "name": "Old Ledger",
+  "grabCost": 1,
+  "pieceValue": 10,
+  "set": null,
+  "isMainScore": true
+}

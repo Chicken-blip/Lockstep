@@ -109,6 +109,9 @@ public class FloorPlanView extends Pane {
                 if (container instanceof SafeContainer safe) {
                     txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
                 }
+                if (container instanceof DisplayCaseContainer display) {
+                    txt.append(display.getId()).append(" [DISPLAY CASE - Difficulty: ").append(display.getPickDifficulty()).append("]: ");
+                }
                 if (containerLoot.get(container.getId()).isEmpty()) {
                     txt.append("(EMPTY)");
                 } else {
@@ -136,6 +139,9 @@ public class FloorPlanView extends Pane {
             for (LootContainer container : r.getRoomContainers()) {
                 if (container instanceof SafeContainer safe) {
                     txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
+                }
+                if (container instanceof DisplayCaseContainer display) {
+                    txt.append(display.getId()).append(" [DISPLAY CASE - Difficulty: ").append(display.getPickDifficulty()).append("]: ");
                 }
                 if (containerLoot.get(container.getId()).isEmpty()) {
                     txt.append("(EMPTY)");

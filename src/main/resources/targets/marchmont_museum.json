@@ -4,7 +4,7 @@
   "entryRoom": "OUTSIDE",
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 4,
-  "availableFrom": 4,
+  "availableFrom": 10,
   "availabilityDuration": 5,
   "maxCrew": 2,
   "rooms": [
@@ -14,7 +14,7 @@
     {"id": "WEST GALLERY", "x": 350, "y": 150, "roomLoot": {"wakizashi": 1.0}, "roomContainers": []},
     {"id": "RESTORATION", "x": 50, "y": 350, "roomLoot": {}, "roomContainers": []},
     {"id": "SECURITY OFFICE", "x": 350, "y": 250, "roomLoot": {"office_cash_box": 0.4}, "roomContainers": []},
-    {"id": "STORAGE", "x": 350, "y": 350, "roomLoot": {"tanto": 1.0, "brass_lamp": 0.5, "wooden_pallet": 0.8, "linen_wrapping": 0.8, "iron_key_ring": 1.0}, "roomContainers": []},
+    {"id": "STORAGE", "x": 350, "y": 350, "roomLoot": {"tanto": 1.0, "brass_lamp": 0.5, "iron_key_ring": 1.0, "wooden_crate": 1.0}, "roomContainers": []},
     {"id": "VAULT", "x": 200, "y": 500, "roomLoot": {}, "roomContainers": [
       {"id": "Vault Safe", "type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}
     ]}

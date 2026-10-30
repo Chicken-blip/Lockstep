@@ -1,0 +1,8 @@
+{
+  "id": "gold_locket",
+  "name": "Gold Locket",
+  "grabCost": 1,
+  "pieceValue": 60,
+  "set": null,
+  "isMainScore": false
+}

@@ -1,0 +1,30 @@
+{
+  "id": "chatelain_jewelry",
+  "name": "Chatelain Jewelry",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 3,
+  "availableFrom": 0,
+  "availabilityDuration": 5,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
+    {"id": "FRONT", "x": 150, "y": 100, "roomLoot": {"pocket_watch": 0.25, "iron_key_ring": 0.8}, "roomContainers": []},
+    {"id": "BACK", "x": 250, "y": 100, "roomLoot": {"gold_chain": 0.4}, "roomContainers": [
+      {"id": "Portrait Display Case", "type": "display", "contents": ["ancestral_portrait"], "pickDifficulty": 3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "FRONT", "moveCost": 1, "lock": null},
+    {"id": "d2", "roomOrigin": "FRONT", "roomDest": "BACK", "moveCost": 1, "lock": null}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "FRONT", "duration": 2},
+        {"room": "BACK", "duration": 2}
+      ]
+    }
+  ]
+}

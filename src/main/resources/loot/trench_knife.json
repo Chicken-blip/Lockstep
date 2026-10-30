@@ -1,0 +1,8 @@
+{
+  "id": "trench_knife",
+  "name": "Trench Knife",
+  "grabCost": 1,
+  "pieceValue": 20,
+  "set": "trench_set",
+  "isMainScore": false
+}

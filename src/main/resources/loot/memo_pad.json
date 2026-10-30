@@ -1,0 +1,8 @@
+{
+  "id": "memo_pad",
+  "name": "Memo Pad",
+  "grabCost": 1,
+  "pieceValue": 10,
+  "set": null,
+  "isMainScore": false
+}

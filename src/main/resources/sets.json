@@ -3,6 +3,9 @@
     {"id": "candelabra", "name": "Candelabra Pair", "setValue": 50},
     {"id": "samurai", "name": "Samurai Set", "setValue": 220},
     {"id": "royal_regalia", "name": "Royal Regalia", "setValue": 300},
-    {"id": "antique_maps", "name": "Antique Maps", "setValue": 70}
+    {"id": "antique_maps", "name": "Antique Maps", "setValue": 70},
+    {"id": "hunting_set", "name": "Hunting Set", "setValue": 400},
+    {"id": "silver_cutlery_set", "name": "Silver Cutlery Set", "setValue": 250},
+    {"id": "trench_set", "name": "Trench Set", "setValue": 150}
   ]
 }

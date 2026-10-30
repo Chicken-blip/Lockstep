@@ -27,4 +27,15 @@ public class ActDurationCalculator {
         }
         return Math.max(dur, 1);
     }
+
+    public static int pickCaseDuration(DisplayCaseContainer container, RosterEntry member) {
+        int dur = container.getPickDifficulty();
+        dur -= member.getData().getSkills().getOrDefault("pick", 0);
+        for (Gear g : member.getGear()) {
+            for (GearEffect eff : g.getEffects()) {
+                if (Objects.equals(eff.getSkill(), "pick")) dur += eff.getStepDelta();
+            }
+        }
+        return Math.max(dur, 1);
+    }
 }

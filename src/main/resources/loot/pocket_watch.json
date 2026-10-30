@@ -1,0 +1,8 @@
+{
+  "id": "pocket_watch",
+  "name": "Pocket Watch",
+  "grabCost": 1,
+  "pieceValue": 105,
+  "set": null,
+  "isMainScore": false
+}
