@@ -20,14 +20,14 @@
     ]}
   ],
   "doors": [
-    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null},
-    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "EAST GALLERY", "moveCost": 1, "lock": null},
-    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "WEST GALLERY", "moveCost": 1, "lock": null},
-    {"id": "d4", "roomOrigin": "EAST GALLERY", "roomDest": "RESTORATION", "moveCost": 1, "lock": null},
-    {"id": "d5", "roomOrigin": "RESTORATION", "roomDest": "VAULT", "moveCost": 1, "lock": null},
-    {"id": "d6", "roomOrigin": "WEST GALLERY", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null},
-    {"id": "d7", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null},
-    {"id": "d8", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}}
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "EAST GALLERY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "WEST GALLERY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d4", "roomOrigin": "EAST GALLERY", "roomDest": "RESTORATION", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d5", "roomOrigin": "RESTORATION", "roomDest": "VAULT", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d6", "roomOrigin": "WEST GALLERY", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d7", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d8", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}, "sensor": null}
   ],
   "patrols": [
     {

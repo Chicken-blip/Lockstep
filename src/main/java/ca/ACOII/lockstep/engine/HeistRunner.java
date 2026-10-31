@@ -11,7 +11,7 @@ public class HeistRunner {
     int currentStep, alarmTimer;
     public Map<CrewMemberState, ActionQueue> crewQueues;
     public List<Guard> guards;
-    Set<String> unlockedDoors, openContainers;
+    Set<String> unlockedDoors, openContainers, disabledSensors;
     Target t;
     HeistInstance instance;
     boolean isCompleted = false, running = true;
@@ -37,6 +37,7 @@ public class HeistRunner {
         alarmTimer = -1;
         unlockedDoors = new HashSet<>();
         openContainers = new HashSet<>();
+        disabledSensors = new HashSet<>();
 
         this.campaign = campaign;
     }
@@ -55,7 +56,22 @@ public class HeistRunner {
                     EventType e;
 
                     if (a instanceof MoveAction move) {
-                        c.setCurrentRoom(move.getDestinationRoom());
+                        String currRoom = c.getCurrentRoom();
+                        String destRoom = move.getDestinationRoom();
+
+                        Door d = instance.getTarget().findDoor(currRoom, destRoom);
+                        if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
+                            if (!c.spotted) {
+                                c.spotted = true;
+                                log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.SPOTTED));
+                                if (alarmTimer == -1) {
+                                    alarmTimer = t.getAlarmCountdown();
+                                    log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                }
+                            }
+                        }
+
+                        c.setCurrentRoom(destRoom);
                         e = EventType.MOVE;
                     } else if (a instanceof PickLockAction pick) {
                         if (crewQueues.get(c).remainingSteps == 0) {
@@ -84,6 +100,13 @@ public class HeistRunner {
                             e = EventType.PICK_CASE;
                         } else {
                             e = EventType.PICK_CASE_PROGRESS;
+                        }
+                    } else if (a instanceof DisableSensorAction disable) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            disabledSensors.add(disable.getSensorId());
+                            e = EventType.DISABLE_SENSOR;
+                        } else {
+                            e = EventType.DISABLE_SENSOR_PROGRESS;
                         }
                     } else {
                         e = EventType.WAIT;
@@ -227,6 +250,26 @@ public class HeistRunner {
                 System.out.println("Attempt at unlocking unlocked door occurred");
                 running = false;
             }
+        } else if (action instanceof DisableSensorAction disable) {
+            Door found = null;
+            for (Door d : instance.getTarget().getDoors()) {
+                if (d.getSensor() != null && Objects.equals(d.getSensor().id, disable.getSensorId())) found = d;
+            }
+            if (found == null) {
+                System.out.println("Attempt at disabling nonexistent sensor occurred");
+                running = false;
+                return;
+            }
+            if (!Objects.equals(crew.getCurrentRoom(), found.getRoomDest()) && !Objects.equals(crew.getCurrentRoom(), found.getRoomOrigin())) {
+                System.out.println("Attempt at disabling sensor in disconnected room occurred");
+                running = false;
+                return;
+            }
+            if (disabledSensors.contains(disable.getSensorId())) {
+                System.out.println("Attempt at disabling disabled sensor occurred");
+                running = false;
+            }
+
         } else if (action instanceof MoveAction move) {
             if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
                 System.out.println("Invalid move destination");

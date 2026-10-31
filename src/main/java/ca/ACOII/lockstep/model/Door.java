@@ -4,6 +4,7 @@ public class Door {
     private String id, roomOrigin, roomDest;
     private int moveCost;
     private Lock lock;
+    private Sensor sensor;
 
     public Door() {
     }
@@ -46,5 +47,13 @@ public class Door {
 
     public void setLock(Lock lock) {
         this.lock = lock;
+    }
+
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
     }
 }

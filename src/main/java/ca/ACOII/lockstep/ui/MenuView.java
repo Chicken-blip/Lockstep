@@ -217,6 +217,7 @@ public class MenuView extends BorderPane {
         ListView<LootItem> items = getLootItemListView();
         items.getItems().addAll(game.getStash().getItems());
         items.getSelectionModel().selectFirst();
+
         Button sellItemBtn = new Button("Sell Item");
         sellItemBtn.setOnAction(e -> {
             game.getStash().sellItem(items.getSelectionModel().getSelectedItem().getId());
@@ -238,6 +239,20 @@ public class MenuView extends BorderPane {
                 }
             }
         });
+        TextArea setDetails = new TextArea();
+        setDetails.setEditable(false);
+        sets.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                setDetails.setText("");
+            } else {
+                StringBuilder txt = new StringBuilder("Set: " + newVal.getName() + "\nContents:");
+                for (LootItem item : game.getCampaign().definitions.findSetItems(newVal.getId())) {
+                    txt.append("\n- ").append(item.getName());
+                }
+                setDetails.setText(txt.toString());
+            }
+        });
+        setDetails.setText("");
         sets.getItems().addAll(app.def.sets.getSets());
         sets.getSelectionModel().selectFirst();
         Button sellSetButton = new Button("Sell Set");
@@ -245,7 +260,7 @@ public class MenuView extends BorderPane {
             game.getStash().sellSet(sets.getSelectionModel().getSelectedItem());
             refresh();
         });
-        setSelling.getChildren().addAll(sets, sellSetButton);
+        setSelling.getChildren().addAll(sets, setDetails, sellSetButton);
         setSelling.setAlignment(Pos.CENTER);
 
         content.getChildren().addAll(itemSelling, setSelling);
@@ -270,7 +285,7 @@ public class MenuView extends BorderPane {
                 } else if (item.getSet() == null) {
                     setText(item.getName() + " (Worth " + item.getPieceValue() + ")");
                 } else {
-                    setText(item.getName() + " [" + item.getSet() + " Set] (Worth " + item.getPieceValue() + ")");
+                    setText(item.getName() + " [" + game.getCampaign().definitions.findSet(item.getSet()).getName() + " Set] (Worth " + item.getPieceValue() + ")");
                 }
             }
         });

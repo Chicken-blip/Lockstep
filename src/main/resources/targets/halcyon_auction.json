@@ -1,0 +1,39 @@
+{
+  "id": "halcyon_auction",
+  "name": "Halcyon Auction",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 4,
+  "availableFrom": 20,
+  "availabilityDuration": 5,
+  "maxCrew": 2,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
+    {"id": "FOYER", "x": 150, "y": 100, "roomLoot": {"donation_box": 0.6}, "roomContainers": []},
+    {"id": "PREVIEW GALLERY", "x": 300, "y": 100, "roomLoot": {"map_of_the_old_world": 0.5, "royal_scepter": 0.9}, "roomContainers": []},
+    {"id": "SECURITY OFFICE", "x": 150, "y": 200, "roomLoot": {"pocket_watch": 0.75, "office_cash_box": 0.5, "old_ledger": 1.0}, "roomContainers": []},
+    {"id": "CATALOG ROOM", "x": 400, "y": 200, "roomLoot": {}, "roomContainers": []},
+    {"id": "VAULT", "x": 200, "y": 350, "roomLoot": {}, "roomContainers": [
+      {"id": "Auction Vault Safe", "type": "safe", "contents": [], "crackDifficulty":  3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "FOYER", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "FOYER", "roomDest": "PREVIEW GALLERY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 2}},
+    {"id": "d3", "roomOrigin": "FOYER", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d4", "roomOrigin": "PREVIEW GALLERY", "roomDest": "CATALOG ROOM", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d5", "roomOrigin": "CATALOG ROOM", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 1}, "sensor": {"id": "s2", "difficulty": 4}},
+    {"id": "d6", "roomOrigin": "SECURITY OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}, "sensor": {"id": "s3", "difficulty": 3}}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "FOYER", "duration": 2},
+        {"room": "PREVIEW GALLERY", "duration": 3},
+        {"room": "FOYER", "duration": 2},
+        {"room": "SECURITY OFFICE", "duration": 3}
+      ]
+    }
+  ]
+}

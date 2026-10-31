@@ -2,6 +2,7 @@ package ca.ACOII.lockstep.load;
 
 import ca.ACOII.lockstep.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,5 +70,20 @@ public class Definitions {
             if (Objects.equals(t.getId(), key)) return t;
         }
         return null;
+    }
+
+    public LootSet findSet(String key) {
+        for (LootSet set : sets.getSets()) {
+            if (Objects.equals(set.getId(), key)) return set;
+        }
+        return null;
+    }
+
+    public List<LootItem> findSetItems(String key) {
+        List<LootItem> items = new ArrayList<>();
+        for (LootItem i : lootItems) {
+            if (Objects.equals(i.getSet(), key)) items.add(i);
+        }
+        return items;
     }
 }

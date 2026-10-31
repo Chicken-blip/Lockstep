@@ -34,7 +34,7 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "GRAB"
+            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "DISABLE SENSOR", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
@@ -174,6 +174,11 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.pickCaseDuration(display, heistCrew.getSelectionModel().getSelectedItem());
                     act = new PickCaseAction(display.getId(), dur);
                 }
+                case "DISABLE SENSOR" -> {
+                    Sensor sensor = target.findSensor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
+                    int dur = ActDurationCalculator.disableSensorDuration(sensor, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new DisableSensorAction(sensor.id, dur);
+                }
                 case "GRAB" -> {
                     LootItem item = app.def.findLoot(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
                     act = new GrabAction(item);
@@ -206,6 +211,7 @@ public class HeistView extends BorderPane {
             case "PICK LOCK" -> buildPickLockForm();
             case "CRACK SAFE" -> buildCrackSafeForm();
             case "PICK CASE" -> buildPickCaseForm();
+            case "DISABLE SENSOR" -> buildDisableSensorForm();
             case "GRAB" -> buildGrabForm();
             default -> throw new IllegalStateException("Unexpected value: " + value);
         };
@@ -292,18 +298,57 @@ public class HeistView extends BorderPane {
         return box;
     }
 
-    private VBox buildGrabForm() {
-        Label label = new Label("Item:");
-        ComboBox<String> itemSelect = new ComboBox<>();
+    private VBox buildDisableSensorForm() {
+        Label label = new Label("Sensor:");
+        ComboBox<String> sensorSelect = new ComboBox<>();
 
         List<String> ids = new ArrayList<>();
+        for (Door d : target.getDoors()) {
+            if (d.getSensor() != null) ids.add(d.getSensor().id);
+        }
+        sensorSelect.getItems().addAll(ids);
+        if (sensorSelect.getItems().isEmpty()) {
+            sensorSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            sensorSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, sensorSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
+    private VBox buildGrabForm() {
+        Label label = new Label("Item:");
+        ComboBox<LootItem> itemSelect = new ComboBox<>();
+        itemSelect.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(LootItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
+
+        List<LootItem> items = new ArrayList<>();
         for (Room r : target.getRooms()) {
-            ids.addAll(instance.getRoomLoot(r.getId()));
+            for (String id : instance.getRoomLoot(r.getId())) {
+                items.add(game.getCampaign().definitions.findLoot(id));
+            }
             for (LootContainer c : r.getRoomContainers()) {
-                ids.addAll(instance.getContainerLoot(c.getId()));
+                for (String id : instance.getContainerLoot(c.getId())) {
+                    items.add(game.getCampaign().definitions.findLoot(id));
+                }
             }
         }
-        itemSelect.getItems().addAll(ids);
+        itemSelect.getItems().addAll(items);
         if (itemSelect.getItems().isEmpty()) {
             itemSelect.setDisable(true);
             actionPossible = false;
@@ -422,10 +467,13 @@ public class HeistView extends BorderPane {
                         setText("PICK LOCK door " + pick.getDoorId());
                     }
                     if (action instanceof CrackAction crack) {
-                        setText("CRACK SAFE safe " + crack.getContainerId());
+                        setText("CRACK SAFE " + crack.getContainerId());
                     }
                     if (action instanceof PickCaseAction pick) {
-                        setText("PICK CASE display case " + pick.getContainerId());
+                        setText("PICK CASE " + pick.getContainerId());
+                    }
+                    if (action instanceof DisableSensorAction disable) {
+                        setText("DISABLE SENSOR " + disable.getSensorId());
                     }
                     if (action instanceof GrabAction grab) {
                         setText("GRAB item " + grab.getItem().getName());

@@ -15,8 +15,8 @@
     ]}
   ],
   "doors": [
-    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "FRONT", "moveCost": 1, "lock": null},
-    {"id": "d2", "roomOrigin": "FRONT", "roomDest": "BACK", "moveCost": 1, "lock": null}
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "FRONT", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "FRONT", "roomDest": "BACK", "moveCost": 1, "lock": null, "sensor": null}
   ],
   "patrols": [
     {

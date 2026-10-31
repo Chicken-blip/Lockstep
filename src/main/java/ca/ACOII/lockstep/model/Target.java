@@ -166,4 +166,20 @@ public class Target {
         }
         return null;
     }
+
+    public Sensor findSensor(String key) {
+        for (Door d : getDoors()) {
+            if (d.getSensor() != null && Objects.equals(d.getSensor().id, key)) return d.getSensor();
+        }
+        return null;
+    }
+
+    public Door findDoor(String roomA, String roomB) {
+        for (Door d : getDoors()) {
+            boolean testA = Objects.equals(d.getRoomOrigin(), roomA) || Objects.equals(d.getRoomDest(), roomA);
+            boolean testB = Objects.equals(d.getRoomDest(), roomB) || Objects.equals(d.getRoomOrigin(), roomB);
+            if (testA && testB) return d;
+        }
+        return null;
+    }
 }

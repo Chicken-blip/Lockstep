@@ -16,9 +16,9 @@
     ]}
   ],
   "doors": [
-    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "SHOWROOM", "moveCost": 1, "lock": null},
-    {"id": "d2", "roomOrigin": "SHOWROOM", "roomDest": "WORKROOM", "moveCost": 1, "lock": null},
-    {"id": "d3", "roomOrigin": "SHOWROOM", "roomDest": "SAFE ROOM", "moveCost": 1, "lock": {"pickDifficulty": 2}}
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "SHOWROOM", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "SHOWROOM", "roomDest": "WORKROOM", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d3", "roomOrigin": "SHOWROOM", "roomDest": "SAFE ROOM", "moveCost": 1, "lock": {"pickDifficulty": 2}, "sensor": null}
   ],
   "patrols": [
     {

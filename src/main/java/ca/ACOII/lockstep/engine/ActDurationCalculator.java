@@ -38,4 +38,15 @@ public class ActDurationCalculator {
         }
         return Math.max(dur, 1);
     }
+    public static int disableSensorDuration(Sensor sensor, RosterEntry member) {
+        int dur = sensor.difficulty;
+        dur -= member.getData().getSkills().getOrDefault("hack", 0);
+        for (Gear g : member.getGear()) {
+            for (GearEffect eff : g.getEffects()) {
+                if (Objects.equals(eff.getSkill(), "hack")) dur += eff.getStepDelta();
+            }
+        }
+        return Math.max(dur, 1);
+
+    }
 }

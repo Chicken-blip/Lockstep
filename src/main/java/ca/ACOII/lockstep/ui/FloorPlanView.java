@@ -54,6 +54,24 @@ public class FloorPlanView extends Pane {
             tip.setShowDelay(Duration.millis(50));
             Tooltip.install(connection, tip);
             this.getChildren().add(connection);
+
+            if (d.getSensor() != null) {
+                //TODO: Make a small circle for the sensor
+                Circle circle = new Circle();
+                Room roomA = instance.getTarget().findRoom(d.getRoomDest());
+                Room roomB = instance.getTarget().findRoom(d.getRoomOrigin());
+
+                circle.setCenterX(getXMidpoint(roomA, roomB));
+                circle.setCenterY(getYMidpoint(roomA, roomB));
+                circle.setRadius(5);
+                circle.setFill(Color.YELLOW);
+
+                Tooltip sensorTip = new Tooltip();
+                sensorTip.setText("Sensor (" + d.getSensor().id + ")\nHack difficulty: " + d.getSensor().difficulty);
+                sensorTip.setShowDelay(Duration.millis(50));
+                Tooltip.install(circle, sensorTip);
+                this.getChildren().add(circle);
+            }
         }
         for (Room r : instance.getTarget().getRooms()) {
             Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
@@ -82,6 +100,17 @@ public class FloorPlanView extends Pane {
         }
 
 
+    }
+
+    private double getXMidpoint(Room roomA, Room roomB) {
+        double Ax = roomA.getX() + ROOM_WIDTH / 2.0;
+        double Bx = roomB.getX() + ROOM_WIDTH / 2.0;
+        return (Ax + Bx)/2.0;
+    }
+    private double getYMidpoint(Room roomA, Room roomB) {
+        double Ay = roomA.getY() + ROOM_HEIGHT / 2.0;
+        double By = roomB.getY() + ROOM_HEIGHT / 2.0;
+        return (Ay + By)/2.0;
     }
 
     private StringBuilder getRoomTooltipContent(String roomId) {
