@@ -34,7 +34,7 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "DISABLE SENSOR", "GRAB"
+            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN", "DISABLE SENSOR", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
@@ -180,7 +180,7 @@ public class HeistView extends BorderPane {
                     act = new DisableSensorAction(sensor.id, dur);
                 }
                 case "GRAB" -> {
-                    LootItem item = app.def.findLoot(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
+                    LootItem item = ((ComboBox<LootItem>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem();
                     act = new GrabAction(item);
                 }
             }
@@ -211,6 +211,7 @@ public class HeistView extends BorderPane {
             case "PICK LOCK" -> buildPickLockForm();
             case "CRACK SAFE" -> buildCrackSafeForm();
             case "PICK CASE" -> buildPickCaseForm();
+            case "FORCE OPEN" -> buildForceOpenForm();
             case "DISABLE SENSOR" -> buildDisableSensorForm();
             case "GRAB" -> buildGrabForm();
             default -> throw new IllegalStateException("Unexpected value: " + value);
@@ -336,6 +337,17 @@ public class HeistView extends BorderPane {
                 }
             }
         });
+        itemSelect.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(LootItem item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getName());
+                }
+            }
+        });
 
         List<LootItem> items = new ArrayList<>();
         for (Room r : target.getRooms()) {
@@ -373,6 +385,34 @@ public class HeistView extends BorderPane {
             for (LootContainer c : r.getRoomContainers()) {
                 if (c instanceof DisplayCaseContainer display) {
                     if (display.getPickDifficulty() > 0) ids.add(display.getId());
+                }
+            }
+        }
+        containerSelect.getItems().addAll(ids);
+        if (containerSelect.getItems().isEmpty()) {
+            containerSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            containerSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, containerSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
+    private VBox buildForceOpenForm() {
+        Label label = new Label("Container:");
+        ComboBox<String> containerSelect = new ComboBox<>();
+
+        List<String> ids = new ArrayList<>();
+        for (Room r : target.getRooms()) {
+            for (LootContainer c : r.getRoomContainers()) {
+                if (c instanceof ForceOpenContainer container) {
+                    if (container.getForceDifficulty() > 0) ids.add(container.getId());
                 }
             }
         }

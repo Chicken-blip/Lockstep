@@ -47,6 +47,16 @@ public class ActDurationCalculator {
             }
         }
         return Math.max(dur, 1);
+    }
 
+    public static int forceOpenDuration(ForceOpenContainer container, RosterEntry member) {
+        int dur = container.getForceDifficulty();
+        dur -= member.getData().getSkills().getOrDefault("strength", 0);
+        for (Gear g : member.getGear()) {
+            for (GearEffect eff : g.getEffects()) {
+                if (Objects.equals(eff.getSkill(), "strength")) dur += eff.getStepDelta();
+            }
+        }
+        return Math.max(dur, 1);
     }
 }

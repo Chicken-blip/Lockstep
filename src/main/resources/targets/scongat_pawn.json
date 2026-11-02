@@ -10,7 +10,7 @@
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
     {"id": "SHOWROOM", "x": 150, "y": 100, "roomLoot": {"trench_knife": 0.9, "gold_locket": 0.7}, "roomContainers": []},
-    {"id": "WORKROOM", "x": 150, "y": 100, "roomLoot": {"silver_spoon": 1.0, "tortoiseshell_comb": 0}, "roomContainers": []},
+    {"id": "WORKROOM", "x": 150, "y": 200, "roomLoot": {"silver_spoon": 1.0, "tortoiseshell_comb": 0}, "roomContainers": []},
     {"id": "SAFE ROOM", "x": 250, "y": 100, "roomLoot": {"map_of_the_new_world": 0.5}, "roomContainers": [
       {"id": "Shop Safe", "type": "safe", "contents": ["silver_ladle", "royal_orb", "old_ledger"]}
     ]}

@@ -1,0 +1,8 @@
+{
+  "id": "server_drive",
+  "name": "Server Drive",
+  "grabCost": 1,
+  "pieceValue": 300,
+  "set": null,
+  "isMainScore": true
+}

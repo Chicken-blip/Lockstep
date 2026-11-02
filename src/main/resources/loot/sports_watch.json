@@ -1,0 +1,8 @@
+{
+  "id": "sports_watch",
+  "name": "Sports Watch",
+  "grabCost": 1,
+  "pieceValue": 100,
+  "set": null,
+  "isMainScore": false
+}

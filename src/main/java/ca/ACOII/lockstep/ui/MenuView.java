@@ -61,7 +61,10 @@ public class MenuView extends BorderPane {
         VBox skillBox = new VBox(10);
         ComboBox<Skill> skills = getSkillComboBox();
 
-        skills.getItems().addAll(app.def.skills.getSkills());
+        for (Skill s : app.def.skills.getSkills()) {
+            if (s.getTrainingCost() > 0) skills.getItems().add(s);
+        }
+
         skills.getSelectionModel().selectFirst();
         skills.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> entries.getSelectionModel().clearSelection());
 

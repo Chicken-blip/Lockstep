@@ -1,0 +1,24 @@
+{
+  "id": "ovation_apartment_room_205",
+  "name": "Ovation Apartment, Room 205",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 2,
+  "availableFrom": 0,
+  "availabilityDuration": 0,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
+    {"id": "HALLWAY", "x": 150, "y": 100, "roomLoot": {"marked_envelope": 0.75}, "roomContainers": []},
+    {"id": "LIVING ROOM", "x": 250, "y": 100, "roomLoot": {"ancestral_urn": 1.0, "loose_notes": 0.5, "sports_watch": 0.75}, "roomContainers": []},
+    {"id": "BEDROOM", "x": 350, "y": 100, "roomLoot": {"desk_wallet": 0.7, "smartphone": 0.2}, "roomContainers": [
+      {"id": "Small Safe", "type": "safe", "contents": ["the_family_heirloom"], "crackDifficulty": 3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "HALLWAY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "HALLWAY", "roomDest": "LIVING ROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 2}},
+    {"id": "d3", "roomOrigin": "LIVING ROOM", "roomDest": "BEDROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s2", "difficulty": 2}}
+  ],
+  "patrols": []
+}

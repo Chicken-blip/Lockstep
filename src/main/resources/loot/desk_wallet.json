@@ -1,0 +1,8 @@
+{
+  "id": "desk_wallet",
+  "name": "Desk Wallet",
+  "grabCost": 1,
+  "pieceValue": 14,
+  "set": null,
+  "isMainScore": false
+}

@@ -1,0 +1,28 @@
+{
+  "id": "anvil_offices",
+  "name": "Anvil Offices",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 3,
+  "availableFrom": 0,
+  "availabilityDuration": 0,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
+    {"id": "LOBBY", "x": 150, "y": 100, "roomLoot": {"stapler": 0.3, "printer_unit": 1}, "roomContainers": []},
+    {"id": "CUBICLES A", "x": 150, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
+    {"id": "CUBICLES B", "x": 250, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
+    {"id": "CUBICLES C", "x": 350, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
+    {"id": "MANAGER OFFICE", "x": 250, "y": 100, "roomLoot": {"printer_paper": 0.4, "printer_toner": 0.6}, "roomContainers": [
+      {"id": "Manager Cabinet", "type": "force_open", "contents": ["server_driver"], "forceDifficulty": 7}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 3}},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "CUBICLES A", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "MANAGER OFFICE", "moveCost": 1, "lock": null, "sensor": {"id": "s2", "difficulty": 5}},
+    {"id": "d2", "roomOrigin": "CUBICLES A", "roomDest": "CUBICLES B", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "CUBICLES B", "roomDest": "CUBICLES C", "moveCost": 1, "lock": null, "sensor": null}
+  ],
+  "patrols": []
+}

@@ -1,0 +1,8 @@
+{
+  "id": "stapler",
+  "name": "Stapler",
+  "grabCost": 1,
+  "pieceValue": 5,
+  "set": null,
+  "isMainScore": false
+}

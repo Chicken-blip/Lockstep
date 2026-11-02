@@ -7,6 +7,14 @@
       "effects": [
         {"skill": "pick", "stepDelta": -1}
       ]
+    },
+    {
+      "id": "crowbar",
+      "name": "Crowbar",
+      "price": 100,
+      "effects": [
+        {"skill": "strength", "stepDelta": -2}
+      ]
     }
   ]
 }

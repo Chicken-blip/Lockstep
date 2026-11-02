@@ -6,6 +6,7 @@
     {"id": "antique_maps", "name": "Antique Maps", "setValue": 70},
     {"id": "hunting_set", "name": "Hunting Set", "setValue": 400},
     {"id": "silver_cutlery_set", "name": "Silver Cutlery Set", "setValue": 250},
-    {"id": "trench_set", "name": "Trench Set", "setValue": 150}
+    {"id": "trench_set", "name": "Trench Set", "setValue": 150},
+    {"id": "printer_station", "name": "Printer Station", "setValue": 100}
   ]
 }

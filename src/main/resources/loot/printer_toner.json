@@ -1,0 +1,8 @@
+{
+  "id": "printer_toner",
+  "name": "Printer Toner",
+  "grabCost": 1,
+  "pieceValue": 30,
+  "set": "printer_station",
+  "isMainScore": false
+}

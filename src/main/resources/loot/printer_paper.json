@@ -1,0 +1,8 @@
+{
+  "id": "printer_paper",
+  "name": "Printer Paper",
+  "grabCost": 1,
+  "pieceValue": 15,
+  "set": "printer_station",
+  "isMainScore": false
+}

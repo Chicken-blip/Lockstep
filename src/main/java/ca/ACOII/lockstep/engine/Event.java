@@ -9,6 +9,7 @@ public record Event(int stepNum, String description, String actorId, EventType e
             case EventType.PICK_CASE_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Picking display case...";
             case EventType.GRAB_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Grabbing item...";
             case EventType.DISABLE_SENSOR_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Disabling sensor...";
+            case EventType.FORCE_OPEN_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Forcing open container...";
             case EventType.SPOTTED -> "[Step " + stepNum + "] " + actorId + " spotted in " + description;
             case EventType.ALARM_RAISED -> "[Step " + stepNum + "] ALARM RAISED";
             case EventType.CAUGHT -> "[Step " + stepNum + "] " + actorId + " caught!";

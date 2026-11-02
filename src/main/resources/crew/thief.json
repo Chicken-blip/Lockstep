@@ -1,7 +1,7 @@
 {
   "id": "thief",
   "name": "The Thief",
-  "skills": {"pick": 1, "crack": 1, "hack": 0},
+  "skills": {"pick": 1, "crack": 1, "hack": 0, "strength": 1},
   "recruitFee": 25,
   "dayAvailability": 0
 }

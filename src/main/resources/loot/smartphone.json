@@ -1,0 +1,8 @@
+{
+  "id": "smartphone",
+  "name": "Smartphone",
+  "grabCost": 1,
+  "pieceValue": 30,
+  "set": null,
+  "isMainScore": false
+}

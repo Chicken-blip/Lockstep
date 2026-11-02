@@ -8,7 +8,8 @@ import java.util.List;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = SafeContainer.class, name = "safe"),
-        @JsonSubTypes.Type(value = DisplayCaseContainer.class, name = "display")
+        @JsonSubTypes.Type(value = DisplayCaseContainer.class, name = "display"),
+        @JsonSubTypes.Type(value = ForceOpenContainer.class, name = "force_open")
 })
 
 public abstract class LootContainer {

@@ -1,0 +1,8 @@
+{
+  "id": "printer_unit",
+  "name": "Printer Unit",
+  "grabCost": 1,
+  "pieceValue": 40,
+  "set": "printer_station",
+  "isMainScore": false
+}

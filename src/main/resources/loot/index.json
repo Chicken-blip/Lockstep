@@ -35,5 +35,19 @@
   "trench_knife.json",
   "trench_bayonet.json",
   "trench_helmet.json",
-  "old_ledger.json"
+  "old_ledger.json",
+  "desk_wallet.json",
+  "loose_notes.json",
+  "sports_watch.json",
+  "ancestral_urn.json",
+  "envelope_marked.json",
+  "smartphone.json",
+  "the_family_heirloom.json",
+
+  "stapler.json",
+  "printer_unit.json",
+  "printer_toner.json",
+  "printer_paper.json",
+  "laptop.json",
+  "server_drive.json"
 ]

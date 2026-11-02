@@ -452,6 +452,579 @@ Two conventions I used, worth knowing:
 
 - **Value Bands**: low ≈ 10–20, medium ≈ 30–60, high ≈ 80–150, very high ≈ 200+. Set values should be well above the sum of their pieces, per your design.
 
+## Medical / Pharmaceutical
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| bandage_roll | Bandage Roll | 1 | 6 | null |
+| painkiller_bottle | Painkiller Bottle | 1 | 10 | null |
+| first_aid_kit | First Aid Kit | 1 | 25 | null |
+| antiseptic_bottle | Antiseptic Bottle | 1 | 12 | null |
+| syringe_pack | Syringe Pack | 1 | 15 | null |
+| suture_kit | Suture Kit | 1 | 30 | null |
+| stethoscope | Stethoscope | 1 | 35 | null |
+| blood_pressure_cuff | Blood Pressure Cuff | 1 | 28 | null |
+| thermometer | Clinical Thermometer | 1 | 18 | null |
+| prescription_pad | Prescription Pad | 1 | 40 | null |
+| pill_bottle_opioid | Opioid Pill Bottle | 1 | 65 | null |
+| pill_bottle_stimulant | Stimulant Bottle | 1 | 60 | null |
+| vial_antibiotic | Antibiotic Vial | 1 | 45 | null |
+| vial_vaccine | Vaccine Vial | 1 | 55 | null |
+| insulin_pen | Insulin Pen | 1 | 50 | null |
+| epipen | EpiPen | 1 | 40 | null |
+| anesthetic_vial | Anesthetic Vial | 1 | 80 | null |
+| morphine_ampoule | Morphine Ampoule | 1 | 95 | null |
+| chemo_vial | Chemo Vial | 1 | 110 | null |
+| rare_blood_bag | Rare Blood Bag | 2 | 120 | null |
+| plasma_pack | Plasma Pack | 1 | 70 | null |
+| surgical_tray | Surgical Tray | 2 | 90 | null |
+| scalpel_set | Scalpel Set | 1 | 35 | null |
+| orthopedic_drill | Orthopedic Drill | 2 | 100 | null |
+| defibrillator | Defibrillator | 2 | 130 | null |
+| ultrasound_probe | Ultrasound Probe | 1 | 85 | null |
+| endoscope | Endoscope | 2 | 115 | null |
+| lab_centrifuge | Lab Centrifuge | 2 | 140 | null |
+| microscope_clinical | Clinical Microscope | 2 | 150 | null |
+| pcr_machine | PCR Machine | 3 | 220 | null |
+| gene_sequencer | Gene Sequencer | 3 | 320 | null |
+| cryo_vial_rack | Cryo Vial Rack | 2 | 160 | null |
+| tissue_sample_jar | Tissue Sample Jar | 1 | 75 | null |
+| pathology_slide_box | Pathology Slide Box | 1 | 65 | null |
+| blood_bag_rack | Blood Bag Rack | 2 | 95 | null |
+| pharmacy_safe_tray | Pharmacy Safe Tray | 2 | 180 | null |
+| controlled_substance_box | Controlled Substance Box | 2 | 200 | null |
+| clinical_trial_binder | Clinical Trial Binder | 1 | 60 | null |
+| patient_records_box | Patient Records Box | 2 | 85 | null |
+| medical_waste_bin | Medical Waste Bin | 3 | 45 | null |
+
+**Sets:**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| surgical_kit | 3 — `surgical_scalpel`, `surgical_forceps`, `surgical_retractor` | 150 | Instruments |
+| trauma_kit | 3 — `trauma_tourniquet`, `trauma_dressing`, `trauma_shears` | 120 | Field kit |
+| pharmacy_dispensary | 3 — `dispensary_scale`, `dispensary_mortar`, `dispensary_counting_tray` | 160 | Dispensary |
+| diagnostic_set | 3 — `diag_stethoscope`, `diag_cuff`, `diag_otoscope` | 140 | Instruments |
+| lab_starter_kit | 3 — `lab_beaker_set`, `lab_pipette_set`, `lab_burner` | 130 | Lab |
+| vaccine_cold_chain | 3 — `cold_box`, `ice_pack_set`, `temp_logger` | 170 | Logistics |
+| opioid_dispensary | 3 — `opioid_bottle_a`, `opioid_bottle_b`, `opioid_bottle_c` | 180 | Controlled |
+| anesthesia_cart | 3 — `anesthesia_vial_set`, `anesthesia_mask`, `anesthesia_monitor` | 250 | Surgical |
+| dental_suite | 3 — `dental_drill`, `dental_mirror_set`, `dental_mold_kit` | 145 | Dental |
+| biohazard_sampling | 3 — `sample_container_set`, `swab_kit`, `seal_bag_set` | 110 | Lab |
+
+**Set-Piece Individual Prices:**
+- `surgical_kit`: 55 + 50 + 45 = 150
+- `trauma_kit`: 50 + 40 + 30 = 120
+- `pharmacy_dispensary`: 60 + 50 + 50 = 160
+- `diagnostic_set`: 50 + 45 + 45 = 140
+- `lab_starter_kit`: 45 + 45 + 40 = 130
+- `vaccine_cold_chain`: 70 + 50 + 50 = 170
+- `opioid_dispensary`: 60 + 60 + 60 = 180
+- `anesthesia_cart`: 90 + 80 + 80 = 250
+- `dental_suite`: 55 + 45 + 45 = 145
+- `biohazard_sampling`: 40 + 35 + 35 = 110
+
+**Main-score candidates**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_panacea | The Panacea | 1 | 420 | null | true |
+| the_antidote | The Antidote | 1 | 380 | null | true |
+| the_clinical_trial_data | The Clinical Trial Data | 1 | 350 | null | true |
+| the_organ_container | The Organ Container | 2 | 450 | null | true |
+
+## Clothing / Textiles / Fashion
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| cotton_bolt | Cotton Bolt | 2 | 15 | null |
+| linen_bolt | Linen Bolt | 2 | 22 | null |
+| wool_bolt | Wool Bolt | 2 | 28 | null |
+| silk_bolt | Silk Bolt | 2 | 45 | null |
+| velvet_bolt | Velvet Bolt | 2 | 55 | null |
+| denim_roll | Denim Roll | 2 | 20 | null |
+| leather_hide | Leather Hide | 2 | 35 | null |
+| fur_pelt | Fur Pelt | 2 | 80 | null |
+| lace_spool | Lace Spool | 1 | 30 | null |
+| thread_box | Thread Box | 1 | 10 | null |
+| button_tin | Button Tin | 1 | 8 | null |
+| sewing_kit | Sewing Kit | 1 | 18 | null |
+| scarf_silk | Silk Scarf | 1 | 35 | null |
+| tie_designer | Designer Tie | 1 | 40 | null |
+| gloves_leather | Leather Gloves | 1 | 45 | null |
+| hat_felt | Felt Hat | 1 | 50 | null |
+| shoes_designer | Designer Shoes | 1 | 90 | null |
+| handbag_designer | Designer Handbag | 1 | 140 | null |
+| belt_designer | Designer Belt | 1 | 60 | null |
+| coat_fur | Fur Coat | 2 | 180 | null |
+| coat_cashmere | Cashmere Coat | 2 | 120 | null |
+| suit_tailored | Tailored Suit | 2 | 150 | null |
+| dress_couture | Couture Dress | 1 | 200 | null |
+| gown_evening | Evening Gown | 2 | 170 | null |
+| uniform_security | Security Uniform | 1 | 30 | null |
+| uniform_staff | Staff Uniform | 1 | 20 | null |
+| costume_theater | Theater Costume | 2 | 65 | null |
+| wedding_dress | Wedding Dress | 2 | 220 | null |
+| vest_kevlar | Kevlar Vest | 1 | 110 | null |
+| apron_butcher | Butcher's Apron | 1 | 12 | null |
+| bolt_end_lot | Bolt-End Lot | 3 | 40 | null |
+| textile_bale | Textile Bale | 3 | 60 | null |
+
+**Sets:**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_tailors_kit | 3 — `tailor_shears`, `tailor_pins`, `tailor_tape` | 90 | Tools |
+| the_gentlemans_wardrobe | 3 — `wardrobe_suit`, `wardrobe_shoes`, `wardrobe_tie` | 280 | Formalwear |
+| the_evening_ensemble | 3 — `ensemble_gown`, `ensemble_clutch`, `ensemble_shoes` | 330 | Formalwear |
+| the_bridal_trousseau | 3 — `trousseau_dress`, `trousseau_veil`, `trousseau_shoes` | 360 | Bridal |
+| the_fur_collection | 3 — `fur_coat_a`, `fur_coat_b`, `fur_stole` | 380 | Luxury |
+| the_designer_display | 3 — `display_handbag`, `display_shoes`, `display_belt` | 260 | Boutique |
+| the_linen_chest | 3 — `linen_sheet_set`, `linen_towel_set`, `linen_tablecloth` | 120 | Household |
+| the_military_uniform | 3 — `uniform_jacket`, `uniform_trousers`, `uniform_cap` | 160 | Uniform |
+| the_theater_wardrobe | 3 — `costume_hero`, `costume_villain`, `costume_extra` | 200 | Costume |
+| the_silk_route | 3 — `silk_bolt_a`, `silk_bolt_b`, `silk_bolt_c` | 150 | Textile |
+
+**Set-Piece Individual Prices:**
+- `the_tailors_kit`: 30 + 30 + 30 = 90
+- `the_gentlemans_wardrobe`: 150 + 90 + 40 = 280
+- `the_evening_ensemble`: 170 + 100 + 60 = 330
+- `the_bridal_trousseau`: 220 + 80 + 60 = 360
+- `the_fur_collection`: 180 + 150 + 50 = 380
+- `the_designer_display`: 140 + 90 + 30 = 260
+- `the_linen_chest`: 50 + 40 + 30 = 120
+- `the_military_uniform`: 70 + 50 + 40 = 160
+- `the_theater_wardrobe`: 75 + 70 + 55 = 200
+- `the_silk_route`: 50 + 50 + 50 = 150
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_designer_original | The Designer Original | 1 | 380 | null | true |
+| the_royal_gown | The Royal Gown | 2 | 420 | null | true |
+| the_lost_tapestry | The Lost Tapestry | 3 | 400 | null | true |
+| the_master_tailors_commission | The Master Tailor's Commission | 1 | 320 | null | true |
+
+## Tools / Trade Goods
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| hammer | Hammer | 1 | 10 | null |
+| screwdriver_set | Screwdriver Set | 1 | 12 | null |
+| wrench_set | Wrench Set | 1 | 25 | null |
+| pliers | Pliers | 1 | 8 | null |
+| crowbar | Crowbar | 1 | 15 | null |
+| hacksaw | Hacksaw | 1 | 14 | null |
+| bolt_cutters | Bolt Cutters | 1 | 35 | null |
+| lockpick_kit | Lockpick Kit | 1 | 60 | null |
+| pry_bar | Pry Bar | 2 | 30 | null |
+| sledgehammer | Sledgehammer | 2 | 28 | null |
+| tool_belt | Tool Belt | 1 | 20 | null |
+| tool_box | Toolbox | 2 | 38 | null |
+| bag_of_tools | Bag of Tools | 1 | 25 | null |
+| drill_power | Power Drill | 2 | 55 | null |
+| angle_grinder | Angle Grinder | 2 | 70 | null |
+| circular_saw | Circular Saw | 2 | 80 | null |
+| reciprocating_saw | Reciprocating Saw | 2 | 65 | null |
+| impact_driver | Impact Driver | 1 | 50 | null |
+| nail_gun | Nail Gun | 2 | 75 | null |
+| heat_gun | Heat Gun | 1 | 40 | null |
+| welding_torch | Welding Torch | 2 | 90 | null |
+| multimeter | Multimeter | 1 | 45 | null |
+| voltage_tester | Voltage Tester | 1 | 20 | null |
+| pipe_cutter | Pipe Cutter | 1 | 30 | null |
+| plumbing_kit | Plumbing Kit | 2 | 60 | null |
+| electrical_kit | Electrical Kit | 2 | 70 | null |
+| carpentry_kit | Carpentry Kit | 2 | 65 | null |
+| masonry_trowel | Masonry Trowel | 1 | 12 | null |
+| surveyor_level | Surveyor's Level | 2 | 120 | null |
+| laser_level | Laser Level | 1 | 85 | null |
+| caliper_precision | Precision Caliper | 1 | 55 | null |
+| micrometer | Micrometer | 1 | 50 | null |
+| tap_and_die_set | Tap and Die Set | 2 | 95 | null |
+| machine_vise | Machine Vise | 3 | 110 | null |
+| bench_grinder | Bench Grinder | 3 | 100 | null |
+| drill_press | Drill Press | 3 | 180 | null |
+| lathe_benchtop | Benchtop Lathe | 3 | 240 | null |
+| mill_benchtop | Benchtop Mill | 3 | 280 | null |
+| welding_rig | Welding Rig | 3 | 220 | null |
+| air_compressor | Air Compressor | 3 | 150 | null |
+| generator_portable | Portable Generator | 3 | 170 | null |
+| heavy_machinery_part | Heavy Machinery Part | 3 | 80 | null |
+| hydraulic_pump | Hydraulic Pump | 2 | 130 | null |
+| bearing_set | Bearing Set | 1 | 40 | null |
+| gear_set | Gear Set | 1 | 45 | null |
+| motor_electric | Electric Motor | 2 | 95 | null |
+| pump_industrial | Industrial Pump | 3 | 160 | null |
+| valve_set | Valve Set | 1 | 35 | null |
+| pipe_fitting_lot | Pipe Fitting Lot | 2 | 30 | null |
+| fastener_lot | Fastener Lot | 1 | 15 | null |
+
+**Sets**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_mechanics_kit | 3 — `mech_wrench_set`, `mech_socket_set`, `mech_screwdriver_set` | 130 | Automotive |
+| the_electricians_kit | 3 — `elec_multimeter`, `elec_tester`, `elec_wire_stripper` | 120 | Electrical |
+| the_plumbers_kit | 3 — `plumb_pipe_cutter`, `plumb_wrench`, `plumb_snake` | 125 | Plumbing |
+| the_carpenters_kit | 3 — `carp_saw`, `carp_chisel_set`, `carp_square` | 140 | Carpentry |
+| the_machinists_kit | 3 — `mach_caliper`, `mach_micrometer`, `mach_gauge_block` | 180 | Precision |
+| the_welders_rig | 3 — `weld_torch`, `weld_mask`, `weld_gloves` | 200 | Welding |
+| the_lockpicks | 3 — `pick_rake`, `pick_tension`, `pick_decoder` | 150 | Bypass |
+| the_demolition_kit | 3 — `demo_pry_bar`, `demo_sledge`, `demo_bolt_cutter` | 130 | Breaching |
+| the_gardeners_kit | 3 — `gard_shears`, `gard_trowel`, `gard_hose_reel` | 90 | Grounds |
+| the_industrial_spares | 3 — `spare_bearing`, `spare_gear`, `spare_motor` | 220 | Industrial |
+
+**Set-piece individual prices:**
+- `the_mechanics_kit`: 45 + 45 + 40 = 130
+- `the_electricians_kit`: 45 + 35 + 40 = 120
+- `the_plumbers_kit`: 40 + 45 + 40 = 125
+- `the_carpenters_kit`: 50 + 50 + 40 = 140
+- `the_machinists_kit`: 60 + 60 + 60 = 180
+- `the_welders_rig`: 90 + 60 + 50 = 200
+- `the_lockpicks`: 50 + 50 + 50 = 150
+- `the_demolition_kit`: 45 + 45 + 40 = 130
+- `the_gardeners_kit`: 30 + 30 + 30 = 90
+- `the_industrial_spares`: 75 + 70 + 75 = 220
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_master_toolkit | The Master Toolkit | 3 | 380 | null | true |
+| the_prototype_lathe | The Prototype Lathe | 3 | 420 | null | true |
+| the_master_key_set | The Master Key Set | 1 | 400 | null | true |
+| the_trade_secret | The Trade Secret | 1 | 300 | null | true |
+
+## Vehicle Parts
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| tire | Tire | 2 | 25 | null |
+| tire_set | Tire Set | 3 | 90 | null |
+| wheel_rim | Wheel Rim | 2 | 40 | null |
+| rim_set | Rim Set | 3 | 140 | null |
+| car_battery | Car Battery | 2 | 45 | null |
+| alternator | Alternator | 2 | 60 | null |
+| starter_motor | Starter Motor | 2 | 55 | null |
+| brake_pad_set | Brake Pad Set | 1 | 30 | null |
+| brake_caliper | Brake Caliper | 2 | 50 | null |
+| shock_absorber | Shock Absorber | 2 | 40 | null |
+| suspension_kit | Suspension Kit | 3 | 120 | null |
+| exhaust_system | Exhaust System | 3 | 95 | null |
+| catalytic_converter | Catalytic Converter | 2 | 110 | null |
+| radiator | Radiator | 2 | 65 | null |
+| fuel_pump | Fuel Pump | 2 | 70 | null |
+| fuel_injector_set | Fuel Injector Set | 1 | 85 | null |
+| carburetor | Carburetor | 2 | 75 | null |
+| turbocharger | Turbocharger | 2 | 160 | null |
+| supercharger | Supercharger | 2 | 180 | null |
+| ecu_unit | ECU Unit | 1 | 130 | null |
+| wiring_harness | Wiring Harness | 2 | 60 | null |
+| headlight_assembly | Headlight Assembly | 1 | 35 | null |
+| taillight_assembly | Taillight Assembly | 1 | 30 | null |
+| side_mirror | Side Mirror | 1 | 20 | null |
+| bumper | Bumper | 3 | 45 | null |
+| hood_panel | Hood Panel | 3 | 55 | null |
+| door_panel | Door Panel | 3 | 50 | null |
+| windshield | Windshield | 3 | 70 | null |
+| seat_leather | Leather Seat | 2 | 80 | null |
+| seat_set | Seat Set | 3 | 150 | null |
+| dashboard_console | Dashboard Console | 3 | 100 | null |
+| steering_wheel | Steering Wheel | 1 | 40 | null |
+| gearbox | Gearbox | 3 | 220 | null |
+| transmission | Transmission | 3 | 280 | null |
+| engine_block | Engine Block | 3 | 320 | null |
+| cylinder_head | Cylinder Head | 3 | 200 | null |
+| crankshaft | Crankshaft | 3 | 180 | null |
+| motorcycle_engine | Motorcycle Engine | 2 | 210 | null |
+| motorcycle_frame | Motorcycle Frame | 3 | 150 | null |
+| marine_engine | Marine Engine | 3 | 340 | null |
+| tractor_part | Tractor Part | 3 | 130 | null |
+| forklift_part | Forklift Part | 3 | 110 | null |
+| ev_battery_pack | EV Battery Pack | 3 | 380 | null |
+| ev_motor | EV Motor | 3 | 260 | null |
+| ev_charger | EV Charger | 2 | 140 | null |
+| obd_scanner | OBD Scanner | 1 | 50 | null |
+| tool_cart_auto | Auto Tool Cart | 3 | 160 | null |
+| diagnostic_laptop | Diagnostic Laptop | 1 | 120 | null |
+
+**Sets**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_tune_up_kit | 3 — `tune_spark_plug_set`, `tune_oil_filter`, `tune_air_filter` | 90 | Maintenance |
+| the_brake_job | 3 — `brake_pads`, `brake_rotors`, `brake_caliper` | 140 | Brakes |
+| the_suspension_kit | 3 — `susp_shock`, `susp_spring`, `susp_strut` | 160 | Suspension |
+| the_engine_rebuild | 3 — `rebuild_piston_set`, `rebuild_ring_set`, `rebuild_bearing_set` | 200 | Engine |
+| the_turbo_kit | 3 — `turbo_unit`, `turbo_intercooler`, `turbo_wastegate` | 260 | Performance |
+| the_ev_drivetrain | 3 — `ev_motor`, `ev_inverter`, `ev_reduction_gear` | 340 | EV |
+| the_mechanic_cart | 3 — `cart_wrench_set`, `cart_socket_set`, `cart_diagnostic` | 180 | Tools |
+| the_motorcycle_build | 3 — `moto_engine`, `moto_frame`, `moto_wheel_set` | 320 | Motorcycle |
+| the_marine_kit | 3 — `marine_prop`, `marine_pump`, `marine_battery` | 220 | Marine |
+| the_detailing_kit | 3 — `detail_polish`, `detail_vacuum`, `detail_steamer` | 110 | Detailing |
+
+**Set-piece individual prices:**
+- `the_tune_up_kit`: 30 + 30 + 30 = 90
+- `the_brake_job`: 30 + 50 + 60 = 140
+- `the_suspension_kit`: 50 + 55 + 55 = 160
+- `the_engine_rebuild`: 70 + 65 + 65 = 200
+- `the_turbo_kit`: 100 + 80 + 80 = 260
+- `the_ev_drivetrain`: 120 + 110 + 110 = 340
+- `the_mechanic_cart`: 60 + 60 + 60 = 180
+- `the_motorcycle_build`: 120 + 100 + 100 = 320
+- `the_marine_kit`: 80 + 70 + 70 = 220
+- `the_detailing_kit`: 40 + 35 + 35 = 110
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_concept_car | The Concept Car | 3 | 500 | null | true |
+| the_getaway_vehicle | The Getaway Vehicle | 2 | 450 | null | true |
+| the_race_engine | The Race Engine | 2 | 420 | null | true |
+| the_prototype_ev | The Prototype EV | 3 | 480 | null | true |
+| the_armored_transport | The Armored Transport | 3 | 450 | null | true |
+
+## Collectibles / Memorabilia
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| trading_card_pack | Trading Card Pack | 1 | 8 | null |
+| trading_card_single | Trading Card (Single) | 1 | 15 | null |
+| trading_card_holo | Holo Trading Card | 1 | 45 | null |
+| trading_card_graded | Graded Trading Card | 1 | 120 | null |
+| card_binder | Card Binder | 1 | 30 | null |
+| card_booster_box | Booster Box (Sealed) | 2 | 90 | null |
+| stamp_single | Stamp (Single) | 1 | 10 | null |
+| stamp_sheet | Stamp Sheet | 1 | 25 | null |
+| stamp_album | Stamp Album | 2 | 70 | null |
+| stamp_rare | Rare Stamp | 1 | 110 | null |
+| coin_single | Coin (Single) | 1 | 12 | null |
+| coin_set_boxed | Boxed Coin Set | 1 | 40 | null |
+| coin_rare | Rare Coin | 1 | 130 | null |
+| coin_album | Coin Album | 2 | 85 | null |
+| comic_single | Comic Book (Single) | 1 | 15 | null |
+| comic_key_issue | Key Issue Comic | 1 | 90 | null |
+| comic_graded | Graded Comic | 1 | 150 | null |
+| comic_long_box | Long Box of Comics | 2 | 60 | null |
+| comic_short_box | Short Box of Comics | 2 | 35 | null |
+| vinyl_record | Vinyl Record | 1 | 12 | null |
+| vinyl_rare_press | Rare Pressing | 1 | 70 | null |
+| vinyl_box_lot | Box of Vinyl | 3 | 50 | null |
+| vinyl_sealed | Sealed Vinyl | 1 | 55 | null |
+| action_figure | Action Figure | 1 | 18 | null |
+| action_figure_boxed | Boxed Action Figure | 1 | 45 | null |
+| action_figure_rare | Rare Action Figure | 1 | 110 | null |
+| toy_diecast | Die-Cast Toy | 1 | 14 | null |
+| toy_diecast_rare | Rare Die-Cast | 1 | 65 | null |
+| toy_model_kit | Model Kit | 2 | 30 | null |
+| sports_card_single | Sports Card | 1 | 15 | null |
+| sports_card_rookie | Rookie Card | 1 | 100 | null |
+| sports_card_graded | Graded Sports Card | 1 | 160 | null |
+| signed_ball | Signed Ball | 1 | 55 | null |
+| signed_jersey | Signed Jersey | 2 | 130 | null |
+| autograph_photo | Autograph Photo | 1 | 40 | null |
+| autograph_book | Signed Book | 1 | 60 | null |
+| program_vintage | Vintage Program | 1 | 25 | null |
+| ticket_stub_vintage | Vintage Ticket Stub | 1 | 20 | null |
+| poster_vintage | Vintage Poster | 2 | 75 | null |
+| poster_movie | Movie Poster | 2 | 65 | null |
+| lobby_card | Lobby Card | 1 | 35 | null |
+| prop_replica | Prop Replica | 2 | 80 | null |
+| memorabilia_helmet | Signed Helmet | 2 | 120 | null |
+| memorabilia_glove | Signed Glove | 1 | 85 | null |
+| cereal_box_vintage | Vintage Cereal Box | 2 | 30 | null |
+| lunchbox_vintage | Vintage Lunchbox | 1 | 35 | null |
+| figure_statue_limited | Limited Statue | 2 | 140 | null |
+| pez_dispenser | Vintage Pez Dispenser | 1 | 22 | null |
+| board_game_vintage | Vintage Board Game | 2 | 45 | null |
+| puzzle_boxed | Boxed Puzzle | 2 | 18 | null |
+| storage_unit_box | Storage Unit Box (Unsearched) | 2 | 40 | null |
+| storage_unit_lot | Storage Unit Lot | 3 | 120 | null |
+| ephemera_folder | Ephemera Folder | 1 | 25 | null |
+| matchbook_collection | Matchbook Collection | 1 | 15 | null |
+| postcard_lot | Postcard Lot | 1 | 18 | null |
+| banknote_collection | Banknote Collection | 1 | 95 | null |
+| militaria_medal | Militaria Medal | 1 | 70 | null |
+| militaria_patch_set | Militaria Patch Set | 1 | 30 | null |
+| fossil_ammonite | Ammonite Fossil | 1 | 45 | null |
+| mineral_specimen | Mineral Specimen | 1 | 35 | null |
+| taxidermy_small | Small Taxidermy | 2 | 55 | null |
+
+**Sets**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_card_collection | 3 — `card_charizard`, `card_black_lotus`, `card_rookie` | 300 | Trading cards |
+| the_stamp_album_set | 3 — `stamp_penny_black`, `stamp_inverted`, `stamp_blue_mauritius` | 320 | Stamps |
+| the_coin_collection | 3 — `coin_double_eagle`, `coin_denarius`, `coin_morgan` | 280 | Coins |
+| the_comic_run | 3 — `comic_issue_1`, `comic_issue_2`, `comic_issue_3` | 260 | Comics |
+| the_vinyl_crate | 3 — `vinyl_first_press`, `vinyl_promo`, `vinyl_test_press` | 240 | Vinyl |
+| the_sports_memorabilia | 3 — `sports_rookie_card`, `sports_signed_ball`, `sports_signed_jersey` | 340 | Sports |
+| the_autograph_book | 3 — `autograph_celeb_a`, `autograph_celeb_b`, `autograph_celeb_c` | 220 | Autographs |
+| the_movie_memorabilia | 3 — `movie_poster_original`, `movie_lobby_set`, `movie_prop` | 280 | Film |
+| the_toy_collection | 3 — `toy_boxed_figure`, `toy_rare_variant`, `toy_vehicle` | 200 | Toys |
+| the_militaria_set | 3 — `militaria_medal_set`, `militaria_patch_set`, `militaria_insignia` | 260 | Militaria |
+| the_natural_history | 3 — `fossil_ammonite`, `fossil_trilobite`, `fossil_fish` | 180 | Natural history |
+| the_storage_find | 3 — `storage_box_a`, `storage_box_b`, `storage_box_c` | 150 | Storage lot |
+
+**Set-piece individual prices:**
+- `the_card_collection`: 120 + 100 + 80 = 300
+- `the_stamp_album_set`: 120 + 100 + 100 = 320
+- `the_coin_collection`: 100 + 90 + 90 = 280
+- `the_comic_run`: 90 + 85 + 85 = 260
+- `the_vinyl_crate`: 80 + 80 + 80 = 240
+- `the_sports_memorabilia`: 100 + 110 + 130 = 340
+- `the_autograph_book`: 70 + 75 + 75 = 220
+- `the_movie_memorabilia`: 110 + 90 + 80 = 280
+- `the_toy_collection`: 75 + 65 + 60 = 200
+- `the_militaria_set`: 90 + 85 + 85 = 260
+- `the_natural_history`: 60 + 60 + 60 = 180
+- `the_storage_find`: 50 + 50 + 50 = 150
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_mint_condition_grail | The Mint-Condition Grail | 1 | 420 | null | true |
+| the_complete_collection | The Complete Collection | 3 | 450 | null | true |
+| the_lost_album | The Lost Album | 2 | 380 | null | true |
+| the_auction_centerpiece | The Auction Centerpiece | 1 | 400 | null | true |
+
+## Office / Commercial Supplies
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| stapler | Stapler | 1 | 5 | null |
+| tape_dispenser | Tape Dispenser | 1 | 6 | null |
+| hole_punch | Hole Punch | 1 | 7 | null |
+| scissors_office | Office Scissors | 1 | 8 | null |
+| pen_box | Box of Pens | 1 | 6 | null |
+| notebook_stack | Notebook Stack | 1 | 10 | null |
+| sticky_note_pack | Sticky Note Pack | 1 | 4 | null |
+| binder_lot | Binder Lot | 2 | 15 | null |
+| paper_ream | Paper Ream | 2 | 8 | null |
+| envelope_box | Envelope Box | 1 | 7 | null |
+| stamp_roll | Postage Stamp Roll | 1 | 20 | null |
+| calculator | Calculator | 1 | 12 | null |
+| label_maker | Label Maker | 1 | 18 | null |
+| shredder | Paper Shredder | 2 | 35 | null |
+| laminator | Laminator | 2 | 30 | null |
+| binding_machine | Binding Machine | 2 | 45 | null |
+| desk_phone | Desk Phone | 1 | 20 | null |
+| conference_phone | Conference Phone | 2 | 60 | null |
+| printer_desktop | Desktop Printer | 2 | 40 | null |
+| printer_commercial | Commercial Printer | 3 | 120 | null |
+| copier | Copier | 3 | 150 | null |
+| scanner_office | Office Scanner | 2 | 55 | null |
+| fax_machine | Fax Machine | 2 | 25 | null |
+| projector | Projector | 2 | 70 | null |
+| whiteboard | Whiteboard | 2 | 25 | null |
+| desk_chair | Desk Chair | 2 | 30 | null |
+| office_desk | Office Desk | 3 | 45 | null |
+| filing_cabinet | Filing Cabinet | 3 | 50 | null |
+| safe_office | Office Safe | 3 | 160 | null |
+| lockbox_office | Office Lockbox | 2 | 70 | null |
+| cash_register | Cash Register | 3 | 110 | null |
+| pos_terminal | POS Terminal | 2 | 80 | null |
+| card_reader | Card Reader | 1 | 35 | null |
+| receipt_printer | Receipt Printer | 1 | 25 | null |
+| barcode_scanner | Barcode Scanner | 1 | 30 | null |
+| time_clock | Time Clock | 2 | 55 | null |
+| coffee_machine | Coffee Machine | 2 | 40 | null |
+| water_cooler | Water Cooler | 3 | 25 | null |
+| microwave_office | Office Microwave | 2 | 20 | null |
+| mini_fridge | Mini Fridge | 3 | 30 | null |
+| vending_machine | Vending Machine | 3 | 90 | null |
+| atm_desktop | Desktop ATM | 3 | 180 | null |
+| key_cabinet | Key Cabinet | 2 | 65 | null |
+| badge_printer | Badge Printer | 2 | 85 | null |
+| access_control_panel | Access Control Panel | 2 | 95 | null |
+| server_rack_small | Small Server Rack | 3 | 140 | null |
+| network_switch | Network Switch | 1 | 45 | null |
+| ups_battery | UPS Battery | 2 | 50 | null |
+| cable_lot | Cable Lot | 2 | 15 | null |
+| toner_cartridge | Toner Cartridge | 1 | 22 | null |
+| toner_cartridge_lot | Toner Cartridge Lot | 2 | 60 | null |
+| ledgers_crate | Ledger Crate | 2 | 42 | null |
+| stock_manifest | Stock Manifest | 1 | 28 | null |
+| delivery_schedule | Delivery Schedule | 1 | 20 | null |
+| mail_cart | Mail Cart | 3 | 35 | null |
+| package_lot | Package Lot | 2 | 30 | null |
+| uniform_rack | Uniform Rack | 3 | 40 | null |
+| office_keys | Office Keys | 1 | 50 | null |
+| master_keycard | Master Keycard | 1 | 90 | null |
+| staff_badge | Staff Badge | 1 | 15 | null |
+
+**Sets**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_desk_starter | 3 — `desk_stapler`, `desk_tape`, `desk_pen_set` | 45 | Desk supplies |
+| the_printer_station | 3 — `printer_unit`, `printer_toner`, `printer_paper` | 90 | Machines |
+| the_conference_kit | 3 — `conf_phone`, `conf_projector`, `conf_whiteboard` | 130 | Meeting room |
+| the_cash_handling | 3 — `cash_register`, `cash_reader`, `cash_receipt_printer` | 150 | Retail |
+| the_security_desk | 3 — `sec_badge_printer`, `sec_access_panel`, `sec_key_cabinet` | 220 | Security |
+| the_it_closet | 3 — `it_switch`, `it_ups`, `it_cable_lot` | 110 | IT |
+| the_breakroom | 3 — `break_coffee`, `break_microwave`, `break_fridge` | 80 | Breakroom |
+| the_filing_system | 3 — `file_cabinet`, `file_binder_set`, `file_label_set` | 95 | Filing |
+| the_office_safe_kit | 3 — `safe_lockbox`, `safe_ledger`, `safe_key_set` | 180 | Valuables |
+| the_retail_floor | 3 — `retail_scanner`, `retail_pos`, `retail_time_clock` | 140 | Retail |
+
+**Set-Piece Individual Prices:**
+- `the_desk_starter`: 15 + 15 + 15 = 45
+- `the_printer_station`: 40 + 30 + 20 = 90
+- `the_conference_kit`: 60 + 50 + 20 = 130
+- `the_cash_handling`: 110 + 20 + 20 = 150
+- `the_security_desk`: 85 + 75 + 60 = 220
+- `the_it_closet`: 45 + 50 + 15 = 110
+- `the_breakroom`: 40 + 20 + 20 = 80
+- `the_filing_system`: 50 + 25 + 20 = 95
+- `the_office_safe_kit`: 70 + 60 + 50 = 180
+- `the_retail_floor`: 30 + 80 + 30 = 140
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_company_ledger | The Company Ledger | 1 | 280 | null | true |
+| the_blackmail_files | The Blackmail Files | 1 | 350 | null | true |
+| the_golden_handshake | The Golden Handshake | 2 | 300 | null | true |
+| the_corporate_secrets | The Corporate Secrets | 2 | 400 | null | true |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

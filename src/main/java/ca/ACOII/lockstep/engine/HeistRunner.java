@@ -55,6 +55,7 @@ public class HeistRunner {
                     }
                     EventType e;
 
+                    //NOTE: Actual action execution
                     if (a instanceof MoveAction move) {
                         String currRoom = c.getCurrentRoom();
                         String destRoom = move.getDestinationRoom();
@@ -100,6 +101,13 @@ public class HeistRunner {
                             e = EventType.PICK_CASE;
                         } else {
                             e = EventType.PICK_CASE_PROGRESS;
+                        }
+                    } else if (a instanceof ForceOpenAction forceOpen) {
+                        if (crewQueues.get(c).remainingSteps == 0) {
+                            openContainers.add(forceOpen.containerId);
+                            e = EventType.FORCE_OPEN;
+                        } else {
+                            e = EventType.FORCE_OPEN_PROGRESS;
                         }
                     } else if (a instanceof DisableSensorAction disable) {
                         if (crewQueues.get(c).remainingSteps == 0) {
@@ -270,6 +278,23 @@ public class HeistRunner {
                 running = false;
             }
 
+        } else if (action instanceof ForceOpenAction forceOpen) {
+            Room curr = t.findRoom(crew.currentRoom);
+            LootContainer container = t.findContainer(forceOpen.containerId);
+            if (container == null) {
+                System.out.println("Attempt at forcing open nonexistent container occurred");
+                running = false;
+                return;
+            }
+            if (!curr.getRoomContainers().contains(container)) {
+                System.out.println("Attempt at forcing open unavailable container occurred");
+                running = false;
+                return;
+            }
+            if (openContainers.contains(container.getId())) {
+                System.out.println("Attempt at forcing open unlocked container occurred");
+                running = false;
+            }
         } else if (action instanceof MoveAction move) {
             if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
                 System.out.println("Invalid move destination");

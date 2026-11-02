@@ -5,6 +5,7 @@ target/
 .kotlin
 save.json
 itemList.txt
+UPDATING.md
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -1,0 +1,8 @@
+{
+  "id": "laptop",
+  "name": "Laptop",
+  "grabCost": 2,
+  "pieceValue": 100,
+  "set": null,
+  "isMainScore": false
+}
