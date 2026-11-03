@@ -7,6 +7,7 @@
   "availableFrom": 3,
   "availabilityDuration": 4,
   "maxCrew": 1,
+  "arrestDuration": 3,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
     {"id": "SHOWROOM", "x": 150, "y": 100, "roomLoot": {"trench_knife": 0.9, "gold_locket": 0.7}, "roomContainers": []},

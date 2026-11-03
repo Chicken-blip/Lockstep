@@ -30,7 +30,6 @@ public class TargetLoader {
             for (String name : filenames) {
                 targets.add(load(name));
             }
-            //TODO: Reconsider validation for Targets
             validate(targets);
             return targets;
         } catch (IOException e) {

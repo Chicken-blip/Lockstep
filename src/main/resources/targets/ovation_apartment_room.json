@@ -7,6 +7,7 @@
   "availableFrom": 0,
   "availabilityDuration": 3,
   "maxCrew": 1,
+  "arrestDuration": 3,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
     {"id": "HALLWAY", "x": 150, "y": 100, "roomLoot": {"marked_envelope": 0.75}, "roomContainers": []},

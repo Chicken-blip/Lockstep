@@ -7,6 +7,7 @@
   "availableFrom": 10,
   "availabilityDuration": 5,
   "maxCrew": 2,
+  "arrestDuration": 3,
   "rooms": [
     {"id": "OUTSIDE", "x": 200, "y": 0, "roomLoot": {}, "roomContainers": []},
     {"id": "LOBBY", "x": 200, "y": 75, "roomLoot": {"register_cash": 0.4, "donation_box": 0.8}, "roomContainers": []},

@@ -56,7 +56,6 @@ public class FloorPlanView extends Pane {
             this.getChildren().add(connection);
 
             if (d.getSensor() != null) {
-                //TODO: Make a small circle for the sensor
                 Circle circle = new Circle();
                 Room roomA = instance.getTarget().findRoom(d.getRoomDest());
                 Room roomB = instance.getTarget().findRoom(d.getRoomOrigin());

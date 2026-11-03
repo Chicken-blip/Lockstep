@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Target {
     private String id, name, entryRoom;
     private List<String> exitRooms;
-    private int alarmCountdown, availableFrom, availabilityDuration, maxCrew;
+    private int alarmCountdown, availableFrom, availabilityDuration, maxCrew, arrestDuration;
     private List<Room> rooms;
     private List<Door> doors;
     private List<Patrol> patrols;
@@ -194,5 +194,9 @@ public class Target {
             if (testA && testB) return d;
         }
         return null;
+    }
+
+    public int getArrestDuration() {
+        return arrestDuration;
     }
 }

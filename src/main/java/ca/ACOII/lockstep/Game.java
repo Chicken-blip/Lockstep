@@ -66,8 +66,7 @@ public class Game {
     public void runHeist(Map<RosterEntry, ActionQueue> queues) {
         HeistRunner heist = new HeistRunner(queues, instance, campaign);
         heist.run();
-        //TODO: Change arrestDuration to target-dependent value
-        campaign.settleHeist(heist, 3);
+        campaign.settleHeist(heist, instance.getTarget().getArrestDuration());
         campaign.nextDay();
         save();
 
