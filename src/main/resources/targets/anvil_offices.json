@@ -4,8 +4,8 @@
   "entryRoom": "OUTSIDE",
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 3,
-  "availableFrom": 0,
-  "availabilityDuration": 0,
+  "availableFrom": 5,
+  "availabilityDuration": 3,
   "maxCrew": 1,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
@@ -14,7 +14,7 @@
     {"id": "CUBICLES B", "x": 250, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
     {"id": "CUBICLES C", "x": 350, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
     {"id": "MANAGER OFFICE", "x": 250, "y": 100, "roomLoot": {"printer_paper": 0.4, "printer_toner": 0.6}, "roomContainers": [
-      {"id": "Manager Cabinet", "type": "force_open", "contents": ["server_driver"], "forceDifficulty": 7}
+      {"id": "Manager Cabinet", "type": "force_open", "contents": ["server_drive"], "forceDifficulty": 7}
     ]}
   ],
   "doors": [
@@ -24,5 +24,6 @@
     {"id": "d2", "roomOrigin": "CUBICLES A", "roomDest": "CUBICLES B", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d2", "roomOrigin": "CUBICLES B", "roomDest": "CUBICLES C", "moveCost": 1, "lock": null, "sensor": null}
   ],
-  "patrols": []
+  "patrols": [],
+  "staff": []
 }

@@ -25,10 +25,11 @@
       "id": "p1",
       "patrolRoute": [
         {"room": "SHOWROOM", "duration": 2},
-        {"room": "WORKROOM", "duration": 1},
+        {"room": "WORKROOM", "duration": 3},
         {"room": "SHOWROOM", "duration": 2},
         {"room": "SAFE ROOM", "duration": 1}
       ]
     }
-  ]
+  ],
+  "staff": []
 }

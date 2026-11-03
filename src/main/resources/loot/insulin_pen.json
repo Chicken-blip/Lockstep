@@ -1,0 +1,8 @@
+{
+  "id": "insulin_pen",
+  "name": "Insulin Pen",
+  "grabCost": 1,
+  "pieceValue": 50,
+  "set": null,
+  "isMainScore": false
+}

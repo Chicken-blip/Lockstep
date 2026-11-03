@@ -28,7 +28,7 @@ public class HeistPlayer {
         this.plan = plan;
         this.log = log;
         this.onFinished = onComplete;
-        timeline = new Timeline(new KeyFrame(Duration.millis(1000), evt -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(2000), evt -> {
             tick();
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);

@@ -1,0 +1,8 @@
+{
+  "id": "bandage_roll",
+  "name": "Bandage Roll",
+  "grabCost": 1,
+  "pieceValue": 5,
+  "set": null,
+  "isMainScore": false
+}

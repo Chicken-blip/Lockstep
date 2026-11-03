@@ -1,0 +1,8 @@
+{
+  "id": "morphine_ampoule",
+  "name": "Morphine Ampoule",
+  "grabCost": 1,
+  "pieceValue": 95,
+  "set": null,
+  "isMainScore": false
+}

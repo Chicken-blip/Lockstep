@@ -98,6 +98,9 @@ public class FloorPlanView extends Pane {
         for (Patrol p : instance.getTarget().getPatrols()) {
             addActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), Color.BLUE, instance.getTarget());
         }
+        for (Staff s : instance.getTarget().getStaff()) {
+            addActor(s.getId(), s.getPatrolRoute().getFirst().getRoom(), Color.GREEN, instance.getTarget());
+        }
 
 
     }
@@ -141,6 +144,9 @@ public class FloorPlanView extends Pane {
                 if (container instanceof DisplayCaseContainer display) {
                     txt.append(display.getId()).append(" [DISPLAY CASE - Difficulty: ").append(display.getPickDifficulty()).append("]: ");
                 }
+                if (container instanceof ForceOpenContainer forceOpen) {
+                    txt.append(forceOpen.getId()).append(" [LOCKED CONTAINER - Difficulty: ").append(forceOpen.getForceDifficulty()).append("]: ");
+                }
                 if (containerLoot.get(container.getId()).isEmpty()) {
                     txt.append("(EMPTY)");
                 } else {
@@ -168,6 +174,9 @@ public class FloorPlanView extends Pane {
             for (LootContainer container : r.getRoomContainers()) {
                 if (container instanceof SafeContainer safe) {
                     txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
+                }
+                if (container instanceof DisplayCaseContainer display) {
+                    txt.append(display.getId()).append(" [DISPLAY CASE - Difficulty: ").append(display.getPickDifficulty()).append("]: ");
                 }
                 if (container instanceof DisplayCaseContainer display) {
                     txt.append(display.getId()).append(" [DISPLAY CASE - Difficulty: ").append(display.getPickDifficulty()).append("]: ");
@@ -204,15 +213,39 @@ public class FloorPlanView extends Pane {
             Patrol p = target.findPatrol(actorId);
 
             StringBuilder txt = new StringBuilder("GUARD\nPATROL: ");
-            for (PatrolEntry entry : p.getPatrolRoute()) {
-                txt.append(entry.getRoom() + " (" + entry.getDuration() + ") -> ");
+            if (p.getPatrolRoute().size() == 1) {
+                txt.append(p.getPatrolRoute().getFirst().getRoom()).append(" (STATIONARY)");
+            } else {
+                for (PatrolEntry entry : p.getPatrolRoute()) {
+                    txt.append(entry.getRoom()).append(" (").append(entry.getDuration()).append(") -> ");
+                }
+                txt = new StringBuilder(txt.substring(0, txt.length() - 3));
             }
-            txt = new StringBuilder(txt.substring(0, txt.length() - 3));
 
             tip.setText(String.valueOf(txt));
             tip.setShowDelay(Duration.millis(200));
             Tooltip.install(c, tip);
         }
+        if (target.findStaff(actorId) != null) {
+            Tooltip tip = new Tooltip();
+            Staff s = target.findStaff(actorId);
+
+            StringBuilder txt = new StringBuilder("STAFF\nPATROL: ");
+            if (s.getPatrolRoute().size() == 1) {
+                txt.append(s.getPatrolRoute().getFirst().getRoom()).append(" (STATIC)");
+            } else {
+                for (PatrolEntry entry : s.getPatrolRoute()) {
+                    txt.append(entry.getRoom()).append(" (").append(entry.getDuration()).append(") -> ");
+                }
+                txt = new StringBuilder(txt.substring(0, txt.length() - 3));
+            }
+            txt.append("\nSUSPICION THRESHOLD: ").append(s.getSuspicionThreshold());
+
+            tip.setText(String.valueOf(txt));
+            tip.setShowDelay(Duration.millis(200));
+            Tooltip.install(c, tip);
+        }
+
 
         actors.put(actorId, c);
         List<String> list = actorsPerRoom.getOrDefault(roomId, new ArrayList<String>());
@@ -270,6 +303,9 @@ public class FloorPlanView extends Pane {
         for (Patrol p : target.getPatrols()) {
             moveActor(p.getId(), p.getPatrolRoute().getFirst().getRoom(), target);
         }
+        for (Staff s : target.getStaff()) {
+            moveActor(s.getId(), s.getPatrolRoute().getFirst().getRoom(), target);
+        }
         for (Room r : target.getRooms()) {
             relayoutRoom(r.getId(), target);
         }
@@ -280,4 +316,5 @@ public class FloorPlanView extends Pane {
         Tooltip tip = roomTooltips.get(roomId);
         tip.setText(getRoomTooltipContent(roomId).toString());
     }
+
 }

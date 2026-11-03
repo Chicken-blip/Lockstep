@@ -5,7 +5,7 @@
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 2,
   "availableFrom": 0,
-  "availabilityDuration": 0,
+  "availabilityDuration": 3,
   "maxCrew": 1,
   "rooms": [
     {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
@@ -20,5 +20,6 @@
     {"id": "d2", "roomOrigin": "HALLWAY", "roomDest": "LIVING ROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 2}},
     {"id": "d3", "roomOrigin": "LIVING ROOM", "roomDest": "BEDROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s2", "difficulty": 2}}
   ],
-  "patrols": []
+  "patrols": [],
+  "staff": []
 }

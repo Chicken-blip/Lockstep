@@ -1,7 +1,6 @@
 package ca.ACOII.lockstep.engine;
 
 import ca.ACOII.lockstep.campaign.*;
-import ca.ACOII.lockstep.campaign.Calendar;
 import ca.ACOII.lockstep.model.*;
 
 import java.util.*;
@@ -11,6 +10,7 @@ public class HeistRunner {
     int currentStep, alarmTimer;
     public Map<CrewMemberState, ActionQueue> crewQueues;
     public List<Guard> guards;
+    public List<StaffState> staff;
     Set<String> unlockedDoors, openContainers, disabledSensors;
     Target t;
     HeistInstance instance;
@@ -29,11 +29,17 @@ public class HeistRunner {
             crewQueues.put(state, queues.get(e));
         }
         log = new EventLog();
-        guards = new ArrayList<>();
 
+        guards = new ArrayList<>();
         for (Patrol p : t.getPatrols()) {
             guards.add(new Guard(p));
         }
+
+        staff = new ArrayList<>();
+        for (Staff s : t.getStaff()) {
+            staff.add(new StaffState(s));
+        }
+
         alarmTimer = -1;
         unlockedDoors = new HashSet<>();
         openContainers = new HashSet<>();
@@ -64,7 +70,7 @@ public class HeistRunner {
                         if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
                             if (!c.spotted) {
                                 c.spotted = true;
-                                log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.SPOTTED));
+                                log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
                                 if (alarmTimer == -1) {
                                     alarmTimer = t.getAlarmCountdown();
                                     log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
@@ -131,9 +137,9 @@ public class HeistRunner {
             }
             for (Guard g : guards) {
                 g.tick();
-
-                //Print guard location each step
-                //System.out.println("[Step " + currentStep + "] Guard " + g.getId() + " in room " + g.getCurrentRoom());
+            }
+            for (StaffState s : staff) {
+                s.tick();
             }
             securityCheck();
 
@@ -338,13 +344,39 @@ public class HeistRunner {
                     for (Guard g : guards) {
                         if (Objects.equals(c.getCurrentRoom(), g.getCurrentRoom()) && !c.spotted) {
                             c.spotted = true;
-                            log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.SPOTTED));
+                            log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.GUARD_SPOTTED));
                             if (alarmTimer == -1) {
                                 alarmTimer = t.getAlarmCountdown();
-                                log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                log.addEvent(new Event(currentStep, null, null, EventType.ALARM_RAISED));
                             }
                         }
                     }
+                }
+            }
+            for (StaffState s : staff) {
+                List<CrewMemberState> spottedPerson = new ArrayList<>();
+                for (CrewMemberState c : crewQueues.keySet()) {
+                    if (Objects.equals(s.getCurrentRoom(), c.getCurrentRoom()) && alarmTimer == -1) {
+                        spottedPerson.add(c);
+                        break;
+                    }
+                }
+                if (!spottedPerson.isEmpty()) {
+                    s.incrementSuspicion();
+                    for (CrewMemberState x : spottedPerson) {
+                        x.spotted = true;
+                    }
+                    if (s.reachedThreshold()) {
+                        for (CrewMemberState c : spottedPerson) {
+                            log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.STAFF_SPOTTED));
+                        }
+                        if (alarmTimer == -1) {
+                            alarmTimer = t.getAlarmCountdown();
+                            log.addEvent(new Event(currentStep, null, null, EventType.ALARM_RAISED));
+                        }
+                    }
+                } else {
+                    s.decrementSuspicion();
                 }
             }
         }

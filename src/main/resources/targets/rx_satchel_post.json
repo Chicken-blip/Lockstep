@@ -1,0 +1,37 @@
+{
+  "id": "rx_satchel_post",
+  "name": "Rx Satchel Post",
+  "entryRoom": "ENTRANCE",
+  "exitRooms": ["ALLEY", "ENTRANCE"],
+  "alarmCountdown": 3,
+  "availableFrom": 1,
+  "availabilityDuration": 3,
+  "maxCrew": 1,
+  "rooms": [
+    {"id": "ENTRANCE", "x": 50, "y": 200, "roomLoot": {}, "roomContainers": []},
+    {"id": "RECEPTION", "x": 150, "y": 200, "roomLoot": {"donation_box": 0.8}, "roomContainers": []},
+    {"id": "DISPENSARY", "x": 150, "y": 100, "roomLoot": {"bandage_roll": 0.4, "pill_bottle_opioid": 0.6, "morphine_ampoule": 0.2, "medical_waste_bin": 0.5}, "roomContainers": []},
+    {"id": "OFFICE", "x": 150, "y": 0, "roomLoot": {}, "roomContainers": [
+      {"id": "Pharmacy Safe", "type": "safe", "contents": ["old_ledger"], "crackDifficulty": 5}
+    ]},
+    {"id": "SHOPPING AREA", "x": 250, "y": 100, "roomLoot": {"first_aid_kit": 0.75, "insulin_pen": 0.75}, "roomContainers": []},
+    {"id": "ALLEY", "x": 350, "y": 100, "roomLoot": {}, "roomContainers": []}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "ENTRANCE", "roomDest": "RECEPTION", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "RECEPTION", "roomDest": "DISPENSARY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d3", "roomOrigin": "DISPENSARY", "roomDest": "OFFICE", "moveCost": 1, "lock": {"pickDifficulty": 4}, "sensor": null},
+    {"id": "d4", "roomOrigin": "DISPENSARY", "roomDest": "SHOPPING AREA", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d5", "roomOrigin": "SHOPPING AREA", "roomDest": "ALLEY", "moveCost": 1, "lock": null, "sensor": null}
+  ],
+  "patrols": [],
+  "staff": [
+    {
+      "id": "pharmacist",
+      "suspicionThreshold": 2,
+      "patrolRoute": [
+        {"room": "ROOM B", "duration": 1}
+      ]
+    }
+  ]
+}

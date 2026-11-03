@@ -35,5 +35,6 @@
         {"room": "SECURITY OFFICE", "duration": 3}
       ]
     }
-  ]
+  ],
+  "staff": []
 }

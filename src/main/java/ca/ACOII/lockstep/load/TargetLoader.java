@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Set;
 
 public class TargetLoader {
-    private final ObjectMapper mapper = new ObjectMapper();
     public Target load(String filename) {
         try {
             InputStream inStrm = getClass().getResourceAsStream("/targets/" + filename);
@@ -23,6 +22,7 @@ public class TargetLoader {
             throw new RuntimeException("Target file not found: " + filename + " | ", e);
         }
     }
+    private final ObjectMapper mapper = new ObjectMapper();
     public List<Target> loadAll() {
         try (InputStream inStrm = getClass().getResourceAsStream("/targets/index.json");) {
             List<String> filenames = mapper.readValue(inStrm, new TypeReference<>() {});
@@ -56,6 +56,12 @@ public class TargetLoader {
                 }
             }
 
+            for (Staff s : t.getStaff()) {
+                if (s.getSuspicionThreshold() <= 0) throw new RuntimeException("Invalid suspicion threshold for Staff " + s.getId());
+                for (PatrolEntry e : s.getPatrolRoute()) {
+                    if (!roomIDs.contains(e.getRoom())) throw new RuntimeException("Patrol Route of Staff " + s.getId() + " for Target " + t.getName() + " has an invalid patrol entry");
+                }
+            }
         }
     }
 }

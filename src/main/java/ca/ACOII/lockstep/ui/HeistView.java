@@ -174,6 +174,11 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.pickCaseDuration(display, heistCrew.getSelectionModel().getSelectedItem());
                     act = new PickCaseAction(display.getId(), dur);
                 }
+                case "FORCE OPEN" -> {
+                    ForceOpenContainer container = (ForceOpenContainer) target.findContainer((((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem()));
+                    int dur = ActDurationCalculator.forceOpenDuration(container, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new ForceOpenAction(container.getId(), dur);
+                }
                 case "DISABLE SENSOR" -> {
                     Sensor sensor = target.findSensor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
                     int dur = ActDurationCalculator.disableSensorDuration(sensor, heistCrew.getSelectionModel().getSelectedItem());
@@ -511,6 +516,9 @@ public class HeistView extends BorderPane {
                     }
                     if (action instanceof PickCaseAction pick) {
                         setText("PICK CASE " + pick.getContainerId());
+                    }
+                    if (action instanceof ForceOpenAction forceOpen) {
+                        setText("FORCE OPEN " + forceOpen.getContainerId());
                     }
                     if (action instanceof DisableSensorAction disable) {
                         setText("DISABLE SENSOR " + disable.getSensorId());

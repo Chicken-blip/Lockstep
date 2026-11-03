@@ -994,6 +994,116 @@ Two conventions I used, worth knowing:
 | the_golden_handshake | The Golden Handshake | 2 | 300 | null | true |
 | the_corporate_secrets | The Corporate Secrets | 2 | 400 | null | true |
 
+# Contraband
+
+| id | name | grabCost | pieceValue | set |
+|---|---|---|---|---|
+| bag_of_weed | Bag of Weed | 1 | 20 | null |
+| brick_of_weed | Brick of Weed | 2 | 90 | null |
+| bag_of_cocaine | Bag of Cocaine | 1 | 60 | null |
+| kilo_of_cocaine | Kilo of Cocaine | 2 | 240 | null |
+| bag_of_heroin | Bag of Heroin | 1 | 70 | null |
+| brick_of_heroin | Brick of Heroin | 2 | 280 | null |
+| bag_of_meth | Bag of Meth | 1 | 45 | null |
+| crystal_meth_lot | Crystal Meth Lot | 2 | 180 | null |
+| bag_of_mdma | Bag of MDMA | 1 | 50 | null |
+| mdma_press_lot | MDMA Press Lot | 2 | 160 | null |
+| bag_of_fentanyl | Bag of Fentanyl | 1 | 90 | null |
+| fentanyl_patch_lot | Fentanyl Patch Lot | 2 | 200 | null |
+| pill_bottle_opioid | Opioid Pill Bottle | 1 | 65 | null |
+| pill_bottle_stimulant | Stimulant Bottle | 1 | 60 | null |
+| pill_bottle_benzo | Benzodiazepine Bottle | 1 | 55 | null |
+| morphine_ampoule | Morphine Ampoule | 1 | 95 | null |
+| anesthetic_vial | Anesthetic Vial | 1 | 80 | null |
+| ketamine_vial | Ketamine Vial | 1 | 75 | null |
+| ghb_bottle | GHB Bottle | 1 | 55 | null |
+| steroid_vial_lot | Steroid Vial Lot | 2 | 120 | null |
+| precursor_chemical | Precursor Chemical | 2 | 100 | null |
+| precursor_drum | Precursor Drum | 3 | 220 | null |
+| lab_glassware_set | Lab Glassware Set | 2 | 130 | null |
+| pill_press | Pill Press | 3 | 260 | null |
+| cutting_agent_bag | Cutting Agent Bag | 1 | 40 | null |
+| packaging_lot | Packaging Lot | 2 | 50 | null |
+| counterfeit_handbag | Counterfeit Handbag | 1 | 45 | null |
+| counterfeit_watch | Counterfeit Watch | 1 | 55 | null |
+| counterfeit_sneakers | Counterfeit Sneakers | 2 | 35 | null |
+| counterfeit_pharma_box | Counterfeit Pharma Box | 2 | 70 | null |
+| counterfeit_bills_sheet | Counterfeit Bills Sheet | 1 | 85 | null |
+| counterfeit_bills_bundle | Counterfeit Bills Bundle | 2 | 180 | null |
+| fake_id_set | Fake ID Set | 1 | 90 | null |
+| fake_passport | Fake Passport | 1 | 140 | null |
+| forged_artwork | Forged Artwork | 2 | 160 | null |
+| forged_documents | Forged Documents | 1 | 75 | null |
+| smuggled_cigarettes | Smuggled Cigarettes | 2 | 60 | null |
+| smuggled_cigarette_carton | Cigarette Carton Lot | 3 | 150 | null |
+| smuggled_alcohol_case | Smuggled Alcohol Case | 3 | 120 | null |
+| smuggled_liquor_bottle | Smuggled Liquor Bottle | 2 | 45 | null |
+| smuggled_ivory | Smuggled Ivory | 2 | 220 | null |
+| smuggled_rare_pelt | Smuggled Rare Pelt | 2 | 190 | null |
+| smuggled_exotic_pet | Smuggled Exotic Pet | 2 | 250 | null |
+| smuggled_weapon_crate | Smuggled Weapon Crate | 3 | 280 | null |
+| smuggled_ammo_box | Smuggled Ammo Box | 2 | 110 | null |
+| stolen_artwork | Stolen Artwork | 3 | 300 | null |
+| stolen_jewelry_lot | Stolen Jewelry Lot | 1 | 180 | null |
+| stolen_watch_lot | Stolen Watch Lot | 1 | 220 | null |
+| stolen_electronics_lot | Stolen Electronics Lot | 2 | 160 | null |
+| stolen_catalytic_converters | Stolen Catalytic Converters | 2 | 140 | null |
+| stolen_license_plates | Stolen License Plates | 1 | 30 | null |
+| human_organ_container | Human Organ Container | 1 | 400 | null |
+| black_market_organ_cooler | Black-Market Organ Cooler | 2 | 450 | null |
+| protected_coral | Protected Coral | 1 | 70 | null |
+| protected_shell_lot | Protected Shell Lot | 1 | 55 | null |
+| restricted_chemical_vial | Restricted Chemical Vial | 1 | 130 | null |
+| radioactive_sample | Radioactive Sample | 1 | 280 | null |
+| explosives_stick | Explosives Stick | 2 | 150 | null |
+| explosives_crate | Explosives Crate | 3 | 320 | null |
+| detonator_set | Detonator Set | 1 | 120 | null |
+| firearm_untraceable | Untraceable Firearm | 1 | 190 | null |
+| suppressor_kit | Suppressor Kit | 1 | 160 | null |
+| lockpick_kit_illicit | Illicit Lockpick Kit | 1 | 70 | null |
+| skimmer_device | Card Skimmer | 1 | 85 | null |
+| cloned_card_lot | Cloned Card Lot | 1 | 110 | null |
+
+**Sets**
+
+| Set id | Pieces | Total piece value | Category |
+|---|---|---|---|
+| the_drug_brick_set | 3 — `brick_cocaine`, `brick_heroin`, `brick_weed` | 480 | Narcotics |
+| the_pill_press_operation | 3 — `press_unit`, `press_dies`, `press_binder` | 380 | Manufacturing |
+| the_lab_setup | 3 — `lab_glassware`, `lab_reagents`, `lab_burner` | 320 | Manufacturing |
+| the_counterfeit_kit | 3 — `counterfeit_plates`, `counterfeit_ink`, `counterfeit_paper` | 280 | Counterfeit |
+| the_forgery_kit | 3 — `forge_stamp`, `forge_laminate`, `forge_signing_pen` | 240 | Forgery |
+| the_smugglers_kit | 3 — `smuggle_compartment`, `smuggle_manifest`, `smuggle_seal` | 260 | Smuggling |
+| the_untraceable_set | 3 — `untraceable_frame`, `untraceable_slide`, `untraceable_mag` | 340 | Weapons |
+| the_stolen_collection | 3 — `stolen_art_a`, `stolen_art_b`, `stolen_art_c` | 600 | Stolen goods |
+| the_protected_goods | 3 — `protected_ivory`, `protected_pelt`, `protected_coral` | 420 | Restricted |
+| the_organ_transport | 3 — `organ_container`, `organ_cooler`, `organ_monitor` | 520 | Organs |
+| the_explosives_set | 3 — `explosive_sticks`, `explosive_charge`, `explosive_timer` | 360 | Explosives |
+| the_cybercrime_kit | 3 — `skimmer`, `cloner`, `writer` | 220 | Fraud |
+
+**Set-Piece Individual Prices:**
+- `the_drug_brick_set`: 160 + 180 + 140 = 480
+- `the_pill_press_operation`: 150 + 120 + 110 = 380
+- `the_lab_setup`: 120 + 110 + 90 = 320
+- `the_counterfeit_kit`: 100 + 90 + 90 = 280
+- `the_forgery_kit`: 85 + 80 + 75 = 240
+- `the_smugglers_kit`: 90 + 90 + 80 = 260
+- `the_untraceable_set`: 120 + 120 + 100 = 340
+- `the_stolen_collection`: 200 + 200 + 200 = 600
+- `the_protected_goods`: 150 + 150 + 120 = 420
+- `the_organ_transport`: 180 + 180 + 160 = 520
+- `the_explosives_set`: 130 + 120 + 110 = 360
+- `the_cybercrime_kit`: 80 + 70 + 70 = 220
+
+**Main-score candidates (designated per target, not sold as sets)**
+
+| id | name | grabCost | pieceValue | set | isMainScore |
+|---|---|---|---|---|---|
+| the_mother_lode | The Mother Lode | 2 | 500 | null | true |
+| the_cartel_ledger | The Cartel Ledger | 1 | 420 | null | true |
+| the_forgery_plate | The Forgery Plate | 1 | 380 | null | true |
+| the_smugglers_manifest | The Smuggler's Manifest | 1 | 350 | null | true |
+| the_black_market_prize | The Black-Market Prize | 2 | 480 | null | true |
 
 
 

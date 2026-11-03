@@ -1,0 +1,8 @@
+{
+  "id": "medical_waste_bin",
+  "name": "Medical Waste Bin",
+  "grabCost": 3,
+  "pieceValue": 45,
+  "set": null,
+  "isMainScore": false
+}

@@ -44,7 +44,7 @@ public class HeistTests {
         game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
-            assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.SPOTTED);
+            assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.GUARD_SPOTTED);
         }
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
 
@@ -79,7 +79,7 @@ public class HeistTests {
         game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
-            assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.SPOTTED);
+            assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.GUARD_SPOTTED);
         }
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
 
@@ -112,7 +112,7 @@ public class HeistTests {
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.CAUGHT, e.evtType());
         }
-        assertSame(EventType.SPOTTED, game.getLog().getEvents().get(7).evtType());
+        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(7).evtType());
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
@@ -142,7 +142,7 @@ public class HeistTests {
         game.prepareHeist(target);
         game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
-        assertSame(EventType.SPOTTED, game.getLog().getEvents().get(7).evtType());
+        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(7).evtType());
         assertSame(EventType.CAUGHT, game.getLog().getEvents().getLast().evtType());
         assertTrue(game.getStash().getItems().isEmpty());
         assertEquals(5, game.getRoster().getFirst().getReleaseDate());
@@ -180,7 +180,7 @@ public class HeistTests {
         game.prepareHeist(target);
         game.runHeist(queues);
         for (Event e : game.getLog().getEvents()) {
-            assertNotSame(EventType.SPOTTED, e.evtType());
+            assertNotSame(EventType.GUARD_SPOTTED, e.evtType());
         }
 
 

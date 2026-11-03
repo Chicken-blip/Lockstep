@@ -13,6 +13,7 @@ public class Target {
     private List<Room> rooms;
     private List<Door> doors;
     private List<Patrol> patrols;
+    private List<Staff> staff;
 
     public Target() {
         id = null;
@@ -26,6 +27,7 @@ public class Target {
         rooms = new ArrayList<>();
         doors = new ArrayList<>();
         patrols = new ArrayList<>();
+        staff = new ArrayList<>();
     }
 
     public String getId() {
@@ -116,6 +118,10 @@ public class Target {
         this.patrols = patrols;
     }
 
+    public List<Staff> getStaff() {return staff;}
+
+    public void setStaff(List<Staff> staff) {this.staff = staff;}
+
     public Room findRoom(String id) {
         for (Room r : rooms) {
             if (Objects.equals(r.getId(), id)) {
@@ -163,6 +169,13 @@ public class Target {
     public Patrol findPatrol(String key) {
         for (Patrol p : getPatrols()) {
             if (Objects.equals(p.getId(), key)) return p;
+        }
+        return null;
+    }
+
+    public Staff findStaff(String key) {
+        for (Staff s : getStaff()) {
+            if (Objects.equals(s.getId(), key)) return s;
         }
         return null;
     }

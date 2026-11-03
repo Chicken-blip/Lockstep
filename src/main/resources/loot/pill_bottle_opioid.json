@@ -1,0 +1,8 @@
+{
+  "id": "pill_bottle_opioid",
+  "name": "Opioid Pill Bottle",
+  "grabCost": 1,
+  "pieceValue": 65,
+  "set": null,
+  "isMainScore": false
+}
