@@ -1,0 +1,8 @@
+{
+  "id": "workstation",
+  "name": "Workstation",
+  "grabCost": 2,
+  "pieceValue": 140,
+  "set": null,
+  "isMainScore": false
+}

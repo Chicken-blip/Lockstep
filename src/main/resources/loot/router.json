@@ -1,0 +1,8 @@
+{
+  "id": "router",
+  "name": "Router",
+  "grabCost": 2,
+  "pieceValue": 85,
+  "set": null,
+  "isMainScore": false
+}

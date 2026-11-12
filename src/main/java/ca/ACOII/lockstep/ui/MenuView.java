@@ -93,7 +93,7 @@ public class MenuView extends BorderPane {
                 skills.getButtonCell().setText(txt);
                 entryDetails.setText(getEntryDetails(newVal));
                 buyGear.setDisable(false);
-                train.setDisable(false);
+                train.setDisable(newVal.getData().getSkills().get(skill.getId()) == 0);
             } else {
                 skills.getButtonCell().setText(skill.getName());
                 entryDetails.setText("");

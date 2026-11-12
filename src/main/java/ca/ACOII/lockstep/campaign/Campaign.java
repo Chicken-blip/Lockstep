@@ -102,7 +102,7 @@ public class Campaign {
     public void trainSkill(CrewMember member, String skillId) {
         RosterEntry e  = getFromRoster(member);
         if (e.getReleaseDate() >= getDate()) throw new RuntimeException("Crew Member " + e.getData().getName() + " is arrested!");
-        int cost = definitions.findSkill(skillId).getTrainingCost() * (e.getData().getSkills().get(skillId) + 1);
+        int cost = definitions.findSkill(skillId).getTrainingCost() * (e.getData().getSkills().get(skillId));
         if (stash.getMoney() < cost) throw new RuntimeException("Not enough money for " + skillId + " training");
         stash.deductMoney(cost);
         e.getData().getSkills().put(skillId,e.getData().getSkills().get(skillId) + 1);

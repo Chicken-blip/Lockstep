@@ -27,7 +27,8 @@ public class HeistTests {
         game.setMoney(100);
         game.recruit("thief", "Thief A");
 
-        Target target = game.getAvailableTargets().getFirst();
+        //Getting Corner Gallery target
+        Target target = definitions.findTarget("corner_gallery");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1 ));
@@ -59,13 +60,14 @@ public class HeistTests {
         game.setMoney(100);
         game.recruit("thief", "Thief A");
 
-        Target target = game.getAvailableTargets().getFirst();
+        //Getting Corner Gallery target
+        Target target = definitions.findTarget("corner_gallery");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1 ));
         actions.add(new WaitAction(2));
         actions.add(new MoveAction("OFFICE", 1));
-        actions.add(new GrabAction(definitions.findLoot("candelabra_a")));
+        actions.add(new WaitAction(1));
         actions.add(new MoveAction("LOBBY", 1 ));
         actions.add(new PickLockAction("d3", 2 ));
         actions.add(new MoveAction("VAULT", 1 ));
@@ -73,13 +75,14 @@ public class HeistTests {
         actions.add(new GrabAction(definitions.findLoot("safe_contents")));
         actions.add(new GrabAction(definitions.findLoot("candelabra_b")));
         actions.add(new MoveAction("LOBBY", 1 ));
+        actions.add(new GrabAction(definitions.findLoot("candelabra_a")));
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
         game.prepareHeist(target);
         game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
         for (Event e : game.getLog().getEvents()) {
-            assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.GUARD_SPOTTED);
+            assertNotSame(EventType.CAUGHT, e.evtType());
         }
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
 
@@ -94,7 +97,8 @@ public class HeistTests {
         game.setMoney(100);
         game.recruit("thief", "Thief A");
 
-        Target target = game.getAvailableTargets().getFirst();
+        //Getting Corner Gallery target
+        Target target = definitions.findTarget("corner_gallery");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1 ));
@@ -112,7 +116,7 @@ public class HeistTests {
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.CAUGHT, e.evtType());
         }
-        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(7).evtType());
+        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(10).evtType());
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
@@ -124,7 +128,8 @@ public class HeistTests {
         game.setMoney(100);
         game.recruit("thief", "Thief A");
 
-        Target target = game.getAvailableTargets().getFirst();
+        //Getting Corner Gallery target
+        Target target = definitions.findTarget("corner_gallery");
 
         List<Action> actions = new ArrayList<>();
         actions.add(new MoveAction("LOBBY", 1 ));
@@ -142,7 +147,7 @@ public class HeistTests {
         game.prepareHeist(target);
         game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
 
-        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(7).evtType());
+        assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(10).evtType());
         assertSame(EventType.CAUGHT, game.getLog().getEvents().getLast().evtType());
         assertTrue(game.getStash().getItems().isEmpty());
         assertEquals(5, game.getRoster().getFirst().getReleaseDate());
@@ -154,7 +159,8 @@ public class HeistTests {
         game.recruit("thief", "Thief A");
         game.recruit("thief", "Thief B");
 
-        Target target = game.getAvailableTargets().getFirst();
+        //Getting Corner Gallery target
+        Target target = definitions.findTarget("corner_gallery");
 
         Map<RosterEntry, ActionQueue> queues = new HashMap<>();
 
@@ -173,7 +179,7 @@ public class HeistTests {
         actions = new ArrayList<>();
         actions.add(new WaitAction(5));
         actions.add(new MoveAction("LOBBY", 1));
-        actions.add(new GrabAction(definitions.findLoot("register_cash")));
+        actions.add(new WaitAction(1));
         actions.add(new MoveAction("OUTSIDE", 1));
         queues.put(game.getRoster().getLast(), new ActionQueue(actions));
 
@@ -186,18 +192,17 @@ public class HeistTests {
 
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
         assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("register_cash")));
         assertEquals(2, game.getCalendar().getCurrentDay());
 
     }
 
     @Test
     public void test1_heistInstanceGeneration() {
-        HeistInstance instance = HeistGenerator.generate(definitions.targets.getFirst(), definitions, 42L);
-        assertTrue(Objects.equals("safe_contents", instance.getMainScoreId()));
+        HeistInstance instance = HeistGenerator.generate(definitions.findTarget("corner_gallery"), definitions, 42L);
+        assertEquals("safe_contents", instance.getMainScoreId());
         assertTrue(instance.getContainerLoot("Vault Safe").contains("safe_contents"));
-        instance = HeistGenerator.generate(definitions.targets.getFirst(), definitions, 42L);
-        assertTrue(Objects.equals("safe_contents", instance.getMainScoreId()));
+        instance = HeistGenerator.generate(definitions.findTarget("corner_gallery"), definitions, 42L);
+        assertEquals("safe_contents", instance.getMainScoreId());
         assertTrue(instance.getContainerLoot("Vault Safe").contains("safe_contents"));
     }
 

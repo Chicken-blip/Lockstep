@@ -338,29 +338,29 @@ Two conventions I used, worth knowing:
 
 ## Electronics and prototypes
 
-| id | name | grabCost | pieceValue | set |
-|---|---|---|---|---|
-| smartphone | Smartphone | 1 | 30 | null |
-| encrypted_phone | Encrypted Phone | 1 | 75 | null |
-| flash_drive | Flash Drive | 1 | 40 | null |
-| external_drive | External Drive | 1 | 55 | null |
-| camera_body | Camera Body | 1 | 65 | null |
-| lens_kit | Lens Kit | 1 | 80 | null |
-| tablet | Tablet | 1 | 45 | null |
-| laptop | Laptop | 2 | 100 | null |
-| workstation | Workstation | 2 | 140 | null |
-| server_drive | Server Drive | 2 | 120 | null |
-| router | Router | 2 | 85 | null |
-| rack_mount | Rack Mount | 2 | 150 | null |
-| test_equipment | Test Equipment | 2 | 130 | null |
-| oscilloscope | Oscilloscope | 2 | 110 | null |
-| prototype_chip | Prototype Chip | 1 | 200 | null |
-| prototype_device | Prototype Device | 3 | 280 | null |
-| prototype_module | Prototype Module | 2 | 240 | null |
-| rare_component | Rare Component | 1 | 170 | null |
-| custom_board | Custom Board | 1 | 160 | null |
-| gold_connectors | Gold Connectors | 1 | 150 | null |
-| demonstration_unit | Demonstration Unit | 3 | 260 | null |
+| id                 | name               | grabCost | pieceValue | set  |
+|--------------------|--------------------|----------|------------|------|
+| smartphone         | Smartphone         | 1        | 30         | null |
+| encrypted_phone    | Encrypted Phone    | 1        | 75         | null |
+| flash_drive        | Flash Drive        | 1        | 40         | null |
+| external_drive     | External Drive     | 1        | 55         | null |
+| camera_body        | Camera Body        | 1        | 65         | null |
+| lens_kit           | Lens Kit           | 1        | 80         | null |
+| tablet             | Tablet             | 1        | 45         | null |
+| laptop             | Laptop             | 2        | 100        | null |
+| workstation        | Workstation        | 2        | 140        | null |
+| server_drive       | Server Drive       | 2        | 120        | null |
+| router             | Router             | 2        | 85         | null |
+| rack_mount         | Rack Mount         | 2        | 150        | null |
+| test_equipment     | Test Equipment     | 2        | 130        | null |
+| oscilloscope       | Oscilloscope       | 2        | 110        | null |
+| prototype_chip     | Prototype Chip     | 1        | 200        | null |
+| prototype_device   | Prototype Device   | 3        | 280        | null |
+| prototype_module   | Prototype Module   | 2        | 240        | null |
+| rare_component     | Rare Component     | 1        | 170        | null |
+| custom_board       | Custom Board       | 1        | 160        | null |
+| gold_connectors    | Gold Connectors    | 1        | 150        | null |
+| demonstration_unit | Demonstration Unit | 3        | 260        | null |
 
 **Main-score candidates (designated per target, not sold as sets)**
 

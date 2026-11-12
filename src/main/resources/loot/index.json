@@ -49,12 +49,13 @@
   "printer_paper.json",
   "laptop.json",
   "server_drive.json",
-
   "bandage_roll.json",
   "first_aid_kit.json",
   "insulin_pen.json",
   "morphine_ampoule.json",
   "pill_bottle_opioid.json",
   "patient_records_box.json",
-  "medical_waste_bin.json"
+  "medical_waste_bin.json",
+  "workstation.json",
+  "router.json"
 ]

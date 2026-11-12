@@ -3,7 +3,6 @@ package ca.ACOII.lockstep.ui;
 import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.engine.*;
-import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

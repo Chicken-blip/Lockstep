@@ -10,7 +10,7 @@ public record Event(int stepNum, String description, String actorId, EventType e
             case EventType.GRAB_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Grabbing item...";
             case EventType.DISABLE_SENSOR_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Disabling sensor...";
             case EventType.FORCE_OPEN_PROGRESS -> "[Step " + stepNum + "] " + actorId + ": Forcing open container...";
-            case EventType.GUARD_SPOTTED, EventType.STAFF_SPOTTED -> "[Step " + stepNum + "] " + actorId + description;
+            case EventType.GUARD_SPOTTED, EventType.STAFF_SPOTTED -> "[Step " + stepNum + "] " + actorId + " " + description;
             case EventType.ALARM_RAISED -> "[Step " + stepNum + "] ALARM RAISED";
             case EventType.CAUGHT -> "[Step " + stepNum + "] " + actorId + " caught!";
             case EventType.ESCAPED -> "[Step " + stepNum + "] " + actorId + " escaped!";
