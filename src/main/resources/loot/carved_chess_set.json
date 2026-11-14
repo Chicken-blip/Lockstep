@@ -1,0 +1,8 @@
+{
+  "id": "carved_chess_set",
+  "name": "Carved Chess Set",
+  "grabCost": 2,
+  "pieceValue": 200,
+  "set": null,
+  "isMainScore": false
+}

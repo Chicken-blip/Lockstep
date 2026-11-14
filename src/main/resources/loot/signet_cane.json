@@ -1,0 +1,8 @@
+{
+  "id": "signet_cane",
+  "name": "Signet Cane",
+  "grabCost": 1,
+  "pieceValue": 90,
+  "set": "founders_relics",
+  "isMainScore": false
+}

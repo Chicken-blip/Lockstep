@@ -1,0 +1,8 @@
+{
+  "id": "antique_barometer",
+  "name": "Antique Barometer",
+  "grabCost": 2,
+  "pieceValue": 240,
+  "set": null,
+  "isMainScore": false
+}

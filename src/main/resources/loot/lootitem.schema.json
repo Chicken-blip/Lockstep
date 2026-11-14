@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lockstep Loot Item",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "grabCost",
+    "pieceValue",
+    "set",
+    "isMainScore"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "grabCost": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "pieceValue": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "set": {
+      "type": ["string", "null"]
+    },
+    "isMainScore": {
+      "type": "boolean"
+    }
+  }
+}

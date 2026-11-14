@@ -1,0 +1,8 @@
+{
+  "id": "concert_harp",
+  "name": "Concert Harp",
+  "grabCost": 3,
+  "pieceValue": 360,
+  "set": null,
+  "isMainScore": false
+}

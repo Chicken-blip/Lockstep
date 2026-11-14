@@ -1,0 +1,8 @@
+{
+  "id": "signet_seal",
+  "name": "Signet Seal",
+  "grabCost": 1,
+  "pieceValue": 110,
+  "set": "founders_relics",
+  "isMainScore": false
+}

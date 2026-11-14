@@ -1,0 +1,8 @@
+{
+  "id": "signet_medal",
+  "name": "Signet Medal",
+  "grabCost": 1,
+  "pieceValue": 70,
+  "set": "founders_relics",
+  "isMainScore": false
+}

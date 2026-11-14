@@ -1,0 +1,8 @@
+{
+  "id": "port_bottle_1910",
+  "name": "Port Bottle 1910",
+  "grabCost": 1,
+  "pieceValue": 75,
+  "set": "vintage_port_selection",
+  "isMainScore": false
+}

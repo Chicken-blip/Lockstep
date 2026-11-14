@@ -1,0 +1,8 @@
+{
+  "id": "sealed_brandy",
+  "name": "Sealed Brandy",
+  "grabCost": 1,
+  "pieceValue": 75,
+  "set": null,
+  "isMainScore": false
+}

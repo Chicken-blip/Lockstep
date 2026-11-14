@@ -2,6 +2,6 @@
   "id": "hacker",
   "name": "The Hacker",
   "skills": {"pick": 0, "crack": 0, "hack": 2, "strength": 0},
-  "recruitFee": 25,
+  "recruitFee": 125,
   "dayAvailability": 0
 }

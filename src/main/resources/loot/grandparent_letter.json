@@ -1,0 +1,8 @@
+{
+  "id": "grandparent_letter",
+  "name": "Grandparents' Letters",
+  "grabCost": 1,
+  "pieceValue": 30,
+  "set": "estate_correspondence",
+  "isMainScore": false
+}

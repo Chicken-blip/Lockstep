@@ -1,0 +1,8 @@
+{
+  "id": "marriage_certificate",
+  "name": "Marriage Certificate",
+  "grabCost": 1,
+  "pieceValue": 45,
+  "set": "estate_correspondence",
+  "isMainScore": false
+}

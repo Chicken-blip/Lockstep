@@ -1,0 +1,8 @@
+{
+  "id": "tea_pot",
+  "name": "Silver Tea Pot",
+  "grabCost": 2,
+  "pieceValue": 70,
+  "set": null,
+  "isMainScore": false
+}

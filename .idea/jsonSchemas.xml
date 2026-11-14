@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="LootItem Schema">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="LootItem Schema" />
+              <option name="relativePathToSchema" value="src/main/resources/loot/lootitem.schema.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/grand_piano.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/sealed_brandy.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/tea_pot.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/alabaster_sculpture.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/sapphire_pendant.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/inheritance_codicil.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/marriage_certificate.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/grandparent_letter.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_seal.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_cane.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_medal.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/tea_saucer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/antique_globe.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/writing_slope.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/antique_barometer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/carved_chess_set.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/inlaid_music_box.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/ivory_fan.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/mahogany_casket.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/wine_bottle.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/port_bottle_1890.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/silver_tray.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/barrel.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+        <entry key="Target Schema">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Target Schema" />
+              <option name="relativePathToSchema" value="src/main/resources/targets/target.schema.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/anvil_offices.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/chatelain_jewelry.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/corner_gallery.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/halcyon_auction.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/heritage_manor.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/marchmont_museum.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/ovation_apartment_room.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/rx_satchel_post.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/scongat_pawn.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>

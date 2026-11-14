@@ -1,0 +1,8 @@
+{
+  "id": "grand_piano",
+  "name": "Grand Piano",
+  "grabCost": 3,
+  "pieceValue": 380,
+  "set": null,
+  "isMainScore": false
+}

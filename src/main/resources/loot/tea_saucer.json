@@ -1,0 +1,8 @@
+{
+  "id": "tea_saucer",
+  "name": "Silver Tea Saucer",
+  "grabCost": 1,
+  "pieceValue": 90,
+  "set": null,
+  "isMainScore": false
+}

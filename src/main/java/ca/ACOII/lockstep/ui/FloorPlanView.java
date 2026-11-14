@@ -75,7 +75,15 @@ public class FloorPlanView extends Pane {
         for (Room r : instance.getTarget().getRooms()) {
             Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
             room.setStroke(Color.BLACK);
-            room.setFill(Color.WHITE);
+            if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId()) && instance.getTarget().getExitRooms().contains(r.getId())) {
+                room.setFill(Color.CYAN);
+            } else if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId())) {
+                room.setFill(Color.MAGENTA);
+            } else if (instance.getTarget().getExitRooms().contains(r.getId())) {
+                room.setFill(Color.YELLOW);
+            } else {
+                room.setFill(Color.WHITE);
+            }
             Label label = new Label(r.getId());
             label.setLayoutX(r.getX() + 5);
             label.setLayoutY(r.getY() + 7);
@@ -195,6 +203,7 @@ public class FloorPlanView extends Pane {
 
     public void addActor(String actorId, String roomId, Color color, Target target) {
         Circle c = new Circle();
+        c.setStroke(Color.BLACK);
 
         double centerX = target.findRoom(roomId).getX() + ROOM_WIDTH / 2.0;
         double centerY = target.findRoom(roomId).getY() + ROOM_HEIGHT / 2.0;

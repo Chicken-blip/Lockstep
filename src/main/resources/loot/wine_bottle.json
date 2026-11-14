@@ -1,0 +1,8 @@
+{
+  "id": "wine_bottle",
+  "name": "Wine Bottle",
+  "grabCost": 1,
+  "pieceValue": 55,
+  "set": null,
+  "isMainScore": false
+}

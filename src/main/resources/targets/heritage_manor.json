@@ -1,0 +1,78 @@
+{
+  "id": "heritage_manor",
+  "name": "Heritage Manor",
+  "entryRoom": "ENTRANCE",
+  "exitRooms": ["OUTSIDE", "GARDEN"],
+  "alarmCountdown": 3,
+  "availableFrom": 0,
+  "availabilityDuration": 15,
+  "maxCrew": 3,
+  "arrestDuration": 10,
+  "rooms": [
+    {"id": "OUTSIDE", "x": 0, "y": 250, "roomLoot": {}, "roomContainers": []},
+    {"id": "ENTRANCE", "x": 200, "y": 250, "roomLoot": {}, "roomContainers": []},
+    {"id": "GRAND HALL", "x": 300, "y": 250, "roomLoot": {"alabaster_sculpture": 0.5}, "roomContainers": []},
+    {"id": "DINING ROOM", "x": 300, "y": 100, "roomLoot": {"grandparent_letter": 0.5, "tea_pot": 0.5, "tea_saucer": 0.5}, "roomContainers": []},
+    {"id": "KITCHEN", "x": 300, "y": 0, "roomLoot": {"silver_tray": 0.5, "wine_bottle": 0.5}, "roomContainers": []},
+    {"id": "PANTRY", "x": 400, "y": 0, "roomLoot": {}, "roomContainers": []},
+    {"id": "CELLAR", "x": 500, "y": 0, "roomLoot": {"sealed_brandy": 0.5, "port_bottle_1910": 0.5, "port_bottle_1890": 0.5}, "roomContainers": []},
+    {"id": "HALLWAY", "x": 500, "y": 250, "roomLoot": {"signet_cane": 0.5}, "roomContainers": []},
+    {"id": "GARDEN", "x": 500, "y": 150, "roomLoot": {}, "roomContainers": []},
+    {"id": "LIBRARY", "x": 500, "y": 350, "roomLoot": {"antique_globe": 0.5, "antique_barometer": 0.5, "carved_chess_set": 0.5}, "roomContainers": []},
+    {"id": "PRIVATE STUDY", "x": 600, "y": 350, "roomLoot": {"grand_piano": 0.5, "writing_slope": 0.5, "inlaid_music_box": 0.5, "inheritance_codicil": 0.5}, "roomContainers": []},
+    {"id": "MASTER BEDROOM", "x": 750, "y": 350, "roomLoot": {"sapphire_pendant": 0.5, "mahogany_casket": 0.5, "ivory_fan": 0.5}, "roomContainers": []},
+    {"id": "CHAPEL", "x": 700, "y": 250, "roomLoot": {"marriage_certificate": 0.5, "concert_harp": 0.5}, "roomContainers": []},
+    {"id": "VAULT", "x": 800, "y": 250, "roomLoot": {}, "roomContainers": [
+      {"id": "Family Safe", "type": "safe", "contents": ["the_family_heirloom"], "crackDifficulty": 3}
+    ]}
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "ENTRANCE", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "ENTRANCE", "roomDest": "GRAND HALL", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d3", "roomOrigin": "GRAND HALL", "roomDest": "DINING ROOM", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d4", "roomOrigin": "DINING ROOM", "roomDest": "KITCHEN", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d5", "roomOrigin": "KITCHEN", "roomDest": "PANTRY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d6", "roomOrigin": "PANTRY", "roomDest": "CELLAR", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d7", "roomOrigin": "GRAND HALL", "roomDest": "HALLWAY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 4}},
+    {"id": "d8", "roomOrigin": "HALLWAY", "roomDest": "GARDEN", "moveCost": 1, "lock": {"pickDifficulty": 3}, "sensor": {"id": "s2", "difficulty": 4}},
+    {"id": "d9", "roomOrigin": "HALLWAY", "roomDest": "LIBRARY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d10", "roomOrigin": "LIBRARY", "roomDest": "PRIVATE STUDY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d11", "roomOrigin": "PRIVATE STUDY", "roomDest": "MASTER BEDROOM", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d12", "roomOrigin": "HALLWAY", "roomDest": "CHAPEL", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d13", "roomOrigin": "CHAPEL", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 5}, "sensor": null}
+  ],
+  "patrols": [
+    {
+      "id": "p1",
+      "patrolRoute": [
+        {"room": "GRAND HALL", "duration": 4},
+        {"room": "DINING ROOM", "duration": 2},
+        {"room": "KITCHEN", "duration": 2},
+        {"room": "PANTRY", "duration": 3},
+        {"room": "KITCHEN", "duration": 1},
+        {"room": "DINING ROOM", "duration": 1}
+      ]
+    },
+    {
+      "id": "p2",
+      "patrolRoute": [
+        {"room": "HALLWAY", "duration": 4},
+        {"room": "LIBRARY", "duration": 2},
+        {"room": "PRIVATE STUDY", "duration": 1},
+        {"room": "MASTER BEDROOM", "duration": 2},
+        {"room": "PRIVATE STUDY", "duration": 1},
+        {"room": "LIBRARY", "duration": 1}
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "caretaker",
+      "suspicionThreshold": 3,
+      "patrolRoute": [
+        {"room": "GRAND HALL", "duration": 7},
+        {"room": "ENTRANCE", "duration": 7}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "id": "inheritance_codicil",
+  "name": "Inheritance Codicil",
+  "grabCost": 1,
+  "pieceValue": 80,
+  "set": "estate_correspondence",
+  "isMainScore": false
+}

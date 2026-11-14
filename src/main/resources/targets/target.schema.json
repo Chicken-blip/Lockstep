@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lockstep Target",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "name", "entryRoom", "exitRooms", "alarmCountdown",
+    "availableFrom", "availabilityDuration", "maxCrew", "arrestDuration",
+    "rooms", "doors", "patrols", "staff"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "name": { "type": "string", "minLength": 1 },
+    "entryRoom": { "type": "string", "minLength": 1 },
+    "exitRooms": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "alarmCountdown": { "type": "integer", "minimum": 0 },
+    "availableFrom": { "type": "integer", "minimum": 0 },
+    "availabilityDuration": { "type": "integer", "minimum": 0 },
+    "maxCrew": { "type": "integer", "minimum": 1 },
+    "arrestDuration": { "type": "integer", "minimum": 0 },
+    "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
+    "doors": { "type": "array", "items": { "$ref": "#/$defs/door" } },
+    "patrols": { "type": "array", "items": { "$ref": "#/$defs/patrol" } },
+    "staff": { "type": "array", "items": { "$ref": "#/$defs/staff" } }
+  },
+  "$defs": {
+    "room": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "x", "y", "roomLoot", "roomContainers"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "x": { "type": "integer" },
+        "y": { "type": "integer" },
+        "roomLoot": {
+          "type": "object",
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
+        },
+        "roomContainers": { "type": "array", "items": { "$ref": "#/$defs/container" } }
+      }
+    },
+    "container": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "contents", "crackDifficulty"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "const": "safe" },
+            "contents": { "type": "array", "items": { "type": "string" } },
+            "crackDifficulty": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "contents", "pickDifficulty"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "const": "display" },
+            "contents": { "type": "array", "items": { "type": "string" } },
+            "pickDifficulty": { "type": "integer", "minimum": 0 }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "contents", "forcedifficulty"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "const": "force_open" },
+            "contents": { "type": "array", "items": { "type": "string" } },
+            "forceDifficulty": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "door": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "roomOrigin", "roomDest", "moveCost", "lock", "sensor"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "roomOrigin": { "type": "string", "minLength": 1 },
+        "roomDest": { "type": "string", "minLength": 1 },
+        "moveCost": { "type": "integer", "minimum": 0 },
+        "lock": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/lock" }
+          ]
+        },
+        "sensor": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/sensor" }
+          ]
+        }
+      }
+    },
+    "lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pickDifficulty"],
+      "properties": { "pickDifficulty": { "type": "integer", "minimum": 0 } }
+    },
+    "sensor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "difficulty"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "difficulty": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "patrol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "patrolRoute"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "patrolRoute": { "$ref": "#/$defs/patrolRoute" }
+      }
+    },
+    "staff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "suspicionThreshold", "patrolRoute"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "suspicionThreshold": { "type": "integer", "minimum": 0 },
+        "patrolRoute": { "$ref": "#/$defs/patrolRoute" }
+      }
+    },
+    "patrolRoute": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["room", "duration"],
+        "properties": {
+          "room": { "type": "string", "minLength": 1 },
+          "duration": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}

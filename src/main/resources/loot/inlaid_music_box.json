@@ -1,0 +1,8 @@
+{
+  "id": "inlaid_music_box",
+  "name": "Inlaid Music Box",
+  "grabCost": 2,
+  "pieceValue": 150,
+  "set": null,
+  "isMainScore": false
+}

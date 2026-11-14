@@ -29,7 +29,7 @@
   "staff": [
     {
       "id": "pharmacist",
-      "suspicionThreshold": 2,
+      "suspicionThreshold": 3,
       "patrolRoute": [
         {"room": "DISPENSARY", "duration": 1}
       ]
