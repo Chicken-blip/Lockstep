@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lockstep Crew Member",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "skills", "recruitFee", "dayAvailability", "hideDuration"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pick", "crack", "hack", "strength"],
+      "properties": {
+        "pick": { "type": "integer", "minimum": 0 },
+        "crack": { "type": "integer", "minimum": 0 },
+        "hack": { "type": "integer", "minimum": 0 },
+        "strength": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "recruitFee": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dayAvailability": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "hideDuration": {
+      "type": "integer",
+      "minimum": 1
+    }
+  }
+}

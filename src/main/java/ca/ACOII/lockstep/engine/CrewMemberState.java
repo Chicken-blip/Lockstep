@@ -13,7 +13,7 @@ public class CrewMemberState {
 
     enum Status { ACTIVE, ESCAPED, CAUGHT }
     Status status = Status.ACTIVE;
-    boolean spotted = false, wasArrested;
+    boolean spotted = false, wasArrested, hiding = false;
     List<LootItem> inventory;
     List<Gear> equippedGear;
 
@@ -22,6 +22,7 @@ public class CrewMemberState {
         this.id = data.getId();
         inventory = new ArrayList<>();
         wasArrested = false;
+        hiding = false;
         equippedGear = new ArrayList<>();
         equippedGear.addAll(gear);
     }
@@ -53,6 +54,8 @@ public class CrewMemberState {
     public boolean arrested() {
         return wasArrested;
     }
+    public void toggleHiding() {hiding = !hiding;}
+    public boolean isHiding() {return hiding;}
 
     public CrewMember getData() {
         return data;

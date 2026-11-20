@@ -3,6 +3,7 @@ package ca.ACOII.lockstep.ui;
 import ca.ACOII.lockstep.engine.Event;
 import ca.ACOII.lockstep.engine.EventLog;
 import ca.ACOII.lockstep.engine.EventType;
+import ca.ACOII.lockstep.engine.ForceDoorAction;
 import ca.ACOII.lockstep.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -52,6 +53,17 @@ public class HeistPlayer {
         String itemName = e.description().substring(e.description().lastIndexOf("Grabbed ") + 7).trim();
         return plan.def.findLoot(plan.def.lootNameToId(itemName));
     }
+    private Door getDoor(Event e) {
+        if (e.evtType() != EventType.FORCE_DOOR && e.evtType() != EventType.PICK_LOCK) return null;
+        String doorId = e.description().substring(e.description().lastIndexOf("door ") + 4).trim();
+        return t.findDoor(doorId);
+    }
+
+    private Sensor getSensor(Event e) {
+        if (e.evtType() != EventType.DISABLE_SENSOR) return null;
+        String sensorId = e.description().substring(e.description().lastIndexOf("sensor ") + 6).trim();
+        return t.findSensor(sensorId);
+    }
     private Room getRoomParent(LootItem i) {
         for (Room r : plan.instance.getTarget().getRooms()) {
             if (r.getRoomLoot().containsKey(i.getId())) return r;
@@ -80,6 +92,12 @@ public class HeistPlayer {
                     }
                     if (getItem(e) != null && getRoomParent(getItem(e)) != null) {
                         plan.updateRoomContents(getItem(e).getId(), getRoomParent(getItem(e)).getId());
+                    }
+                    if (getDoor(e) != null) {
+                        plan.updateDoor(getDoor(e).getId());
+                    }
+                    if (getSensor(e) != null) {
+                        plan.updateSensor(getSensor(e).getId());
                     }
                 }
             }

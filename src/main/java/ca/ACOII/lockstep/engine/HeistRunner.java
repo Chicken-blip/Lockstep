@@ -59,71 +59,84 @@ public class HeistRunner {
                         campaign.maxStep = currentStep;
                         return;
                     }
-                    EventType e;
+                    EventType e = null;
 
                     //NOTE: Actual action execution
-                    if (a instanceof MoveAction move) {
-                        String currRoom = c.getCurrentRoom();
-                        String destRoom = move.getDestinationRoom();
+                    if (a instanceof HideAction) {
+                        if (!c.isHiding()) c.toggleHiding();
+                        e = EventType.HIDE;
+                    } else {
+                        if (c.isHiding()) c.toggleHiding();
+                        if (a instanceof MoveAction move) {
+                            String currRoom = c.getCurrentRoom();
+                            String destRoom = move.getDestinationRoom();
 
-                        Door d = instance.getTarget().findDoor(currRoom, destRoom);
-                        if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
-                            if (!c.spotted) {
-                                c.spotted = true;
-                                log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
-                                if (alarmTimer == -1) {
-                                    alarmTimer = t.getAlarmCountdown();
-                                    log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                            Door d = instance.getTarget().findDoor(currRoom, destRoom);
+                            if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
+                                if (!c.spotted) {
+                                    c.spotted = true;
+                                    log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
+                                    if (alarmTimer == -1) {
+                                        alarmTimer = t.getAlarmCountdown();
+                                        log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                    }
                                 }
                             }
-                        }
 
-                        c.setCurrentRoom(destRoom);
-                        e = EventType.MOVE;
-                    } else if (a instanceof PickLockAction pick) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            unlockedDoors.add(pick.doorId);
-                            e = EventType.PICK_LOCK;
-                        } else {
-                            e = EventType.PICK_LOCK_PROGRESS;
+                            c.setCurrentRoom(destRoom);
+                            e = EventType.MOVE;
+                        } else if (a instanceof PickLockAction pick) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                unlockedDoors.add(pick.doorId);
+                                e = EventType.PICK_LOCK;
+                            } else {
+                                e = EventType.PICK_LOCK_PROGRESS;
+                            }
+                        } else if (a instanceof ForceDoorAction forceDoor) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                unlockedDoors.add(forceDoor.doorId);
+                                e = EventType.FORCE_DOOR;
+                            } else {
+                                e = EventType.FORCE_DOOR_PROGRESS;
+                            }
+                        } else if (a instanceof GrabAction grab) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                c.addToInventory(grab.item);
+                                e = EventType.GRAB;
+                            } else {
+                                e = EventType.GRAB_PROGRESS;
+                            }
+                        } else if (a instanceof CrackAction crack) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                openContainers.add(crack.containerId);
+                                e = EventType.CRACK;
+                            } else {
+                                e = EventType.CRACK_PROGRESS;
+                            }
+                        } else if (a instanceof PickCaseAction pick) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                openContainers.add(pick.containerId);
+                                e = EventType.PICK_CASE;
+                            } else {
+                                e = EventType.PICK_CASE_PROGRESS;
+                            }
+                        } else if (a instanceof ForceOpenAction forceOpen) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                openContainers.add(forceOpen.containerId);
+                                e = EventType.FORCE_OPEN;
+                            } else {
+                                e = EventType.FORCE_OPEN_PROGRESS;
+                            }
+                        } else if (a instanceof DisableSensorAction disable) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                disabledSensors.add(disable.getSensorId());
+                                e = EventType.DISABLE_SENSOR;
+                            } else {
+                                e = EventType.DISABLE_SENSOR_PROGRESS;
+                            }
+                        } else if (a instanceof WaitAction) {
+                            e = EventType.WAIT;
                         }
-                    } else if (a instanceof GrabAction grab) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            c.addToInventory(grab.item);
-                            e = EventType.GRAB;
-                        } else {
-                            e = EventType.GRAB_PROGRESS;
-                        }
-                    } else if (a instanceof CrackAction crack) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            openContainers.add(crack.containerId);
-                            e = EventType.CRACK;
-                        } else {
-                            e = EventType.CRACK_PROGRESS;
-                        }
-                    } else if (a instanceof PickCaseAction pick) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            openContainers.add(pick.containerId);
-                            e = EventType.PICK_CASE;
-                        } else {
-                            e = EventType.PICK_CASE_PROGRESS;
-                        }
-                    } else if (a instanceof ForceOpenAction forceOpen) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            openContainers.add(forceOpen.containerId);
-                            e = EventType.FORCE_OPEN;
-                        } else {
-                            e = EventType.FORCE_OPEN_PROGRESS;
-                        }
-                    } else if (a instanceof DisableSensorAction disable) {
-                        if (crewQueues.get(c).remainingSteps == 0) {
-                            disabledSensors.add(disable.getSensorId());
-                            e = EventType.DISABLE_SENSOR;
-                        } else {
-                            e = EventType.DISABLE_SENSOR_PROGRESS;
-                        }
-                    } else {
-                        e = EventType.WAIT;
                     }
 
                     if (a != null) log.addEvent(new Event(currentStep, a.getDescription(), c.getData().getName(), e));
@@ -199,7 +212,21 @@ public class HeistRunner {
             System.out.println("Empty action - something's wrong");
             running = false;
         }
-        if (action instanceof GrabAction grab) {
+        if (action instanceof HideAction hide) {
+            Room curr = t.findRoom(crew.currentRoom);
+            //Check if the current room allows hiding
+            if (!curr.canHide()) {
+                System.out.println("Attempt at hiding in unapplicable room occurred");
+                running = false;
+                return;
+            }
+            //Check if the set duration is outside the max allowed for the crew member
+            if (hide.getDuration() > crew.getData().getHideDuration()) {
+                System.out.println("Attempt at hiding beyond max hide duration for crew member occurred");
+                running = false;
+            }
+
+        } else if (action instanceof GrabAction grab) {
             Room curr = t.findRoom(crew.currentRoom);
             //Check if the current room has the directed item
             if (instance.getRoomLoot(curr.getId()).contains(grab.item.getId())) {
@@ -301,6 +328,25 @@ public class HeistRunner {
                 System.out.println("Attempt at forcing open unlocked container occurred");
                 running = false;
             }
+        } else if (action instanceof ForceDoorAction forceDoor) {
+            Room curr = t.findRoom(crew.currentRoom);
+            Door d = t.findDoor(forceDoor.doorId);
+            if (d == null) {
+                System.out.println("Attempt at forcing open nonexistent door occurred");
+                running = false;
+                return;
+            } if (!(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
+                System.out.println("Attempt at forcing open door in different room occurred");
+                running = false;
+                return;
+            } if (d.getLock().getForceDifficulty() == 0) {
+                System.out.println("Attempt at forcing open incompatible door occurred");
+                running = false;
+                return;
+            } if (unlockedDoors.contains(d.getId())) {
+                System.out.println("Attempt at forcing open unlocked door occurred");
+                running = false;
+            }
         } else if (action instanceof MoveAction move) {
             if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
                 System.out.println("Invalid move destination");
@@ -342,7 +388,7 @@ public class HeistRunner {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     for (Guard g : guards) {
-                        if (Objects.equals(c.getCurrentRoom(), g.getCurrentRoom()) && !c.spotted) {
+                        if (Objects.equals(c.getCurrentRoom(), g.getCurrentRoom()) && !c.spotted && !c.isHiding()) {
                             c.spotted = true;
                             log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.GUARD_SPOTTED));
                             if (alarmTimer == -1) {
@@ -356,7 +402,7 @@ public class HeistRunner {
             for (StaffState s : staff) {
                 List<CrewMemberState> spottedPerson = new ArrayList<>();
                 for (CrewMemberState c : crewQueues.keySet()) {
-                    if (Objects.equals(s.getCurrentRoom(), c.getCurrentRoom()) && alarmTimer == -1) {
+                    if (Objects.equals(s.getCurrentRoom(), c.getCurrentRoom()) && alarmTimer == -1 && !c.isHiding()) {
                         spottedPerson.add(c);
                         break;
                     }

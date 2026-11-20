@@ -19,13 +19,16 @@ import java.util.*;
 
 public class FloorPlanView extends Pane {
     private static final double ROOM_WIDTH = 75, ROOM_HEIGHT = 60;
+    private static final int SLOT_NUM = 8;
     Map<String, Circle> actors;
     Map<String, List<String>> actorsPerRoom;
     Map<String, Rectangle> rooms;
+    Map<String, Line> doors;
+    Map<String, Circle> sensors;
     Map<String, Tooltip> roomTooltips;
     List<String> removedItemIds;
-    Double[] offsetX = new Double[]{-15d, 15d, -15d, 15d};
-    Double[] offsetY = new Double[]{-15d, -15d, 15d, 15d};
+    Double[] offsetX = new Double[]{-20d, -10d, 10d, 20d, 20d, 10d, -10d, -20d};
+    Double[] offsetY = new Double[]{-10d, -20d, -20d, -10d, 10d, 20d, 20d, 10d};
     Definitions def;
     HeistInstance instance;
     public FloorPlanView(HeistInstance instance, Game g, List<RosterEntry> entries, Definitions def) {
@@ -35,6 +38,8 @@ public class FloorPlanView extends Pane {
         actors = new HashMap<>();
         actorsPerRoom = new HashMap<>();
         rooms = new HashMap<>();
+        doors = new HashMap<>();
+        sensors = new HashMap<>();
         roomTooltips = new HashMap<>();
         removedItemIds = new ArrayList<>();
         for (Door d : instance.getTarget().getDoors()) {
@@ -46,13 +51,18 @@ public class FloorPlanView extends Pane {
             connection.setStrokeWidth(5);
             connection.setPickOnBounds(true);
             Tooltip tip = new Tooltip();
+            StringBuilder txt = new StringBuilder(d.getId());
             if (d.getLock() != null) {
-                tip.setText(d.getId() + " (LOCKED - Difficulty: " + d.getLock().getPickDifficulty() + ")");
+                txt.append(" (LOCKED)");
+                txt.append((d.getLock().getPickDifficulty() > 0 ? "\nPICK LOCK - Difficulty: " + d.getLock().getPickDifficulty() : ""));
+                txt.append((d.getLock().getForceDifficulty() > 0 ? "\nFORCE OPEN - Difficulty: " + d.getLock().getForceDifficulty() : ""));
             } else {
-                tip.setText(d.getId() + " (OPEN)");
+                txt.append(" (OPEN)");
             }
+            tip.setText(txt.toString());
             tip.setShowDelay(Duration.millis(50));
             Tooltip.install(connection, tip);
+            doors.put(d.getId(), connection);
             this.getChildren().add(connection);
 
             if (d.getSensor() != null) {
@@ -69,6 +79,7 @@ public class FloorPlanView extends Pane {
                 sensorTip.setText("Sensor (" + d.getSensor().id + ")\nHack difficulty: " + d.getSensor().difficulty);
                 sensorTip.setShowDelay(Duration.millis(50));
                 Tooltip.install(circle, sensorTip);
+                sensors.put(d.getSensor().getId(), circle);
                 this.getChildren().add(circle);
             }
         }
@@ -140,7 +151,7 @@ public class FloorPlanView extends Pane {
             containerLoot.put(container.getId(), containerIds);
         }
 
-        StringBuilder txt = new StringBuilder(r.getId() + "\n");
+        StringBuilder txt = new StringBuilder(r.getId() + (r.canHide() ? " - HAS COVER" : "") + "\n");
         if (roomLoot.isEmpty() && containerLoot.isEmpty()) {
             txt.append("(EMPTY)");
         } else if (roomLoot.isEmpty()) {
@@ -208,7 +219,7 @@ public class FloorPlanView extends Pane {
         double centerX = target.findRoom(roomId).getX() + ROOM_WIDTH / 2.0;
         double centerY = target.findRoom(roomId).getY() + ROOM_HEIGHT / 2.0;
 
-        int slot = actorsInRoom(roomId).size() % 4;
+        int slot = actorsInRoom(roomId).size() % SLOT_NUM;
 
         c.setCenterX(centerX + offsetX[slot]);
         c.setCenterY(centerY + offsetY[slot]);
@@ -283,7 +294,7 @@ public class FloorPlanView extends Pane {
         double centerY = t.findRoom(roomId).getY() + ROOM_HEIGHT / 2.0;
         int slot = 0;
         for (String actorId : actorsInRoom(roomId)) {
-            slot = slot % 4;
+            slot = slot % SLOT_NUM;
             actors.get(actorId).setCenterX(centerX + offsetX[slot]);
             actors.get(actorId).setCenterY(centerY + offsetY[slot]);
             slot++;
@@ -325,4 +336,13 @@ public class FloorPlanView extends Pane {
         tip.setText(getRoomTooltipContent(roomId).toString());
     }
 
+    public void updateDoor(String doorId) {
+        Line line = doors.get(doorId);
+        line.setStroke(Color.BLACK);
+    }
+
+    public void updateSensor(String sensorId) {
+        Circle circle = sensors.get(sensorId);
+        circle.setFill(Color.GREY);
+    }
 }

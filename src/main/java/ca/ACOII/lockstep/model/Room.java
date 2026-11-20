@@ -9,6 +9,7 @@ public class Room {
     private String id;
     private Map<String, Double> roomLoot;
     private List<LootContainer> roomContainers;
+    private boolean hasCover;
     private int x, y;
 
     public Room() {
@@ -56,5 +57,11 @@ public class Room {
         this.y = y;
     }
 
+    public boolean canHide() {
+        return hasCover;
+    }
 
+    public void setHasCover(boolean hasCover) {
+        this.hasCover = hasCover;
+    }
 }

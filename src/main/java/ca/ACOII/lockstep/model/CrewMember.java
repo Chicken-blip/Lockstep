@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class CrewMember {
     private String id, name;
-    private int recruitFee, dayAvailability, releaseDate;
+    private int recruitFee, dayAvailability, releaseDate, hideDuration;
     Map<String, Integer> skills;
 
     public CrewMember() {
@@ -21,6 +21,7 @@ public class CrewMember {
             this.skills.put(str, c.skills.get(str));
         }
         releaseDate = 0;
+        this.hideDuration = c.hideDuration;
     }
 
     public String getId() {
@@ -69,5 +70,13 @@ public class CrewMember {
 
     public void addSkill(Skill s, Integer lvl) {
         skills.put(s.getId(), lvl);
+    }
+
+    public int getHideDuration() {
+        return hideDuration;
+    }
+
+    public void setHideDuration(int hideDuration) {
+        this.hideDuration = hideDuration;
     }
 }

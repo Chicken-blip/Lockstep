@@ -9,14 +9,14 @@
   "maxCrew": 1,
   "arrestDuration": 3,
   "rooms": [
-    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": []},
-    {"id": "LOBBY", "x": 150, "y": 100, "roomLoot": {"stapler": 0.3, "printer_unit": 1}, "roomContainers": []},
-    {"id": "CUBICLES A", "x": 150, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": []},
-    {"id": "CUBICLES B", "x": 250, "y": 200, "roomLoot": {"workstation": 0.9}, "roomContainers": []},
-    {"id": "CUBICLES C", "x": 350, "y": 200, "roomLoot": {"router": 0.8}, "roomContainers": []},
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": [], "hasCover": false},
+    {"id": "LOBBY", "x": 150, "y": 100, "roomLoot": {"stapler": 0.3, "printer_unit": 1}, "roomContainers": [], "hasCover": false},
+    {"id": "CUBICLES A", "x": 150, "y": 200, "roomLoot": {"laptop": 0.9}, "roomContainers": [], "hasCover": false},
+    {"id": "CUBICLES B", "x": 250, "y": 200, "roomLoot": {"workstation": 0.9}, "roomContainers": [], "hasCover": false},
+    {"id": "CUBICLES C", "x": 350, "y": 200, "roomLoot": {"router": 0.8}, "roomContainers": [], "hasCover": false},
     {"id": "MANAGER OFFICE", "x": 250, "y": 100, "roomLoot": {"printer_paper": 0.4, "printer_toner": 0.6}, "roomContainers": [
       {"id": "Manager Cabinet", "type": "force_open", "contents": ["server_drive"], "forceDifficulty": 7}
-    ]}
+    ], "hasCover": false}
   ],
   "doors": [
     {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 3}},

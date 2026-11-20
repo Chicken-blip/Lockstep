@@ -3,5 +3,6 @@
   "name": "The Thief",
   "skills": {"pick": 0, "crack": 1, "hack": 0, "strength": 1},
   "recruitFee": 50,
-  "dayAvailability": 0
+  "dayAvailability": 0,
+  "hideDuration": 5
 }

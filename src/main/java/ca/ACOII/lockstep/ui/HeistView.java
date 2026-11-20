@@ -13,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN", "DISABLE SENSOR", "GRAB"
+            "MOVE", "WAIT", "HIDE", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN CONTAINER", "FORCE OPEN DOOR", "DISABLE SENSOR", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
@@ -86,8 +85,7 @@ public class HeistView extends BorderPane {
     private VBox mapPane() {
         VBox pane = new VBox(10);
 
-        FloorPlanView plan = new FloorPlanView(game.getInstance(), game, entries, app.def);
-        mapPane = plan;
+        mapPane = new FloorPlanView(game.getInstance(), game, entries, app.def);
         mapPane.setPadding(new Insets(20));
         ScrollPane scroll = new ScrollPane(mapPane);
         scroll.setPannable(true);
@@ -127,14 +125,6 @@ public class HeistView extends BorderPane {
         for (RosterEntry e : entries) {
             heistCrew.getItems().add(e);
         }
-        heistCrew.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            resetActionList(newVal);
-        });
-        heistCrew.getSelectionModel().selectFirst();
-        actionSelectionPane.getChildren().add(heistCrew);
-
-        Label title = new Label("Add Action");
-        actionSelectionPane.getChildren().add(title);
 
         ComboBox<String> actionTypes = new ComboBox<>();
         actionTypes.getItems().addAll(ACTIONS);
@@ -145,6 +135,19 @@ public class HeistView extends BorderPane {
             actionSelectionPane.getChildren().add(3, formFor(actionTypes.getValue()));
         });
         actionTypes.getSelectionModel().selectFirst();
+
+        heistCrew.getSelectionModel().selectFirst();
+        heistCrew.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            resetActionList(newVal);
+            if (actionSelectionPane.getChildren().size() == 5) {
+                actionSelectionPane.getChildren().remove(3);
+            }
+            actionSelectionPane.getChildren().add(3, formFor(actionTypes.getValue()));
+        });
+        actionSelectionPane.getChildren().add(heistCrew);
+
+        Label title = new Label("Add Action");
+        actionSelectionPane.getChildren().add(title);
 
         Button add = new Button("Add Action");
         add.setOnAction(e -> {
@@ -157,6 +160,9 @@ public class HeistView extends BorderPane {
                 }
                 case "WAIT" -> {
                     act = new WaitAction((Integer) ((Spinner<?>) pane.getChildren().get(1)).getValue());
+                }
+                case "HIDE" -> {
+                    act = new HideAction((Integer) ((Spinner<?>) pane.getChildren().get(1)).getValue());
                 }
                 case "PICK LOCK" -> {
                     Door door = target.findDoor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
@@ -173,10 +179,15 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.pickCaseDuration(display, heistCrew.getSelectionModel().getSelectedItem());
                     act = new PickCaseAction(display.getId(), dur);
                 }
-                case "FORCE OPEN" -> {
+                case "FORCE OPEN CONTAINER" -> {
                     ForceOpenContainer container = (ForceOpenContainer) target.findContainer((((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem()));
                     int dur = ActDurationCalculator.forceOpenDuration(container, heistCrew.getSelectionModel().getSelectedItem());
                     act = new ForceOpenAction(container.getId(), dur);
+                }
+                case "FORCE OPEN DOOR" -> {
+                    Door door = target.findDoor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
+                    int dur = ActDurationCalculator.forceDoorDuration(door, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new ForceDoorAction(door.getId(), dur);
                 }
                 case "DISABLE SENSOR" -> {
                     Sensor sensor = target.findSensor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
@@ -212,10 +223,12 @@ public class HeistView extends BorderPane {
         return switch (value) {
             case "MOVE" -> buildMoveForm();
             case "WAIT" -> buildWaitForm();
+            case "HIDE" -> buildHideForm();
             case "PICK LOCK" -> buildPickLockForm();
             case "CRACK SAFE" -> buildCrackSafeForm();
             case "PICK CASE" -> buildPickCaseForm();
-            case "FORCE OPEN" -> buildForceOpenForm();
+            case "FORCE OPEN CONTAINER" -> buildForceOpenContainerForm();
+            case "FORCE OPEN DOOR" -> buildForceOpenDoorForm();
             case "DISABLE SENSOR" -> buildDisableSensorForm();
             case "GRAB" -> buildGrabForm();
             default -> throw new IllegalStateException("Unexpected value: " + value);
@@ -251,13 +264,25 @@ public class HeistView extends BorderPane {
         return box;
     }
 
+    private VBox buildHideForm() {
+        Label label = new Label("Duration:");
+        Spinner<Integer> spinner = new Spinner<>(1, heistCrew.getSelectionModel().getSelectedItem().getData().getHideDuration(), 1);
+
+        actionPossible = true;
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, spinner);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
     private VBox buildPickLockForm() {
         Label label = new Label("Door:");
         ComboBox<String> doorSelect = new ComboBox<>();
 
         List<String> ids = new ArrayList<>();
         for (Door d : target.getDoors()) {
-            if (d.getLock() != null) ids.add(d.getId());
+            if (d.getLock() != null) if (d.getLock().getPickDifficulty() > 0) ids.add(d.getId());
         }
         doorSelect.getItems().addAll(ids);
         if (doorSelect.getItems().isEmpty()) {
@@ -408,7 +433,7 @@ public class HeistView extends BorderPane {
         return box;
     }
 
-    private VBox buildForceOpenForm() {
+    private VBox buildForceOpenContainerForm() {
         Label label = new Label("Container:");
         ComboBox<String> containerSelect = new ComboBox<>();
 
@@ -432,6 +457,30 @@ public class HeistView extends BorderPane {
 
         VBox box = new VBox();
         box.getChildren().addAll(label, containerSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
+    private VBox buildForceOpenDoorForm() {
+        Label label = new Label("Door:");
+        ComboBox<String> doorSelect = new ComboBox<>();
+
+        List<String> ids = new ArrayList<>();
+        for (Door d : target.getDoors()) {
+            if (d.getLock() != null) if (d.getLock().getForceDifficulty() > 0) ids.add(d.getId());
+        }
+        doorSelect.getItems().addAll(ids);
+        if (doorSelect.getItems().isEmpty()) {
+            doorSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            doorSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, doorSelect);
         box.setAlignment(Pos.CENTER);
         return box;
     }
@@ -507,6 +556,9 @@ public class HeistView extends BorderPane {
                     if (action instanceof WaitAction wait) {
                         setText("WAIT " + wait.getDuration());
                     }
+                    if (action instanceof HideAction hide) {
+                        setText("HIDE " + hide.getDuration());
+                    }
                     if (action instanceof PickLockAction pick) {
                         setText("PICK LOCK door " + pick.getDoorId());
                     }
@@ -518,6 +570,9 @@ public class HeistView extends BorderPane {
                     }
                     if (action instanceof ForceOpenAction forceOpen) {
                         setText("FORCE OPEN " + forceOpen.getContainerId());
+                    }
+                    if (action instanceof ForceDoorAction forceDoor) {
+                        setText("FORCE OPEN door " + forceDoor.getDoorId());
                     }
                     if (action instanceof DisableSensorAction disable) {
                         setText("DISABLE SENSOR " + disable.getSensorId());

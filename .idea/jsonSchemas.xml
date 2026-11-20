@@ -3,6 +3,25 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
+        <entry key="CrewMember Schema">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="CrewMember Schema" />
+              <option name="relativePathToSchema" value="src/main/resources/crew/crewmember.schema.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/crew/hacker.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/crew/thief.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="LootItem Schema">
           <value>
             <SchemaInfo>
@@ -12,52 +31,28 @@
               <option name="patterns">
                 <list>
                   <Item>
-                    <option name="path" value="src/main/resources/loot/grand_piano.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/sealed_brandy.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/tea_pot.json" />
-                  </Item>
-                  <Item>
                     <option name="path" value="src/main/resources/loot/alabaster_sculpture.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/sapphire_pendant.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/inheritance_codicil.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/marriage_certificate.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/grandparent_letter.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/signet_seal.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/signet_cane.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/signet_medal.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/tea_saucer.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/antique_globe.json" />
-                  </Item>
-                  <Item>
-                    <option name="path" value="src/main/resources/loot/writing_slope.json" />
                   </Item>
                   <Item>
                     <option name="path" value="src/main/resources/loot/antique_barometer.json" />
                   </Item>
                   <Item>
+                    <option name="path" value="src/main/resources/loot/antique_globe.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/barrel.json" />
+                  </Item>
+                  <Item>
                     <option name="path" value="src/main/resources/loot/carved_chess_set.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/grand_piano.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/grandparent_letter.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/inheritance_codicil.json" />
                   </Item>
                   <Item>
                     <option name="path" value="src/main/resources/loot/inlaid_music_box.json" />
@@ -69,16 +64,40 @@
                     <option name="path" value="src/main/resources/loot/mahogany_casket.json" />
                   </Item>
                   <Item>
-                    <option name="path" value="src/main/resources/loot/wine_bottle.json" />
+                    <option name="path" value="src/main/resources/loot/marriage_certificate.json" />
                   </Item>
                   <Item>
                     <option name="path" value="src/main/resources/loot/port_bottle_1890.json" />
                   </Item>
                   <Item>
+                    <option name="path" value="src/main/resources/loot/sapphire_pendant.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/sealed_brandy.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_cane.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_medal.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/signet_seal.json" />
+                  </Item>
+                  <Item>
                     <option name="path" value="src/main/resources/loot/silver_tray.json" />
                   </Item>
                   <Item>
-                    <option name="path" value="src/main/resources/loot/barrel.json" />
+                    <option name="path" value="src/main/resources/loot/tea_pot.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/tea_saucer.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/wine_bottle.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/loot/writing_slope.json" />
                   </Item>
                 </list>
               </option>

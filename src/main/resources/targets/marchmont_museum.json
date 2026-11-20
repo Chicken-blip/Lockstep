@@ -9,16 +9,16 @@
   "maxCrew": 2,
   "arrestDuration": 3,
   "rooms": [
-    {"id": "OUTSIDE", "x": 200, "y": 0, "roomLoot": {}, "roomContainers": []},
-    {"id": "LOBBY", "x": 200, "y": 75, "roomLoot": {"register_cash": 0.4, "donation_box": 0.8}, "roomContainers": []},
-    {"id": "EAST GALLERY", "x": 50, "y": 150, "roomLoot": {"katana": 1.0}, "roomContainers": []},
-    {"id": "WEST GALLERY", "x": 350, "y": 150, "roomLoot": {"wakizashi": 1.0}, "roomContainers": []},
-    {"id": "RESTORATION", "x": 50, "y": 350, "roomLoot": {}, "roomContainers": []},
-    {"id": "SECURITY OFFICE", "x": 350, "y": 250, "roomLoot": {"office_cash_box": 0.4}, "roomContainers": []},
-    {"id": "STORAGE", "x": 350, "y": 350, "roomLoot": {"tanto": 1.0, "brass_lamp": 0.5, "iron_key_ring": 1.0, "wooden_crate": 1.0}, "roomContainers": []},
+    {"id": "OUTSIDE", "x": 200, "y": 0, "roomLoot": {}, "roomContainers": [], "hasCover": false},
+    {"id": "LOBBY", "x": 200, "y": 75, "roomLoot": {"register_cash": 0.4, "donation_box": 0.8}, "roomContainers": [], "hasCover": false},
+    {"id": "EAST GALLERY", "x": 50, "y": 150, "roomLoot": {"katana": 1.0}, "roomContainers": [], "hasCover": true},
+    {"id": "WEST GALLERY", "x": 350, "y": 150, "roomLoot": {"wakizashi": 1.0}, "roomContainers": [], "hasCover": false},
+    {"id": "RESTORATION", "x": 50, "y": 350, "roomLoot": {}, "roomContainers": [], "hasCover": false},
+    {"id": "SECURITY OFFICE", "x": 350, "y": 250, "roomLoot": {"office_cash_box": 0.4}, "roomContainers": [], "hasCover": true},
+    {"id": "STORAGE", "x": 350, "y": 350, "roomLoot": {"tanto": 1.0, "brass_lamp": 0.5, "iron_key_ring": 1.0, "wooden_crate": 1.0}, "roomContainers": [], "hasCover": true},
     {"id": "VAULT", "x": 200, "y": 500, "roomLoot": {}, "roomContainers": [
       {"id": "Vault Safe", "type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}
-    ]}
+    ], "hasCover": false}
   ],
   "doors": [
     {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": null},
@@ -28,7 +28,7 @@
     {"id": "d5", "roomOrigin": "RESTORATION", "roomDest": "VAULT", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d6", "roomOrigin": "WEST GALLERY", "roomDest": "SECURITY OFFICE", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d7", "roomOrigin": "SECURITY OFFICE", "roomDest": "STORAGE", "moveCost": 1, "lock": null, "sensor": null},
-    {"id": "d8", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3}, "sensor": null}
+    {"id": "d8", "roomOrigin": "STORAGE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3, "forceDifficulty": 0}, "sensor": null}
   ],
   "patrols": [
     {
