@@ -21,6 +21,7 @@
     {"id": "d2", "roomOrigin": "HALLWAY", "roomDest": "LIVING ROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 2}},
     {"id": "d3", "roomOrigin": "LIVING ROOM", "roomDest": "BEDROOM", "moveCost": 1, "lock": null, "sensor": {"id": "s2", "difficulty": 2}}
   ],
+  "blockages": [],
   "patrols": [],
   "staff": []
 }

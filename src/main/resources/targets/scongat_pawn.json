@@ -9,10 +9,10 @@
   "maxCrew": 1,
   "arrestDuration": 3,
   "rooms": [
-    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": [], "hasCover": false},
-    {"id": "SHOWROOM", "x": 150, "y": 100, "roomLoot": {"trench_knife": 0.9, "gold_locket": 0.7}, "roomContainers": [], "hasCover": false},
-    {"id": "WORKROOM", "x": 150, "y": 200, "roomLoot": {"silver_spoon": 1.0, "tortoiseshell_comb": 0.1}, "roomContainers": [], "hasCover": false},
-    {"id": "SAFE ROOM", "x": 250, "y": 100, "roomLoot": {"map_of_the_new_world": 0.5}, "roomContainers": [
+    {"id": "OUTSIDE", "x": 0, "y": 100, "roomLoot": {}, "roomContainers": [], "hasCover": false},
+    {"id": "SHOWROOM", "x": 200, "y": 100, "roomLoot": {"trench_knife": 0.9, "gold_locket": 0.7}, "roomContainers": [], "hasCover": false},
+    {"id": "WORKROOM", "x": 200, "y": 300, "roomLoot": {"silver_spoon": 1.0, "tortoiseshell_comb": 0.1}, "roomContainers": [], "hasCover": false},
+    {"id": "SAFE ROOM", "x": 400, "y": 100, "roomLoot": {"map_of_the_new_world": 0.5}, "roomContainers": [
       {"id": "Shop Safe", "type": "safe", "contents": ["silver_ladle", "royal_orb", "old_ledger"], "crackDifficulty": 5}
     ], "hasCover": false}
   ],
@@ -20,6 +20,9 @@
     {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "SHOWROOM", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d2", "roomOrigin": "SHOWROOM", "roomDest": "WORKROOM", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d3", "roomOrigin": "SHOWROOM", "roomDest": "SAFE ROOM", "moveCost": 1, "lock": {"pickDifficulty": 2, "forceDifficulty": 0}, "sensor": null}
+  ],
+  "blockages": [
+    {"id": "b1", "roomOrigin": "WORKROOM", "roomDest": "SAFE ROOM", "moveCost": 0, "breakDifficulty": 3}
   ],
   "patrols": [
     {

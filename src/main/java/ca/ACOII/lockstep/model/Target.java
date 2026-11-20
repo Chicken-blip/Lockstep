@@ -12,6 +12,7 @@ public class Target {
     private int alarmCountdown, availableFrom, availabilityDuration, maxCrew, arrestDuration;
     private List<Room> rooms;
     private List<Door> doors;
+    private List<Blockage> blockages;
     private List<Patrol> patrols;
     private List<Staff> staff;
 
@@ -26,6 +27,7 @@ public class Target {
         maxCrew = 0;
         rooms = new ArrayList<>();
         doors = new ArrayList<>();
+        blockages = new ArrayList<>();
         patrols = new ArrayList<>();
         staff = new ArrayList<>();
     }
@@ -110,6 +112,14 @@ public class Target {
         this.doors = doors;
     }
 
+    public List<Blockage> getBlockages() {
+        return blockages;
+    }
+
+    public void setBlockages(List<Blockage> blockages) {
+        this.blockages = blockages;
+    }
+
     public List<Patrol> getPatrols() {
         return patrols;
     }
@@ -146,6 +156,15 @@ public class Target {
         for (Door d : doors) {
             if (Objects.equals(d.getId(), doorId)) {
                 return d;
+            }
+        }
+        return null;
+    }
+
+    public Blockage findBlockage(String blockageId) {
+        for (Blockage b : blockages) {
+            if (Objects.equals(b.getId(), blockageId)) {
+                return b;
             }
         }
         return null;
@@ -192,6 +211,14 @@ public class Target {
             boolean testA = Objects.equals(d.getRoomOrigin(), roomA) || Objects.equals(d.getRoomDest(), roomA);
             boolean testB = Objects.equals(d.getRoomDest(), roomB) || Objects.equals(d.getRoomOrigin(), roomB);
             if (testA && testB) return d;
+        }
+        return null;
+    }
+    public Blockage findBlockage(String roomA, String roomB) {
+        for (Blockage b: getBlockages()) {
+            boolean testA = Objects.equals(b.getRoomOrigin(), roomA) || Objects.equals(b.getRoomDest(), roomA);
+            boolean testB = Objects.equals(b.getRoomDest(), roomB) || Objects.equals(b.getRoomOrigin(), roomB);
+            if (testA && testB) return b;
         }
         return null;
     }

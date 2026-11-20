@@ -20,6 +20,7 @@
     "arrestDuration": { "type": "integer", "minimum": 0 },
     "rooms": { "type": "array", "items": { "$ref": "#/$defs/room" } },
     "doors": { "type": "array", "items": { "$ref": "#/$defs/door" } },
+    "blockages": { "type": "array", "items": { "$ref": "#/$defs/blockage"} },
     "patrols": { "type": "array", "items": { "$ref": "#/$defs/patrol" } },
     "staff": { "type": "array", "items": { "$ref": "#/$defs/staff" } }
   },
@@ -116,6 +117,18 @@
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "difficulty": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "blockage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "roomOrigin", "roomDest", "moveCost", "breakDifficulty"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "roomOrigin": { "type": "string", "minLength": 1 },
+        "roomDest": { "type": "string", "minLength": 1 },
+        "moveCost": { "type": "integer", "minimum": 0 },
+        "breakDifficulty": {"type": "integer", "minimum": 0}
       }
     },
     "patrol": {

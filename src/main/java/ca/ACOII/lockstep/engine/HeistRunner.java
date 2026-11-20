@@ -11,7 +11,7 @@ public class HeistRunner {
     public Map<CrewMemberState, ActionQueue> crewQueues;
     public List<Guard> guards;
     public List<StaffState> staff;
-    Set<String> unlockedDoors, openContainers, disabledSensors;
+    Set<String> unlockedDoors, clearedBlockages, openContainers, disabledSensors;
     Target t;
     HeistInstance instance;
     boolean isCompleted = false, running = true;
@@ -42,6 +42,7 @@ public class HeistRunner {
 
         alarmTimer = -1;
         unlockedDoors = new HashSet<>();
+        clearedBlockages = new HashSet<>();
         openContainers = new HashSet<>();
         disabledSensors = new HashSet<>();
 
@@ -72,17 +73,16 @@ public class HeistRunner {
                             String destRoom = move.getDestinationRoom();
 
                             Door d = instance.getTarget().findDoor(currRoom, destRoom);
-                            if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
-                                if (!c.spotted) {
-                                    c.spotted = true;
-                                    log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
-                                    if (alarmTimer == -1) {
-                                        alarmTimer = t.getAlarmCountdown();
-                                        log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
+                                    if (!c.spotted) {
+                                        c.spotted = true;
+                                        log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
+                                        if (alarmTimer == -1) {
+                                            alarmTimer = t.getAlarmCountdown();
+                                            log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                        }
                                     }
                                 }
-                            }
-
                             c.setCurrentRoom(destRoom);
                             e = EventType.MOVE;
                         } else if (a instanceof PickLockAction pick) {
@@ -98,6 +98,13 @@ public class HeistRunner {
                                 e = EventType.FORCE_DOOR;
                             } else {
                                 e = EventType.FORCE_DOOR_PROGRESS;
+                            }
+                        } else if (a instanceof SmashAction smash) {
+                            if (crewQueues.get(c).remainingSteps == 0) {
+                                clearedBlockages.add(smash.getBlockageId());
+                                e = EventType.SMASH_BLOCKAGE;
+                            } else {
+                                e = EventType.SMASH_BLOCKAGE_PROGRESS;
                             }
                         } else if (a instanceof GrabAction grab) {
                             if (crewQueues.get(c).remainingSteps == 0) {
@@ -347,6 +354,25 @@ public class HeistRunner {
                 System.out.println("Attempt at forcing open unlocked door occurred");
                 running = false;
             }
+        } else if (action instanceof SmashAction smash) {
+            Room curr = t.findRoom(crew.currentRoom);
+            Blockage b = t.findBlockage(smash.blockageId);
+            if (b == null) {
+                System.out.println("Attempt at smashing nonexistent blockage occurred");
+                running = false;
+                return;
+            } if (!(Objects.equals(curr.getId(), b.getRoomDest()) || Objects.equals(curr.getId(), b.getRoomOrigin()))) {
+                System.out.println("Attempt at smashing blockage in different room occurred");
+                running = false;
+                return;
+            } if (b.getBreakDifficulty() == 0) {
+                System.out.println("Attempt at smashing incompatible blockage occurred");
+                running = false;
+                return;
+            } if (clearedBlockages.contains(b.getId())) {
+                System.out.println("Attempt at smashing cleared blockage occurred");
+                running = false;
+            }
         } else if (action instanceof MoveAction move) {
             if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
                 System.out.println("Invalid move destination");
@@ -355,7 +381,7 @@ public class HeistRunner {
             }
             Room destRoom = instance.getTarget().findRoom(move.getDestinationRoom());
             Room originRoom = instance.getTarget().findRoom(crew.getCurrentRoom());
-            boolean foundDoor = false, validOrigin = false, validDestination = false;
+            boolean foundDoor = false, validOrigin, validDestination;
             for (Door d : instance.getTarget().getDoors()) {
                 validOrigin = Objects.equals(d.getRoomOrigin(), originRoom.getId()) || Objects.equals(d.getRoomDest(), originRoom.getId());
                 validDestination = Objects.equals(d.getRoomOrigin(), destRoom.getId()) || Objects.equals(d.getRoomDest(), destRoom.getId());
@@ -363,6 +389,18 @@ public class HeistRunner {
                     if (d.getLock() == null || unlockedDoors.contains(d.getId())) {
                         foundDoor = true;
                         break;
+                    }
+                }
+            }
+            if (!foundDoor) {
+                for (Blockage b : instance.getTarget().getBlockages()) {
+                    validOrigin = Objects.equals(b.getRoomOrigin(), originRoom.getId()) || Objects.equals(b.getRoomDest(), originRoom.getId());
+                    validDestination = Objects.equals(b.getRoomOrigin(), destRoom.getId()) || Objects.equals(b.getRoomDest(), destRoom.getId());
+                    if (validOrigin && validDestination) {
+                        if (clearedBlockages.contains(b.getId())) {
+                            foundDoor = true;
+                            break;
+                        }
                     }
                 }
             }

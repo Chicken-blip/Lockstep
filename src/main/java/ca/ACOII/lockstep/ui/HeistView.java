@@ -32,7 +32,7 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "HIDE", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN CONTAINER", "FORCE OPEN DOOR", "DISABLE SENSOR", "GRAB"
+            "MOVE", "WAIT", "HIDE", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN CONTAINER", "FORCE OPEN DOOR", "SMASH BLOCKAGE", "DISABLE SENSOR", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
@@ -85,7 +85,7 @@ public class HeistView extends BorderPane {
     private VBox mapPane() {
         VBox pane = new VBox(10);
 
-        mapPane = new FloorPlanView(game.getInstance(), game, entries, app.def);
+        mapPane = new FloorPlanView(game.getInstance(), entries, app.def);
         mapPane.setPadding(new Insets(20));
         ScrollPane scroll = new ScrollPane(mapPane);
         scroll.setPannable(true);
@@ -152,7 +152,7 @@ public class HeistView extends BorderPane {
         Button add = new Button("Add Action");
         add.setOnAction(e -> {
             String value = actionTypes.getValue();
-            VBox pane = ((VBox) actionSelectionPane.getChildren().get(3));;
+            VBox pane = ((VBox) actionSelectionPane.getChildren().get(3));
             Action act = null;
             switch (value) {
                 case "MOVE" -> {
@@ -189,6 +189,11 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.forceDoorDuration(door, heistCrew.getSelectionModel().getSelectedItem());
                     act = new ForceDoorAction(door.getId(), dur);
                 }
+                case "SMASH BLOCKAGE" -> {
+                    Blockage blockage = target.findBlockage(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
+                    int dur = ActDurationCalculator.smashBlockageDuration(blockage, heistCrew.getSelectionModel().getSelectedItem());
+                    act = new SmashAction(blockage.getId(), dur);
+                }
                 case "DISABLE SENSOR" -> {
                     Sensor sensor = target.findSensor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
                     int dur = ActDurationCalculator.disableSensorDuration(sensor, heistCrew.getSelectionModel().getSelectedItem());
@@ -203,9 +208,7 @@ public class HeistView extends BorderPane {
             resetActionList(heistCrew.getSelectionModel().getSelectedItem());
         });
 
-        actionTypes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            add.setDisable(!actionPossible);
-        });
+        actionTypes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> add.setDisable(!actionPossible));
 
         actionSelectionPane.getChildren().add(actionTypes);
         actionSelectionPane.getChildren().add(formFor(actionTypes.getValue()));
@@ -229,6 +232,7 @@ public class HeistView extends BorderPane {
             case "PICK CASE" -> buildPickCaseForm();
             case "FORCE OPEN CONTAINER" -> buildForceOpenContainerForm();
             case "FORCE OPEN DOOR" -> buildForceOpenDoorForm();
+            case "SMASH BLOCKAGE" -> buildSmashBlockageForm();
             case "DISABLE SENSOR" -> buildDisableSensorForm();
             case "GRAB" -> buildGrabForm();
             default -> throw new IllegalStateException("Unexpected value: " + value);
@@ -485,6 +489,30 @@ public class HeistView extends BorderPane {
         return box;
     }
 
+    private VBox buildSmashBlockageForm() {
+        Label label = new Label("Blockage:");
+        ComboBox<String> blockageSelect = new ComboBox<>();
+
+        List<String> ids = new ArrayList<>();
+        for (Blockage b : target.getBlockages()) {
+            if (b.getBreakDifficulty() > 0) ids.add(b.getId());
+        }
+        blockageSelect.getItems().addAll(ids);
+        if (blockageSelect.getItems().isEmpty()) {
+            blockageSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            blockageSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, blockageSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
+
     private VBox executeQueuePane() {
         actionList = new ListView<>();
 
@@ -524,12 +552,9 @@ public class HeistView extends BorderPane {
             heistCrew.getSelectionModel().selectFirst();
             resetActionList(heistCrew.getSelectionModel().getSelectedItem());
 
-            HeistPlayer player = new HeistPlayer(mapPane, game.getLog(), target, new Runnable() {
-                @Override
-                public void run() {
-                    returnBtn.setDisable(false);
-                    returnBtn.setText("Continue");
-                }
+            HeistPlayer player = new HeistPlayer(mapPane, game.getLog(), target, () -> {
+                returnBtn.setDisable(false);
+                returnBtn.setText("Continue");
             }, game.getCampaign().maxStep, logList);
             player.play();
 
@@ -573,6 +598,9 @@ public class HeistView extends BorderPane {
                     }
                     if (action instanceof ForceDoorAction forceDoor) {
                         setText("FORCE OPEN door " + forceDoor.getDoorId());
+                    }
+                    if (action instanceof SmashAction smash) {
+                        setText("SMASH blockage " + smash.getBlockageId());
                     }
                     if (action instanceof DisableSensorAction disable) {
                         setText("DISABLE SENSOR " + disable.getSensorId());

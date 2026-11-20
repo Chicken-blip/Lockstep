@@ -1,6 +1,5 @@
 package ca.ACOII.lockstep.ui;
 
-import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.engine.HeistInstance;
 import ca.ACOII.lockstep.load.*;
@@ -23,7 +22,7 @@ public class FloorPlanView extends Pane {
     Map<String, Circle> actors;
     Map<String, List<String>> actorsPerRoom;
     Map<String, Rectangle> rooms;
-    Map<String, Line> doors;
+    Map<String, Line> connections;
     Map<String, Circle> sensors;
     Map<String, Tooltip> roomTooltips;
     List<String> removedItemIds;
@@ -31,14 +30,14 @@ public class FloorPlanView extends Pane {
     Double[] offsetY = new Double[]{-10d, -20d, -20d, -10d, 10d, 20d, 20d, 10d};
     Definitions def;
     HeistInstance instance;
-    public FloorPlanView(HeistInstance instance, Game g, List<RosterEntry> entries, Definitions def) {
+    public FloorPlanView(HeistInstance instance, List<RosterEntry> entries, Definitions def) {
         super();
         this.def = def;
         this.instance = instance;
         actors = new HashMap<>();
         actorsPerRoom = new HashMap<>();
         rooms = new HashMap<>();
-        doors = new HashMap<>();
+        connections = new HashMap<>();
         sensors = new HashMap<>();
         roomTooltips = new HashMap<>();
         removedItemIds = new ArrayList<>();
@@ -49,7 +48,7 @@ public class FloorPlanView extends Pane {
                     instance.getTarget().findRoom(d.getRoomDest()).getY() + ROOM_HEIGHT / 2);
             connection.setStroke(d.getLock() != null ? Color.RED : Color.BLACK);
             connection.setStrokeWidth(5);
-            connection.setPickOnBounds(true);
+            connection.setPickOnBounds(false);
             Tooltip tip = new Tooltip();
             StringBuilder txt = new StringBuilder(d.getId());
             if (d.getLock() != null) {
@@ -62,7 +61,7 @@ public class FloorPlanView extends Pane {
             tip.setText(txt.toString());
             tip.setShowDelay(Duration.millis(50));
             Tooltip.install(connection, tip);
-            doors.put(d.getId(), connection);
+            connections.put(d.getId(), connection);
             this.getChildren().add(connection);
 
             if (d.getSensor() != null) {
@@ -82,6 +81,23 @@ public class FloorPlanView extends Pane {
                 sensors.put(d.getSensor().getId(), circle);
                 this.getChildren().add(circle);
             }
+        }
+        for (Blockage b : instance.getTarget().getBlockages()) {
+            Line connection = new Line(instance.getTarget().findRoom(b.getRoomOrigin()).getX() + ROOM_WIDTH / 2,
+                    instance.getTarget().findRoom(b.getRoomOrigin()).getY() + ROOM_HEIGHT / 2,
+                    instance.getTarget().findRoom(b.getRoomDest()).getX() + ROOM_WIDTH / 2,
+                    instance.getTarget().findRoom(b.getRoomDest()).getY() + ROOM_HEIGHT / 2);
+            connection.setStroke(Color.BLACK);
+            connection.setStrokeWidth(5);
+            connection.getStrokeDashArray().addAll(15d, 10d);
+            connection.setPickOnBounds(false);
+            Tooltip tip = new Tooltip();
+            tip.setText(b.getId() + (b.getBreakDifficulty() > 0 ? "\nSMASH - Difficulty: " + b.getBreakDifficulty() : "OPEN"));
+            tip.setShowDelay(Duration.millis(50));
+            Tooltip.install(connection, tip);
+            connections.put(b.getId(), connection);
+            this.getChildren().add(connection);
+
         }
         for (Room r : instance.getTarget().getRooms()) {
             Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
@@ -337,8 +353,12 @@ public class FloorPlanView extends Pane {
     }
 
     public void updateDoor(String doorId) {
-        Line line = doors.get(doorId);
+        Line line = connections.get(doorId);
         line.setStroke(Color.BLACK);
+    }
+    public void updateBlockage(String blockageId) {
+        Line line = connections.get(blockageId);
+        line.setStrokeDashOffset(0);
     }
 
     public void updateSensor(String sensorId) {

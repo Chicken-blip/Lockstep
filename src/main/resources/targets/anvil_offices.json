@@ -25,6 +25,7 @@
     {"id": "d4", "roomOrigin": "CUBICLES A", "roomDest": "CUBICLES B", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d5", "roomOrigin": "CUBICLES B", "roomDest": "CUBICLES C", "moveCost": 1, "lock": null, "sensor": null}
   ],
+  "blockages": [],
   "patrols": [],
   "staff": []
 }

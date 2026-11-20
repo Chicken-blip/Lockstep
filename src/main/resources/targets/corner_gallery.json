@@ -22,6 +22,7 @@
     {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 2, "forceDifficulty": 0}, "sensor": null},
     {"id": "d4", "roomOrigin": "OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": null, "sensor": null}
   ],
+  "blockages": [],
   "patrols": [
     {
       "id": "p1",

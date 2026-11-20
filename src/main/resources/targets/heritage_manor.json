@@ -41,6 +41,7 @@
     {"id": "d12", "roomOrigin": "HALLWAY", "roomDest": "CHAPEL", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d13", "roomOrigin": "CHAPEL", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 5, "forceDifficulty": 0}, "sensor": null}
   ],
+  "blockages": [],
   "patrols": [
     {
       "id": "p1",

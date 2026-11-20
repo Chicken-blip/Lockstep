@@ -48,6 +48,10 @@ public class TargetLoader {
                 if (!roomIDs.contains(d.getRoomOrigin())) throw new RuntimeException("Door " + d.getId() + " for Target " + t.getName() + " has an invalid room origin");
                 if (!roomIDs.contains(d.getRoomDest())) throw new RuntimeException("Door " + d.getId() + " for Target " + t.getName() + " has an invalid room destination");
             }
+            for (Blockage b : t.getBlockages()) {
+                if (!roomIDs.contains(b.getRoomOrigin())) throw new RuntimeException("Door " + b.getId() + " for Target " + t.getName() + " has an invalid room origin");
+                if (!roomIDs.contains(b.getRoomDest())) throw new RuntimeException("Door " + b.getId() + " for Target " + t.getName() + " has an invalid room destination");
+            }
 
             for (Patrol p : t.getPatrols()) {
                 for (PatrolEntry e : p.getPatrolRoute()) {

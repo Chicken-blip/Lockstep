@@ -26,6 +26,7 @@
     {"id": "d5", "roomOrigin": "CATALOG ROOM", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 1, "forceDifficulty": 0}, "sensor": {"id": "s2", "difficulty": 4}},
     {"id": "d6", "roomOrigin": "SECURITY OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 3, "forceDifficulty": 0}, "sensor": {"id": "s3", "difficulty": 3}}
   ],
+  "blockages": [],
   "patrols": [
     {
       "id": "p1",

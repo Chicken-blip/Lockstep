@@ -25,6 +25,7 @@
     {"id": "d4", "roomOrigin": "DISPENSARY", "roomDest": "SHOPPING AREA", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d5", "roomOrigin": "SHOPPING AREA", "roomDest": "ALLEY", "moveCost": 1, "lock": null, "sensor": null}
   ],
+  "blockages": [],
   "patrols": [],
   "staff": [
     {
