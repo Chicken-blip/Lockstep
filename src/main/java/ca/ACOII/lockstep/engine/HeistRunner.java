@@ -73,16 +73,21 @@ public class HeistRunner {
                             String destRoom = move.getDestinationRoom();
 
                             Door d = instance.getTarget().findDoor(currRoom, destRoom);
-                                if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
-                                    if (!c.spotted) {
-                                        c.spotted = true;
-                                        log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
-                                        if (alarmTimer == -1) {
-                                            alarmTimer = t.getAlarmCountdown();
-                                            log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
-                                        }
+                            if (d == null) {
+                                if (instance.getTarget().findBlockage(currRoom, destRoom) == null) {
+                                    a = null;
+                                    running = false;
+                                };
+                            } else if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
+                                if (!c.spotted) {
+                                    c.spotted = true;
+                                    log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
+                                    if (alarmTimer == -1) {
+                                        alarmTimer = t.getAlarmCountdown();
+                                        log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
                                     }
                                 }
+                            }
                             c.setCurrentRoom(destRoom);
                             e = EventType.MOVE;
                         } else if (a instanceof PickLockAction pick) {

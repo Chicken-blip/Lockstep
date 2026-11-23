@@ -4,7 +4,7 @@
   "entryRoom": "ENTRANCE",
   "exitRooms": ["OUTSIDE", "GARDEN"],
   "alarmCountdown": 3,
-  "availableFrom": 0,
+  "availableFrom": 10,
   "availabilityDuration": 15,
   "maxCrew": 3,
   "arrestDuration": 10,
@@ -23,7 +23,7 @@
     {"id": "MASTER BEDROOM", "x": 750, "y": 350, "roomLoot": {"sapphire_pendant": 0.5, "mahogany_casket": 0.5, "ivory_fan": 0.5}, "roomContainers": [], "hasCover": false},
     {"id": "CHAPEL", "x": 700, "y": 250, "roomLoot": {"marriage_certificate": 0.5, "concert_harp": 0.5}, "roomContainers": [], "hasCover": false},
     {"id": "VAULT", "x": 800, "y": 250, "roomLoot": {}, "roomContainers": [
-      {"id": "Family Safe", "type": "safe", "contents": ["the_family_heirloom"], "crackDifficulty": 3}
+      {"id": "Family Safe", "type": "safe", "contents": ["the_family_heirloom"], "crackDifficulty": 12}
     ], "hasCover": false}
   ],
   "doors": [
@@ -33,13 +33,13 @@
     {"id": "d4", "roomOrigin": "DINING ROOM", "roomDest": "KITCHEN", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d5", "roomOrigin": "KITCHEN", "roomDest": "PANTRY", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d6", "roomOrigin": "PANTRY", "roomDest": "CELLAR", "moveCost": 1, "lock": null, "sensor": null},
-    {"id": "d7", "roomOrigin": "GRAND HALL", "roomDest": "HALLWAY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 4}},
-    {"id": "d8", "roomOrigin": "HALLWAY", "roomDest": "GARDEN", "moveCost": 1, "lock": {"pickDifficulty": 3, "forceDifficulty": 5}, "sensor": {"id": "s2", "difficulty": 4}},
+    {"id": "d7", "roomOrigin": "GRAND HALL", "roomDest": "HALLWAY", "moveCost": 1, "lock": null, "sensor": {"id": "s1", "difficulty": 8}},
+    {"id": "d8", "roomOrigin": "HALLWAY", "roomDest": "GARDEN", "moveCost": 1, "lock": {"pickDifficulty": 7, "forceDifficulty": 7}, "sensor": {"id": "s2", "difficulty": 6}},
     {"id": "d9", "roomOrigin": "HALLWAY", "roomDest": "LIBRARY", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d10", "roomOrigin": "LIBRARY", "roomDest": "PRIVATE STUDY", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d11", "roomOrigin": "PRIVATE STUDY", "roomDest": "MASTER BEDROOM", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d12", "roomOrigin": "HALLWAY", "roomDest": "CHAPEL", "moveCost": 1, "lock": null, "sensor": null},
-    {"id": "d13", "roomOrigin": "CHAPEL", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 5, "forceDifficulty": 0}, "sensor": null}
+    {"id": "d13", "roomOrigin": "CHAPEL", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 6, "forceDifficulty": 0}, "sensor": null}
   ],
   "blockages": [],
   "patrols": [

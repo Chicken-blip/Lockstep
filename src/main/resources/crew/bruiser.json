@@ -1,0 +1,8 @@
+{
+  "id": "bruiser",
+  "name": "The Bruiser",
+  "skills": {"pick": 0, "crack": 0, "hack": 0, "strength": 10},
+  "recruitFee": 125,
+  "dayAvailability": 10,
+  "hideDuration": 2
+}

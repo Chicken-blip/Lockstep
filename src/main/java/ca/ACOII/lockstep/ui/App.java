@@ -40,7 +40,7 @@ public class App extends Application {
     public static void main(String[] args) {launch(args);}
     @Override
     public void start(Stage stage) {
-        game.setMoney(1000);
+        game.setMoney(75);
 
         scene = new Scene(buildScreen(Screen.MENU), 800, 600);
 

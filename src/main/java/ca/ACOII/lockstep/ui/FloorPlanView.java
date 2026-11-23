@@ -49,17 +49,7 @@ public class FloorPlanView extends Pane {
             connection.setStroke(d.getLock() != null ? Color.RED : Color.BLACK);
             connection.setStrokeWidth(5);
             connection.setPickOnBounds(false);
-            Tooltip tip = new Tooltip();
-            StringBuilder txt = new StringBuilder(d.getId());
-            if (d.getLock() != null) {
-                txt.append(" (LOCKED)");
-                txt.append((d.getLock().getPickDifficulty() > 0 ? "\nPICK LOCK - Difficulty: " + d.getLock().getPickDifficulty() : ""));
-                txt.append((d.getLock().getForceDifficulty() > 0 ? "\nFORCE OPEN - Difficulty: " + d.getLock().getForceDifficulty() : ""));
-            } else {
-                txt.append(" (OPEN)");
-            }
-            tip.setText(txt.toString());
-            tip.setShowDelay(Duration.millis(50));
+            Tooltip tip = getDoorTooltip(d);
             Tooltip.install(connection, tip);
             connections.put(d.getId(), connection);
             this.getChildren().add(connection);
@@ -100,17 +90,7 @@ public class FloorPlanView extends Pane {
 
         }
         for (Room r : instance.getTarget().getRooms()) {
-            Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
-            room.setStroke(Color.BLACK);
-            if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId()) && instance.getTarget().getExitRooms().contains(r.getId())) {
-                room.setFill(Color.CYAN);
-            } else if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId())) {
-                room.setFill(Color.MAGENTA);
-            } else if (instance.getTarget().getExitRooms().contains(r.getId())) {
-                room.setFill(Color.YELLOW);
-            } else {
-                room.setFill(Color.WHITE);
-            }
+            Rectangle room = getRoomRectangle(instance, r);
             Label label = new Label(r.getId());
             label.setLayoutX(r.getX() + 5);
             label.setLayoutY(r.getY() + 7);
@@ -137,6 +117,36 @@ public class FloorPlanView extends Pane {
         }
 
 
+    }
+
+    private Rectangle getRoomRectangle(HeistInstance instance, Room r) {
+        Rectangle room = new Rectangle(r.getX(), r.getY(), ROOM_WIDTH, ROOM_HEIGHT);
+        room.setStroke(Color.BLACK);
+        if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId()) && instance.getTarget().getExitRooms().contains(r.getId())) {
+            room.setFill(Color.CYAN);
+        } else if (Objects.equals(instance.getTarget().getEntryRoom(), r.getId())) {
+            room.setFill(Color.MAGENTA);
+        } else if (instance.getTarget().getExitRooms().contains(r.getId())) {
+            room.setFill(Color.YELLOW);
+        } else {
+            room.setFill(Color.WHITE);
+        }
+        return room;
+    }
+
+    private Tooltip getDoorTooltip(Door d) {
+        Tooltip tip = new Tooltip();
+        StringBuilder txt = new StringBuilder(d.getId());
+        if (d.getLock() != null) {
+            txt.append(" (LOCKED)");
+            txt.append((d.getLock().getPickDifficulty() > 0 ? "\nPICK LOCK - Difficulty: " + d.getLock().getPickDifficulty() : ""));
+            txt.append((d.getLock().getForceDifficulty() > 0 ? "\nFORCE OPEN - Difficulty: " + d.getLock().getForceDifficulty() : ""));
+        } else {
+            txt.append(" (OPEN)");
+        }
+        tip.setText(txt.toString());
+        tip.setShowDelay(Duration.millis(50));
+        return tip;
     }
 
     private double getXMidpoint(Room roomA, Room roomB) {
