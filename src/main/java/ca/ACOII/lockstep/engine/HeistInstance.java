@@ -5,6 +5,7 @@ import ca.ACOII.lockstep.model.LootContainer;
 import ca.ACOII.lockstep.model.Room;
 import ca.ACOII.lockstep.model.Target;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,16 +13,18 @@ import java.util.Map;
 
 public class HeistInstance {
     Target target;
-    Map<String, List<String>> roomLootIds, containerLootIds;
+    Map<String, List<String>> roomLootIds, roomKeycardIds, containerLootIds;
     String mainScoreId;
     Definitions definitions;
     public HeistInstance(Target target, Definitions definitions) {
         this.target = target;
         this.definitions = definitions;
         roomLootIds = new HashMap<>();
+        roomKeycardIds = new HashMap<>();
         containerLootIds = new HashMap<>();
         for (Room r : target.getRooms()) {
             roomLootIds.put(r.getId(), new ArrayList<>());
+            roomKeycardIds.put(r.getId(), new ArrayList<>());
             for (LootContainer container : r.getRoomContainers()) {
                 containerLootIds.put(container.getId(), new ArrayList<>(container.getContents()));
             }
@@ -35,6 +38,9 @@ public class HeistInstance {
 
     public List<String> getRoomLoot(String roomId) {
         return roomLootIds.get(roomId);
+    }
+    public List<String> getRoomKeycards(String id) {
+        return roomKeycardIds.get(id);
     }
     public List<String> getContainerLoot(String containerId) {
         return containerLootIds.get(containerId);
@@ -67,4 +73,6 @@ public class HeistInstance {
     public void setMainScoreId(String mainScoreId) {
         this.mainScoreId = mainScoreId;
     }
+
+
 }

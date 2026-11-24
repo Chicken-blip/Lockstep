@@ -32,7 +32,7 @@ public class HeistView extends BorderPane {
     ListView<String> logList;
 
     private static final List<String> ACTIONS = List.of(
-            "MOVE", "WAIT", "HIDE", "PICK LOCK", "CRACK SAFE", "PICK CASE", "FORCE OPEN CONTAINER", "FORCE OPEN DOOR", "SMASH BLOCKAGE", "DISABLE SENSOR", "GRAB"
+            "MOVE", "WAIT", "HIDE", "PICK LOCK", "USE KEYCARD", "CRACK SAFE", "PICK CASE", "FORCE OPEN CONTAINER", "FORCE OPEN DOOR", "SMASH BLOCKAGE", "DISABLE SENSOR", "GRAB"
     );
     ComboBox<RosterEntry> heistCrew;
     ListView<Action> actionList;
@@ -169,6 +169,10 @@ public class HeistView extends BorderPane {
                     int dur = ActDurationCalculator.pickLockDuration(door, heistCrew.getSelectionModel().getSelectedItem());
                     act = new PickLockAction(door.getId(), dur);
                 }
+                case "USE KEYCARD" -> {
+                    Door door = target.findDoor(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
+                    act = new UseKeycardAction(door.getId(), ((KeycardLock) door.getLock()).getKeycardId(), 1);
+                }
                 case "CRACK SAFE" -> {
                     SafeContainer safe = (SafeContainer) target.findContainer(((ComboBox<String>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem());
                     int dur = ActDurationCalculator.crackDuration(safe, heistCrew.getSelectionModel().getSelectedItem());
@@ -200,8 +204,12 @@ public class HeistView extends BorderPane {
                     act = new DisableSensorAction(sensor.id, dur);
                 }
                 case "GRAB" -> {
-                    LootItem item = ((ComboBox<LootItem>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem();
-                    act = new GrabAction(item);
+                    Object object = ((ComboBox<Object>) pane.getChildren().get(1)).getSelectionModel().getSelectedItem();
+                    if (object instanceof LootItem item) {
+                        act = new GrabAction(item);
+                    } else if (object instanceof Keycard keycard) {
+                        act = new GrabAction(keycard);
+                    }
                 }
             }
             plans.get(heistCrew.getSelectionModel().getSelectedItem().getData().getName()).add(act);
@@ -228,6 +236,7 @@ public class HeistView extends BorderPane {
             case "WAIT" -> buildWaitForm();
             case "HIDE" -> buildHideForm();
             case "PICK LOCK" -> buildPickLockForm();
+            case "USE KEYCARD" -> buildUseKeycardForm();
             case "CRACK SAFE" -> buildCrackSafeForm();
             case "PICK CASE" -> buildPickCaseForm();
             case "FORCE OPEN CONTAINER" -> buildForceOpenContainerForm();
@@ -286,7 +295,11 @@ public class HeistView extends BorderPane {
 
         List<String> ids = new ArrayList<>();
         for (Door d : target.getDoors()) {
-            if (d.getLock() != null) if (d.getLock().getPickDifficulty() > 0) ids.add(d.getId());
+            if (d.getLock() != null && d.getLock() instanceof PickLock pick) {
+                if (pick.getPickDifficulty() > 0) {
+                    ids.add(d.getId());
+                }
+            }
         }
         doorSelect.getItems().addAll(ids);
         if (doorSelect.getItems().isEmpty()) {
@@ -304,6 +317,34 @@ public class HeistView extends BorderPane {
         return box;
     }
 
+    private VBox buildUseKeycardForm() {
+        Label label = new Label("Door:");
+        ComboBox<String> doorSelect = new ComboBox<>();
+
+        List<String> ids = new ArrayList<>();
+        for (Door d : target.getDoors()) {
+            if (d.getLock() != null && d.getLock() instanceof KeycardLock keycard) {
+                if (keycard.getKeycardId() != null) {
+                    ids.add(d.getId());
+                }
+            }
+        }
+
+        doorSelect.getItems().addAll(ids);
+        if (doorSelect.getItems().isEmpty()) {
+            doorSelect.setDisable(true);
+            actionPossible = false;
+        }
+        else {
+            doorSelect.getSelectionModel().selectFirst();
+            actionPossible = true;
+        }
+
+        VBox box = new VBox();
+        box.getChildren().addAll(label, doorSelect);
+        box.setAlignment(Pos.CENTER);
+        return box;
+    }
     private VBox buildCrackSafeForm() {
         Label label = new Label("Container:");
         ComboBox<String> containerSelect = new ComboBox<>();
@@ -358,26 +399,30 @@ public class HeistView extends BorderPane {
 
     private VBox buildGrabForm() {
         Label label = new Label("Item:");
-        ComboBox<LootItem> itemSelect = new ComboBox<>();
+        ComboBox<Object> itemSelect = new ComboBox<>();
         itemSelect.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(LootItem item, boolean empty) {
+            protected void updateItem(Object item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                } else {
-                    setText(item.getName());
+                } else if (item instanceof LootItem){
+                    setText(((LootItem) item).getName());
+                } else if (item instanceof Keycard) {
+                    setText(((Keycard) item).getName());
                 }
             }
         });
         itemSelect.setButtonCell(new ListCell<>() {
             @Override
-            protected void updateItem(LootItem item, boolean empty) {
+            protected void updateItem(Object item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) {
                     setText(null);
-                } else {
-                    setText(item.getName());
+                } else if (item instanceof LootItem){
+                    setText(((LootItem) item).getName());
+                } else if (item instanceof Keycard) {
+                    setText(((Keycard) item).getName());
                 }
             }
         });
@@ -389,11 +434,18 @@ public class HeistView extends BorderPane {
             }
             for (LootContainer c : r.getRoomContainers()) {
                 for (String id : instance.getContainerLoot(c.getId())) {
-                    items.add(game.getCampaign().definitions.findLoot(id));
+                    items.add(game.def.findLoot(id));
                 }
             }
         }
         itemSelect.getItems().addAll(items);
+        List<Keycard> keycards = new ArrayList<>();
+        for (Room r : target.getRooms()) {
+            for (String card : instance.getRoomKeycards(r.getId())) {
+                keycards.add(game.def.findKeycard(card));
+            }
+        }
+        itemSelect.getItems().addAll(keycards);
         if (itemSelect.getItems().isEmpty()) {
             itemSelect.setDisable(true);
             actionPossible = false;
@@ -471,7 +523,11 @@ public class HeistView extends BorderPane {
 
         List<String> ids = new ArrayList<>();
         for (Door d : target.getDoors()) {
-            if (d.getLock() != null) if (d.getLock().getForceDifficulty() > 0) ids.add(d.getId());
+            if (d.getLock() != null) {
+                if (d.getLock() instanceof PickLock pick) {
+                    if (pick.getForceDifficulty() > 0) ids.add(d.getId());
+                }
+            }
         }
         doorSelect.getItems().addAll(ids);
         if (doorSelect.getItems().isEmpty()) {
@@ -587,6 +643,9 @@ public class HeistView extends BorderPane {
                     if (action instanceof PickLockAction pick) {
                         setText("PICK LOCK door " + pick.getDoorId());
                     }
+                    if (action instanceof UseKeycardAction useKeycard) {
+                        setText("USE KEYCARD " + game.def.findKeycard(useKeycard.getKeycardId()).getName() + " on door " + useKeycard.getDoorId());
+                    }
                     if (action instanceof CrackAction crack) {
                         setText("CRACK SAFE " + crack.getContainerId());
                     }
@@ -606,7 +665,11 @@ public class HeistView extends BorderPane {
                         setText("DISABLE SENSOR " + disable.getSensorId());
                     }
                     if (action instanceof GrabAction grab) {
-                        setText("GRAB item " + grab.getItem().getName());
+                        if (game.def.findLoot(grab.getItemId()) != null) {
+                            setText("GRAB item " + game.def.findLoot(grab.getItemId()).getName());
+                        } else {
+                            setText("GRAB keycard " + game.def.findKeycard(grab.getItemId()).getName());
+                        }
                     }
 
                 }

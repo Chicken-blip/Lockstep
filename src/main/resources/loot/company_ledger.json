@@ -1,0 +1,8 @@
+{
+  "id": "company_ledger",
+  "name": "Company Ledger",
+  "grabCost": 1,
+  "pieceValue": 250,
+  "set": null,
+  "isMainScore": true
+}

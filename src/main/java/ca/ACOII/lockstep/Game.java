@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.function.Predicate;
 
 public class Game {
-    Definitions def;
+    public Definitions def;
     Campaign campaign;
     String saveFile;
     EventLog log;

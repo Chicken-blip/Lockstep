@@ -14,12 +14,12 @@ public class ActionQueue {
     public Action tick() {
         if (currentAction == null) {
             if (plan.isEmpty()) return null;
-            currentAction = plan.getFirst();
-            plan.removeFirst();
+            currentAction = plan.removeFirst();
+            if (currentAction == null) return null;
             remainingSteps = currentAction.getDuration();
         }
         remainingSteps--;
-        if (remainingSteps == 0) {
+        if (remainingSteps <= 0) {
             Action a = currentAction;
             currentAction = null;
             return a;
@@ -29,5 +29,10 @@ public class ActionQueue {
 
     public boolean isDone() {
         return (plan.isEmpty() && currentAction == null);
+    }
+
+    public void cancelCurrentAction() {
+        currentAction = null;
+        remainingSteps = 0;
     }
 }

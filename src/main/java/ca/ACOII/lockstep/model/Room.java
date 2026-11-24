@@ -8,6 +8,7 @@ import java.util.Map;
 public class Room {
     private String id;
     private Map<String, Double> roomLoot;
+    private List<String> roomKeycards;
     private List<LootContainer> roomContainers;
     private boolean hasCover;
     private int x, y;
@@ -15,6 +16,7 @@ public class Room {
     public Room() {
         id = null;
         roomLoot = new HashMap<>();
+        roomKeycards = new ArrayList<>();
         roomContainers = new ArrayList<>();
     }
 
@@ -39,6 +41,14 @@ public class Room {
 
     public void setRoomContainers(List<LootContainer> roomContainers) {
         this.roomContainers = roomContainers;
+    }
+
+    public List<String> getRoomKeycards() {
+        return roomKeycards;
+    }
+
+    public void setRoomKeycards(List<String> roomKeycards) {
+        this.roomKeycards = roomKeycards;
     }
 
     public int getX() {

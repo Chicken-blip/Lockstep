@@ -2,6 +2,7 @@ import ca.ACOII.lockstep.Game;
 import ca.ACOII.lockstep.campaign.RosterEntry;
 import ca.ACOII.lockstep.engine.*;
 import ca.ACOII.lockstep.load.Definitions;
+import ca.ACOII.lockstep.model.LootItem;
 import ca.ACOII.lockstep.model.Target;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,8 +50,10 @@ public class HeistTests {
         }
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
 
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
+        List<String> inv = game.getStash().getItems().stream().map(LootItem::getId).toList();
+
+        assertTrue(inv.contains("candelabra_b"));
+        assertTrue(inv.contains("safe_contents"));
         assertEquals(2, game.getCalendar().getCurrentDay());
 
     }
@@ -86,9 +89,11 @@ public class HeistTests {
         }
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
 
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_a")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
+        List<String> inv = game.getStash().getItems().stream().map(LootItem::getId).toList();
+
+        assertTrue(inv.contains("candelabra_b"));
+        assertTrue(inv.contains("candelabra_a"));
+        assertTrue(inv.contains("safe_contents"));
         assertEquals(2, game.getCalendar().getCurrentDay());
     }
 
@@ -118,8 +123,11 @@ public class HeistTests {
         }
         assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(10).evtType());
         assertSame(EventType.ESCAPED, game.getLog().getEvents().getLast().evtType());
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
+
+        List<String> inv = game.getStash().getItems().stream().map(LootItem::getId).toList();
+
+        assertTrue(inv.contains("candelabra_b"));
+        assertTrue(inv.contains("safe_contents"));
         assertEquals(2, game.getCalendar().getCurrentDay());
     }
 
@@ -189,11 +197,30 @@ public class HeistTests {
             assertNotSame(EventType.GUARD_SPOTTED, e.evtType());
         }
 
+        List<String> inv = game.getStash().getItems().stream().map(LootItem::getId).toList();
 
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("candelabra_b")));
-        assertTrue(game.getStash().getItems().contains(definitions.findLoot("safe_contents")));
+        assertTrue(inv.contains("candelabra_b"));
+        assertTrue(inv.contains("safe_contents"));
         assertEquals(2, game.getCalendar().getCurrentDay());
 
+    }
+
+    @Test
+    public void test_invalidActionDoesNotStopRemainingQueue() {
+        game.setMoney(100);
+        game.recruit("thief", "Thief A");
+
+        Target target = definitions.findTarget("corner_gallery");
+        List<Action> actions = new ArrayList<>();
+        actions.add(new GrabAction(definitions.findLoot("safe_contents")));
+        actions.add(new WaitAction(1));
+
+        game.prepareHeist(target);
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+
+        List<EventType> eventTypes = game.getLog().getEvents().stream().map(Event::evtType).toList();
+        assertTrue(eventTypes.contains(EventType.ACTION_FAILED));
+        assertTrue(eventTypes.contains(EventType.WAIT));
     }
 
     @Test

@@ -25,6 +25,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Keycard Schema">
+          <value>
+            <SchemaInfo>
+              <option name="generatedName" value="New Schema" />
+              <option name="name" value="Keycard Schema" />
+              <option name="relativePathToSchema" value="src/main/resources/keycards/keycard.schema.json" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="src/main/resources/keycards/secure_storage_card.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="LootItem Schema">
           <value>
             <SchemaInfo>
@@ -141,6 +157,9 @@
                   </Item>
                   <Item>
                     <option name="path" value="src/main/resources/targets/scongat_pawn.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="src/main/resources/targets/secure_storage.json" />
                   </Item>
                 </list>
               </option>

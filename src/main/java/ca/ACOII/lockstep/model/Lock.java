@@ -1,26 +1,15 @@
 package ca.ACOII.lockstep.model;
 
-public class Lock {
-    private int pickDifficulty, forceDifficulty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-    public Lock() {
-        pickDifficulty = 0; forceDifficulty = 0;
-    }
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = PickLock.class, name = "pick"),
+        @JsonSubTypes.Type(value = KeycardLock.class, name = "keycard")
+})
 
-    public int getPickDifficulty() {
-        return pickDifficulty;
-    }
-
-    public int getForceDifficulty() {
-        return forceDifficulty;
-    }
-
-    public void setForceDifficulty(int forceDifficulty) {
-        this.forceDifficulty = forceDifficulty;
-    }
-
-    public void setPickDifficulty(int pickDifficulty) {
-        this.pickDifficulty = pickDifficulty;
-    }
+public abstract class Lock {
+    public Lock() {}
 
 }

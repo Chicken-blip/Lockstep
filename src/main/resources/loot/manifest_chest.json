@@ -1,0 +1,8 @@
+{
+  "id": "manifest_chest",
+  "name": "Manifest Chest",
+  "grabCost": 2,
+  "pieceValue": 100,
+  "set": "harbor_manifest",
+  "isMainScore": false
+}

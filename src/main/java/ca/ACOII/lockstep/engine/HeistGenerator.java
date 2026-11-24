@@ -20,6 +20,9 @@ public class HeistGenerator {
                     instance.getRoomLoot(r.getId()).add(lootId);
                 }
             }
+            for (String cardId : r.getRoomKeycards()) {
+                instance.getRoomKeycards(r.getId()).add(cardId);
+            }
         }
         return instance;
     }

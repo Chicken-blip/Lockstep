@@ -10,6 +10,7 @@
     {"id": "printer_station", "name": "Printer Station", "setValue": 100},
     {"id": "vintage_port_selection", "name": "Vintage Port Selection", "setValue": 275},
     {"id": "founders_relics", "name": "The Founder's Relics", "setValue": 340},
-    {"id": "estate_correspondence", "name": "Estate Correspondence", "setValue": 225}
+    {"id": "estate_correspondence", "name": "Estate Correspondence", "setValue": 225},
+    {"id": "harbor_manifest", "name": "Harbor Manifest", "setValue": 500}
   ]
 }

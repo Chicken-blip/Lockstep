@@ -53,6 +53,11 @@ public class HeistPlayer {
         String itemName = e.description().substring(e.description().lastIndexOf("Grabbed ") + 7).trim();
         return plan.def.findLoot(plan.def.lootNameToId(itemName));
     }
+    private Keycard getKeycard(Event e) {
+        if (e.evtType() != EventType.GRAB) return null;
+        String cardName = e.description().substring(e.description().lastIndexOf("Grabbed ") + 7).trim();
+        return plan.def.findKeycard(plan.def.keycardNameToId(cardName));
+    }
     private Door getDoor(Event e) {
         if (e.evtType() != EventType.FORCE_DOOR && e.evtType() != EventType.PICK_LOCK) return null;
         String doorId = e.description().substring(e.description().lastIndexOf("door ") + 4).trim();
@@ -69,6 +74,15 @@ public class HeistPlayer {
             if (r.getRoomLoot().containsKey(i.getId())) return r;
             for (LootContainer container : r.getRoomContainers()) {
                 if (container.getContents().contains(i.getId())) return r;
+            }
+        }
+        return null;
+    }
+    private Room getRoomParent(Keycard card) {
+        for (Room r : plan.instance.getTarget().getRooms()) {
+            if (r.getRoomKeycards().contains(card.getId())) return r;
+            for (LootContainer container : r.getRoomContainers()) {
+                if (container.getContents().contains(card.getId())) return r;
             }
         }
         return null;
@@ -92,6 +106,9 @@ public class HeistPlayer {
                     }
                     if (getItem(e) != null && getRoomParent(getItem(e)) != null) {
                         plan.updateRoomContents(getItem(e).getId(), getRoomParent(getItem(e)).getId());
+                    }
+                    if (getKeycard(e) != null && getRoomParent(getKeycard(e)) != null) {
+                        plan.updateRoomContents(getKeycard(e).getId(), getRoomParent(getKeycard(e)).getId());
                     }
                     if (getDoor(e) != null) {
                         plan.updateDoor(getDoor(e).getId());

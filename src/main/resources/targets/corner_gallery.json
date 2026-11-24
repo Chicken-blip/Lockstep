@@ -9,17 +9,17 @@
   "maxCrew": 1,
   "arrestDuration": 3,
   "rooms": [
-    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": [], "hasCover": false},
-    {"id": "LOBBY", "x": 150, "y": 100, "roomLoot": {"candelabra_a": 1.0}, "roomContainers": [], "hasCover": false},
-    {"id": "OFFICE", "x": 250, "y": 50, "roomLoot": {"register_cash": 0.6}, "roomContainers": [], "hasCover": false},
-    {"id": "VAULT", "x": 250, "y": 150, "roomLoot": {"candelabra_b": 1.0}, "roomContainers": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": [], "roomKeycards": [], "hasCover": false},
+    {"id": "LOBBY", "x": 150, "y": 100, "roomLoot": {"candelabra_a": 1.0}, "roomKeycards": [], "roomContainers": [], "hasCover": false},
+    {"id": "OFFICE", "x": 250, "y": 50, "roomLoot": {"register_cash": 0.6}, "roomKeycards": [], "roomContainers": [], "hasCover": false},
+    {"id": "VAULT", "x": 250, "y": 150, "roomLoot": {"candelabra_b": 1.0}, "roomKeycards": [], "roomContainers": [
       {"id": "Vault Safe", "type": "safe", "contents": ["safe_contents"], "crackDifficulty": 3}
     ], "hasCover": false}
   ],
   "doors": [
     {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": null},
     {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "OFFICE", "moveCost": 1, "lock": null, "sensor": null},
-    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "VAULT", "moveCost": 1, "lock": {"pickDifficulty": 2, "forceDifficulty": 0}, "sensor": null},
+    {"id": "d3", "roomOrigin": "LOBBY", "roomDest": "VAULT", "moveCost": 1, "lock": {"type": "pick", "pickDifficulty": 2, "forceDifficulty": 0}, "sensor": null},
     {"id": "d4", "roomOrigin": "OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": null, "sensor": null}
   ],
   "blockages": [],

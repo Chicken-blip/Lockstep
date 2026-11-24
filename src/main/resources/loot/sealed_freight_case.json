@@ -1,0 +1,8 @@
+{
+  "id": "sealed_freight_case",
+  "name": "Sealed Freight Case",
+  "grabCost": 3,
+  "pieceValue": 125,
+  "set": "harbor_manifest",
+  "isMainScore": false
+}

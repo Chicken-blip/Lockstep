@@ -9,10 +9,10 @@
   "maxCrew": 1,
   "arrestDuration": 3,
   "rooms": [
-    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomContainers": [], "hasCover": false},
-    {"id": "HALLWAY", "x": 150, "y": 100, "roomLoot": {"marked_envelope": 0.75}, "roomContainers": [], "hasCover": false},
-    {"id": "LIVING ROOM", "x": 250, "y": 100, "roomLoot": {"ancestral_urn": 1.0, "loose_notes": 0.5, "sports_watch": 0.75}, "roomContainers": [], "hasCover": false},
-    {"id": "BEDROOM", "x": 350, "y": 100, "roomLoot": {"desk_wallet": 0.7, "smartphone": 0.2}, "roomContainers": [
+    {"id": "OUTSIDE", "x": 50, "y": 100, "roomLoot": {}, "roomKeycards": [], "roomContainers": [], "hasCover": false},
+    {"id": "HALLWAY", "x": 150, "y": 100, "roomLoot": {"marked_envelope": 0.75}, "roomKeycards": [], "roomContainers": [], "hasCover": false},
+    {"id": "LIVING ROOM", "x": 250, "y": 100, "roomLoot": {"ancestral_urn": 1.0, "loose_notes": 0.5, "sports_watch": 0.75}, "roomKeycards": [], "roomContainers": [], "hasCover": false},
+    {"id": "BEDROOM", "x": 350, "y": 100, "roomLoot": {"desk_wallet": 0.7, "smartphone": 0.2}, "roomKeycards": [], "roomContainers": [
       {"id": "Small Safe", "type": "safe", "contents": ["the_family_heirloom"], "crackDifficulty": 3}
     ], "hasCover": false}
   ],

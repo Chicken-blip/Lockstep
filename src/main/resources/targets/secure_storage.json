@@ -1,0 +1,87 @@
+{
+  "id": "secure_storage",
+  "name": "Secure Storage",
+  "entryRoom": "OUTSIDE",
+  "exitRooms": ["OUTSIDE"],
+  "alarmCountdown": 3,
+  "availableFrom": 6,
+  "availabilityDuration": 4,
+  "maxCrew": 1,
+  "arrestDuration": 5,
+  "rooms": [
+    {
+      "id": "OUTSIDE",
+      "x": 100,
+      "y": 100,
+      "roomLoot": {},
+      "roomKeycards": [],
+      "roomContainers": [],
+      "hasCover": false
+    },
+    {
+      "id": "LOBBY",
+      "x": 250,
+      "y": 100,
+      "roomLoot": {},
+      "roomKeycards": [],
+      "roomContainers": [],
+      "hasCover": false
+    },
+    {
+      "id": "WAREHOUSE A",
+      "x": 250,
+      "y": 400,
+      "roomLoot": {"customs_pallet": 1.0},
+      "roomKeycards": ["secure_storage_card"],
+      "roomContainers": [],
+      "hasCover": true
+    },
+    {
+      "id": "WAREHOUSE B",
+      "x": 400,
+      "y": 400,
+      "roomLoot": {"sealed_freight_case": 0.75, "manifest_chest": 0.75},
+      "roomKeycards": [],
+      "roomContainers": [],
+      "hasCover": true
+    },
+    {
+      "id": "OFFICE",
+      "x": 250,
+      "y": 250,
+      "roomLoot": {"laptop": 0.9, "memo_pad": 0.5},
+      "roomKeycards": [],
+      "roomContainers": [],
+      "hasCover": false
+    },
+    {
+      "id": "VAULT",
+      "x": 400,
+      "y": 100,
+      "roomLoot": {},
+      "roomKeycards": [],
+      "roomContainers": [
+        {"type": "safe", "id": "Secure Safe", "contents": ["company_ledger"], "crackDifficulty": 5}
+      ],
+      "hasCover": false
+    }
+  ],
+  "doors": [
+    {"id": "d1", "roomOrigin": "OUTSIDE", "roomDest": "LOBBY", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d2", "roomOrigin": "LOBBY", "roomDest": "WAREHOUSE A", "moveCost": 1, "lock": {"type": "pick", "pickDifficulty": 5, "forceDifficulty": 9}, "sensor": null},
+    {"id": "d4", "roomOrigin": "WAREHOUSE A", "roomDest": "WAREHOUSE B", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d5", "roomOrigin": "LOBBY", "roomDest": "OFFICE", "moveCost": 1, "lock": null, "sensor": null},
+    {"id": "d6", "roomOrigin": "OFFICE", "roomDest": "VAULT", "moveCost": 1, "lock": {"type": "keycard", "keycardId": "secure_storage_card"}, "sensor": null}
+  ],
+  "blockages": [
+    {
+      "id": "b1",
+      "roomOrigin": "WAREHOUSE B",
+      "roomDest": "VAULT",
+      "moveCost": 1,
+      "breakDifficulty": 3
+    }
+  ],
+  "patrols": [],
+  "staff": []
+}

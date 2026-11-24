@@ -139,8 +139,12 @@ public class FloorPlanView extends Pane {
         StringBuilder txt = new StringBuilder(d.getId());
         if (d.getLock() != null) {
             txt.append(" (LOCKED)");
-            txt.append((d.getLock().getPickDifficulty() > 0 ? "\nPICK LOCK - Difficulty: " + d.getLock().getPickDifficulty() : ""));
-            txt.append((d.getLock().getForceDifficulty() > 0 ? "\nFORCE OPEN - Difficulty: " + d.getLock().getForceDifficulty() : ""));
+            if (d.getLock() instanceof PickLock) {
+                txt.append((((PickLock) d.getLock()).getPickDifficulty() > 0 ? "\nPICK LOCK - Difficulty: " + ((PickLock) d.getLock()).getPickDifficulty() : ""));
+                txt.append(((PickLock) d.getLock()).getForceDifficulty() > 0 ? "\nFORCE OPEN - Difficulty: " + ((PickLock) d.getLock()).getForceDifficulty() : "");
+            } else if (d.getLock() instanceof KeycardLock) {
+                txt.append((!((KeycardLock) d.getLock()).getKeycardId().isBlank() ? "\nKEYCARD LOCK - Keycard: " + def.findKeycard(((KeycardLock) d.getLock()).getKeycardId()).getName() : ""));
+            }
         } else {
             txt.append(" (OPEN)");
         }
@@ -162,9 +166,13 @@ public class FloorPlanView extends Pane {
 
     private StringBuilder getRoomTooltipContent(String roomId) {
         Room r = instance.getTarget().findRoom(roomId);
-        List<String> roomLoot;
+        List<String> roomLoot, roomKeycards;
         Map<String, List<String>> containerLoot;
         roomLoot = new ArrayList<>();
+        roomKeycards = new ArrayList<>();
+        for (String id : instance.getRoomKeycards(roomId)) {
+            if (!removedItemIds.contains(id)) roomKeycards.add(id);
+        }
         for (String id : instance.getRoomLoot(roomId)) {
             if (!removedItemIds.contains(id)) roomLoot.add(id);
         }
@@ -178,9 +186,9 @@ public class FloorPlanView extends Pane {
         }
 
         StringBuilder txt = new StringBuilder(r.getId() + (r.canHide() ? " - HAS COVER" : "") + "\n");
-        if (roomLoot.isEmpty() && containerLoot.isEmpty()) {
+        if (roomLoot.isEmpty() && roomKeycards.isEmpty() && containerLoot.isEmpty()) {
             txt.append("(EMPTY)");
-        } else if (roomLoot.isEmpty()) {
+        } else if (roomLoot.isEmpty() && roomKeycards.isEmpty()) {
             for (LootContainer container : r.getRoomContainers()) {
                 if (container instanceof SafeContainer safe) {
                     txt.append(safe.getId()).append(" [SAFE - Difficulty: ").append(safe.getCrackDifficulty()).append("]: ");
@@ -205,12 +213,18 @@ public class FloorPlanView extends Pane {
             for (String str : roomLoot) {
                 txt.append(def.findLoot(str).getName()).append(", ");
             }
+            for (String str : roomKeycards) {
+                txt.append(def.findKeycard(str).getName()).append(", ");
+            }
             txt = new StringBuilder(txt.substring(0, txt.length() - 2));
         } else {
             txt.append("LOOT: ");
 
             for (String str : roomLoot) {
                 txt.append(def.findLoot(str).getName()).append(", ");
+            }
+            for (String str : roomKeycards) {
+                txt.append(def.findKeycard(str).getName()).append(", ");
             }
 
             txt = new StringBuilder(txt.substring(0, txt.length() - 2)).append("\n");

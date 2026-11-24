@@ -28,7 +28,7 @@
     "room": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "x", "y", "roomLoot", "roomContainers", "hasCover"],
+      "required": ["id", "x", "y", "roomLoot", "roomKeycards", "roomContainers", "hasCover"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
         "x": { "type": "integer" },
@@ -37,6 +37,7 @@
           "type": "object",
           "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 }
         },
+        "roomKeycards": {"type": "array", "items": { "type": "string", "minLength": 1}},
         "roomContainers": { "type": "array", "items": { "$ref": "#/$defs/container" } },
         "hasCover": {"type": "boolean"}
       }
@@ -89,8 +90,34 @@
         "moveCost": { "type": "integer", "minimum": 0 },
         "lock": {
           "oneOf": [
-            { "type": "null" },
-            { "$ref": "#/$defs/lock" }
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "pickDifficulty", "forceDifficulty"],
+              "properties": {
+                "type": {
+                  "const": "pick"
+                },
+                "pickDifficulty": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "forceDifficulty": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "keycardId"],
+              "properties": {
+                "type": { "const": "keycard" },
+                "keycardId": { "type": "string", "minLength": 1 }
+              }
+            },
           ]
         },
         "sensor": {
@@ -99,15 +126,6 @@
             { "$ref": "#/$defs/sensor" }
           ]
         }
-      }
-    },
-    "lock": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["pickDifficulty", "forceDifficulty"],
-      "properties": {
-        "pickDifficulty": { "type": "integer", "minimum": 0 },
-        "forceDifficulty": { "type": "integer", "minimum": 0 }
       }
     },
     "sensor": {

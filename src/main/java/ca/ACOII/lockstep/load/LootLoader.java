@@ -24,8 +24,7 @@ public class LootLoader {
         try {
             InputStream inStrm = getClass().getResourceAsStream("/loot/" + filename);
             if (inStrm == null) throw new RuntimeException("LootItem file not found: " + filename);
-            LootItem item = mapper.readValue(inStrm, LootItem.class);
-            return item;
+            return mapper.readValue(inStrm, LootItem.class);
         } catch (IOException e) {
             throw new RuntimeException("LootItem file not found: " + filename + " | ", e);
         }

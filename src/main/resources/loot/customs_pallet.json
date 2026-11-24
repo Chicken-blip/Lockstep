@@ -1,0 +1,8 @@
+{
+  "id": "customs_pallet",
+  "name": "Customs Pallet",
+  "grabCost": 2,
+  "pieceValue": 70,
+  "set": "harbor_manifest",
+  "isMainScore": false
+}

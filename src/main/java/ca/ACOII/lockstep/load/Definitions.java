@@ -11,6 +11,7 @@ public class Definitions {
     public final SkillList skills;
     public final GearList gear;
     public final List<LootItem> lootItems;
+    public final List<Keycard> keycards;
     public final List<CrewMember> crew;
     public final List<Target> targets;
 
@@ -19,6 +20,7 @@ public class Definitions {
         skills = new SkillLoader().load();
         gear = new GearLoader(skills).load();
         lootItems = new LootLoader(sets).loadAll();
+        keycards = new KeycardLoader().loadAll();
         crew = new CrewLoader(skills).loadAll();
         targets = new TargetLoader().loadAll();
     }
@@ -30,10 +32,26 @@ public class Definitions {
         }
         return null;
     }
+    public Keycard findKeycard(String key) {
+        for (Keycard card : keycards) {
+            if (Objects.equals(card.getId(), key)) {
+                return card;
+            }
+        }
+        return null;
+    }
     public String lootNameToId(String name) {
         for (LootItem i : lootItems) {
             if (Objects.equals(i.getName(), name)) {
                 return i.getId();
+            }
+        }
+        return null;
+    }
+    public String keycardNameToId(String cardName) {
+        for (Keycard c : keycards) {
+            if (Objects.equals(c.getName(), cardName)) {
+                return c.getId();
             }
         }
         return null;

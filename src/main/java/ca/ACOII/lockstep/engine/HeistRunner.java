@@ -53,12 +53,16 @@ public class HeistRunner {
         while (running) {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
-                    Action a = crewQueues.get(c).tick();
-                    validateAction(c, a);
-                    if (!running) {
-                        arrestRemainingActors();
-                        campaign.maxStep = currentStep;
-                        return;
+                    ActionQueue queue = crewQueues.get(c);
+                    if (queue.isDone()) {
+                        continue;
+                    }
+                    Action a = queue.tick();
+                    String validationError = validateAction(c, a);
+                    if (validationError != null) {
+                        queue.cancelCurrentAction();
+                        log.addEvent(new Event(currentStep, validationError, c.getData().getName(), EventType.ACTION_FAILED));
+                        continue;
                     }
                     EventType e = null;
 
@@ -73,18 +77,15 @@ public class HeistRunner {
                             String destRoom = move.getDestinationRoom();
 
                             Door d = instance.getTarget().findDoor(currRoom, destRoom);
-                            if (d == null) {
-                                if (instance.getTarget().findBlockage(currRoom, destRoom) == null) {
-                                    a = null;
-                                    running = false;
-                                };
-                            } else if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
-                                if (!c.spotted) {
-                                    c.spotted = true;
-                                    log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
-                                    if (alarmTimer == -1) {
-                                        alarmTimer = t.getAlarmCountdown();
-                                        log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                            if (d != null) {
+                                if (d.getSensor() != null && !disabledSensors.contains(d.getSensor().id)) {
+                                    if (!c.spotted) {
+                                        c.spotted = true;
+                                        log.addEvent(new Event(currentStep, "detected passing through " + d.getId() + " to " + destRoom, c.getData().getName(), EventType.GUARD_SPOTTED));
+                                        if (alarmTimer == -1) {
+                                            alarmTimer = t.getAlarmCountdown();
+                                            log.addEvent(new Event(currentStep, null, c.getData().getName(), EventType.ALARM_RAISED));
+                                        }
                                     }
                                 }
                             }
@@ -104,6 +105,9 @@ public class HeistRunner {
                             } else {
                                 e = EventType.FORCE_DOOR_PROGRESS;
                             }
+                        } else if (a instanceof UseKeycardAction useKeycard) {
+                            unlockedDoors.add(useKeycard.doorId);
+                            e = EventType.USE_KEYCARD;
                         } else if (a instanceof SmashAction smash) {
                             if (crewQueues.get(c).remainingSteps == 0) {
                                 clearedBlockages.add(smash.getBlockageId());
@@ -112,8 +116,13 @@ public class HeistRunner {
                                 e = EventType.SMASH_BLOCKAGE_PROGRESS;
                             }
                         } else if (a instanceof GrabAction grab) {
-                            if (crewQueues.get(c).remainingSteps == 0) {
-                                c.addToInventory(grab.item);
+                            if (crewQueues.get(c).remainingSteps <= 0) {
+                                if (campaign.definitions.findLoot(grab.itemId) == null) {
+                                    c.keycards.add(grab.itemId);
+                                } else {
+                                    c.addToInventory(campaign.definitions.findLoot(grab.itemId));
+                                }
+                                removeFromTarget(grab.itemId);
                                 e = EventType.GRAB;
                             } else {
                                 e = EventType.GRAB_PROGRESS;
@@ -219,89 +228,105 @@ public class HeistRunner {
         }
     }
 
-    private void validateAction (CrewMemberState crew, Action action) {
+    private String validateAction (CrewMemberState crew, Action action) {
         if (action == null) {
-            System.out.println("Empty action - something's wrong");
-            running = false;
+            return "No action was available";
         }
         if (action instanceof HideAction hide) {
             Room curr = t.findRoom(crew.currentRoom);
             //Check if the current room allows hiding
-            if (!curr.canHide()) {
-                System.out.println("Attempt at hiding in unapplicable room occurred");
-                running = false;
-                return;
+            if (curr == null || !curr.canHide()) {
+                return "Cannot hide in this room";
             }
             //Check if the set duration is outside the max allowed for the crew member
             if (hide.getDuration() > crew.getData().getHideDuration()) {
-                System.out.println("Attempt at hiding beyond max hide duration for crew member occurred");
-                running = false;
+                return "Hide duration exceeds crew member's limit";
             }
 
         } else if (action instanceof GrabAction grab) {
             Room curr = t.findRoom(crew.currentRoom);
+            if (curr == null) {
+                return "Cannot grab an item outside a valid room";
+            }
             //Check if the current room has the directed item
-            if (instance.getRoomLoot(curr.getId()).contains(grab.item.getId())) {
-                return;
-            } else {
-                //Check each container within the room
-                for (LootContainer container : curr.getRoomContainers()) {
-                    //Check if the specified container is unlocked and has the item
-                    List<String> containerLoot = instance.getContainerLoot(container.getId());
-                    if (containerLoot.contains(grab.item.getId()) && openContainers.contains(container.getId())) {
-                        return;
-                    }
+            if (instance.getRoomLoot(curr.getId()).contains(grab.itemId)) {
+                return null;
+            }
+            //Check if the current room has the corresponding keycard, in case the id is of a keycard's
+            if (instance.getRoomKeycards(curr.getId()).contains(grab.itemId)) {
+                return null;
+            }
+            //Check each container within the room
+            for (LootContainer container : curr.getRoomContainers()) {
+                //Check if the specified container is unlocked and has the item
+                List<String> containerLoot = instance.getContainerLoot(container.getId());
+                if (containerLoot.contains(grab.itemId) && openContainers.contains(container.getId())) {
+                    return null;
                 }
             }
-            System.out.println("Attempt at grabbing unavailable item occurred");
-            running = false;
+            return "Item is not available in this room";
+        } else if (action instanceof UseKeycardAction useKeycard) {
+            if (crew.keycards.isEmpty()) {
+                return "Crew member has no keycard";
+            }
+            Room curr = t.findRoom(crew.currentRoom);
+            Door d = t.findDoor(useKeycard.doorId);
+            if (d == null) {
+                return "Door does not exist";
+            }
+            if (!(d.getLock() instanceof KeycardLock keycardLock) || keycardLock.getKeycardId() == null) {
+                return "Door does not use a valid keycard lock";
+            }
+            if (!crew.hasKeycard(keycardLock.getKeycardId())) {
+                return "Crew member does not have the required keycard";
+            }
+            if (curr == null || !(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
+                return "Crew member is not next to that door";
+            }
+            if (unlockedDoors.contains(d.getId())) {
+                return "Door is already unlocked";
+            }
         } else if (action instanceof CrackAction crack) {
             Room curr = t.findRoom(crew.currentRoom);
             LootContainer container = t.findContainer(crack.containerId);
             if (container == null) {
-                System.out.println("Attempt at cracking nonexistent container occurred");
-                running = false;
-                return;
+                return "Container does not exist";
             }
-            if (!curr.getRoomContainers().contains(container)) {
-                System.out.println("Attempt at cracking unavailable container occurred");
-                running = false;
-                return;
+            if (curr == null || !curr.getRoomContainers().contains(container)) {
+                return "Container is not in this room";
             }
             if (openContainers.contains(container.getId())) {
-                System.out.println("Attempt at cracking unlocked container occurred");
-                running = false;
+                return "Container is already open";
             }
         } else if (action instanceof PickCaseAction pick) {
             Room curr = t.findRoom(crew.currentRoom);
             LootContainer container = t.findContainer(pick.containerId);
             if (container == null) {
-                System.out.println("Attempt at picking nonexistent container occurred");
-                running = false;
-                return;
-            } if (!curr.getRoomContainers().contains(container)) {
-                System.out.println("Attempt at picking unavailable container occurred");
-                running = false;
-                return;
+                return "Container does not exist";
+            }
+            if (!(container instanceof DisplayCaseContainer)) {
+                return "Container is not a display case";
+            }
+            if (curr == null || !curr.getRoomContainers().contains(container)) {
+                return "Container is not in this room";
             }
             if (openContainers.contains(container.getId())) {
-                System.out.println("Attempt at picking unlocked container occurred");
-                running = false;
+                return "Container is already open";
             }
         } else if (action instanceof PickLockAction pick) {
             Room curr = t.findRoom(crew.currentRoom);
             Door d = t.findDoor(pick.doorId);
             if (d == null) {
-                System.out.println("Attempt at picking nonexistent door occurred");
-                running = false;
-                return;
-            } if (!(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
-                System.out.println("Attempt at unlocking door in different room occurred");
-                running = false;
-                return;
-            } if (unlockedDoors.contains(d.getId())) {
-                System.out.println("Attempt at unlocking unlocked door occurred");
-                running = false;
+                return "Door does not exist";
+            }
+            if (!(d.getLock() instanceof PickLock pickLock) || pickLock.getPickDifficulty() == 0) {
+                return "Door cannot be picked";
+            }
+            if (curr == null || !(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
+                return "Crew member is not next to that door";
+            }
+            if (unlockedDoors.contains(d.getId())) {
+                return "Door is already unlocked";
             }
         } else if (action instanceof DisableSensorAction disable) {
             Door found = null;
@@ -309,83 +334,69 @@ public class HeistRunner {
                 if (d.getSensor() != null && Objects.equals(d.getSensor().id, disable.getSensorId())) found = d;
             }
             if (found == null) {
-                System.out.println("Attempt at disabling nonexistent sensor occurred");
-                running = false;
-                return;
+                return "Sensor does not exist";
             }
             if (!Objects.equals(crew.getCurrentRoom(), found.getRoomDest()) && !Objects.equals(crew.getCurrentRoom(), found.getRoomOrigin())) {
-                System.out.println("Attempt at disabling sensor in disconnected room occurred");
-                running = false;
-                return;
+                return "Crew member is not next to that sensor";
             }
             if (disabledSensors.contains(disable.getSensorId())) {
-                System.out.println("Attempt at disabling disabled sensor occurred");
-                running = false;
+                return "Sensor is already disabled";
             }
 
         } else if (action instanceof ForceOpenAction forceOpen) {
             Room curr = t.findRoom(crew.currentRoom);
             LootContainer container = t.findContainer(forceOpen.containerId);
             if (container == null) {
-                System.out.println("Attempt at forcing open nonexistent container occurred");
-                running = false;
-                return;
+                return "Container does not exist";
             }
-            if (!curr.getRoomContainers().contains(container)) {
-                System.out.println("Attempt at forcing open unavailable container occurred");
-                running = false;
-                return;
+            if (!(container instanceof ForceOpenContainer)) {
+                return "Container cannot be forced open";
+            }
+            if (curr == null || !curr.getRoomContainers().contains(container)) {
+                return "Container is not in this room";
             }
             if (openContainers.contains(container.getId())) {
-                System.out.println("Attempt at forcing open unlocked container occurred");
-                running = false;
+                return "Container is already open";
             }
         } else if (action instanceof ForceDoorAction forceDoor) {
             Room curr = t.findRoom(crew.currentRoom);
             Door d = t.findDoor(forceDoor.doorId);
             if (d == null) {
-                System.out.println("Attempt at forcing open nonexistent door occurred");
-                running = false;
-                return;
-            } if (!(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
-                System.out.println("Attempt at forcing open door in different room occurred");
-                running = false;
-                return;
-            } if (d.getLock().getForceDifficulty() == 0) {
-                System.out.println("Attempt at forcing open incompatible door occurred");
-                running = false;
-                return;
-            } if (unlockedDoors.contains(d.getId())) {
-                System.out.println("Attempt at forcing open unlocked door occurred");
-                running = false;
+                return "Door does not exist";
+            }
+            if (!(d.getLock() instanceof PickLock pickLock) || pickLock.getForceDifficulty() == 0) {
+                return "Door cannot be forced open";
+            }
+            if (curr == null || !(Objects.equals(curr.getId(), d.getRoomDest()) || Objects.equals(curr.getId(), d.getRoomOrigin()))) {
+                return "Crew member is not next to that door";
+            }
+            if (unlockedDoors.contains(d.getId())) {
+                return "Door is already unlocked";
             }
         } else if (action instanceof SmashAction smash) {
             Room curr = t.findRoom(crew.currentRoom);
             Blockage b = t.findBlockage(smash.blockageId);
             if (b == null) {
-                System.out.println("Attempt at smashing nonexistent blockage occurred");
-                running = false;
-                return;
-            } if (!(Objects.equals(curr.getId(), b.getRoomDest()) || Objects.equals(curr.getId(), b.getRoomOrigin()))) {
-                System.out.println("Attempt at smashing blockage in different room occurred");
-                running = false;
-                return;
-            } if (b.getBreakDifficulty() == 0) {
-                System.out.println("Attempt at smashing incompatible blockage occurred");
-                running = false;
-                return;
-            } if (clearedBlockages.contains(b.getId())) {
-                System.out.println("Attempt at smashing cleared blockage occurred");
-                running = false;
+                return "Blockage does not exist";
+            }
+            if (curr == null || !(Objects.equals(curr.getId(), b.getRoomDest()) || Objects.equals(curr.getId(), b.getRoomOrigin()))) {
+                return "Crew member is not next to that blockage";
+            }
+            if (b.getBreakDifficulty() == 0) {
+                return "Blockage cannot be smashed";
+            }
+            if (clearedBlockages.contains(b.getId())) {
+                return "Blockage is already cleared";
             }
         } else if (action instanceof MoveAction move) {
-            if (instance.getTarget().findRoom(move.getDestinationRoom()) == null) {
-                System.out.println("Invalid move destination");
-                running = false;
-                return;
-            }
-            Room destRoom = instance.getTarget().findRoom(move.getDestinationRoom());
             Room originRoom = instance.getTarget().findRoom(crew.getCurrentRoom());
+            Room destRoom = instance.getTarget().findRoom(move.getDestinationRoom());
+            if (destRoom == null) {
+                return "Destination room does not exist";
+            }
+            if (originRoom == null) {
+                return "Current room does not exist";
+            }
             boolean foundDoor = false, validOrigin, validDestination;
             for (Door d : instance.getTarget().getDoors()) {
                 validOrigin = Objects.equals(d.getRoomOrigin(), originRoom.getId()) || Objects.equals(d.getRoomDest(), originRoom.getId());
@@ -410,10 +421,10 @@ public class HeistRunner {
                 }
             }
             if (!foundDoor) {
-                System.out.println("No valid path from origin to move destination");
-                running = false;
+                return "No open path to destination room";
             }
         }
+        return null;
     }
 
     public void securityCheck() {
@@ -477,5 +488,15 @@ public class HeistRunner {
 
     public EventLog getLog() {
         return log;
+    }
+
+    private void removeFromTarget(String id) {
+        for (String room : instance.roomLootIds.keySet()) {
+            instance.roomLootIds.get(room).remove(id);
+            instance.roomKeycardIds.get(room).remove(id);
+        }
+        for (String container : instance.containerLootIds.keySet()) {
+            instance.containerLootIds.get(container).remove(id);
+        }
     }
 }

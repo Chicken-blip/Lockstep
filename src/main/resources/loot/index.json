@@ -58,7 +58,6 @@
   "medical_waste_bin.json",
   "workstation.json",
   "router.json",
-
   "grand_piano.json",
   "concert_harp.json",
   "sealed_brandy.json",
@@ -79,11 +78,15 @@
   "grandparent_letter.json",
   "marriage_certificate.json",
   "inheritance_codicil.json",
-
   "wine_bottle.json",
   "port_bottle_1890.json",
   "port_bottle_1910.json",
   "port_bottle_1930.json",
   "silver_tray.json",
-  "barrel.json"
+  "barrel.json",
+  "secure_crate.json",
+  "sealed_freight_case.json",
+  "customs_pallet.json",
+  "manifest_chest.json",
+  "company_ledger.json"
 ]

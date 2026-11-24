@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class ActDurationCalculator {
     public static int pickLockDuration(Door door, RosterEntry member) {
-        int dur = door.getLock().getPickDifficulty();
+        int dur = ((PickLock) door.getLock()).getPickDifficulty();
         dur -= member.getData().getSkills().getOrDefault("pick", 0);
         for (Gear g : member.getGear()) {
             for (GearEffect eff : g.getEffects()) {
@@ -60,7 +60,7 @@ public class ActDurationCalculator {
     }
 
     public static int forceDoorDuration(Door door, RosterEntry member) {
-        int dur = door.getLock().getForceDifficulty();
+        int dur = ((PickLock) door.getLock()).getForceDifficulty();
         dur -= member.getData().getSkills().getOrDefault("strength", 0);
         for (Gear g : member.getGear()) {
             for (GearEffect eff : g.getEffects()) {
