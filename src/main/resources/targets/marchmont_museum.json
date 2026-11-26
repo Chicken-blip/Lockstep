@@ -39,7 +39,8 @@
         {"room": "EAST GALLERY", "duration": 2},
         {"room": "LOBBY", "duration": 2},
         {"room": "WEST GALLERY", "duration": 2}
-      ]
+      ],
+      "bribeCost": 0
     },
     {
       "id": "p2",
@@ -49,7 +50,8 @@
         {"room": "VAULT", "duration": 5},
         {"room": "STORAGE", "duration": 1},
         {"room": "SECURITY OFFICE", "duration": 1}
-      ]
+      ],
+      "bribeCost": 0
     }
   ],
   "staff": []

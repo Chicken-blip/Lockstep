@@ -15,9 +15,11 @@ public class HeistRunner {
     Target t;
     HeistInstance instance;
     boolean isCompleted = false, running = true;
+    //ID of bribed guard, if any
+    String bribedGuard;
     Campaign campaign;
 
-    public HeistRunner(Map<RosterEntry, ActionQueue> queues, HeistInstance instance, Campaign campaign) {
+    public HeistRunner(Map<RosterEntry, ActionQueue> queues, HeistInstance instance, Campaign campaign, String bribedGuard) {
         currentStep = 1;
         this.t = instance.getTarget();
         this.instance = instance;
@@ -28,6 +30,7 @@ public class HeistRunner {
             state.setCurrentRoom(t.getEntryRoom());
             crewQueues.put(state, queues.get(e));
         }
+        this.bribedGuard = bribedGuard;
         log = new EventLog();
 
         guards = new ArrayList<>();
@@ -442,6 +445,7 @@ public class HeistRunner {
             for (CrewMemberState c : crewQueues.keySet()) {
                 if (c.status == CrewMemberState.Status.ACTIVE) {
                     for (Guard g : guards) {
+                        if (Objects.equals(g.getId(), bribedGuard)) break;
                         if (Objects.equals(c.getCurrentRoom(), g.getCurrentRoom()) && !c.spotted && !c.isHiding()) {
                             c.spotted = true;
                             log.addEvent(new Event(currentStep, "spotted in " + c.getCurrentRoom(), c.getData().getName(), EventType.GUARD_SPOTTED));

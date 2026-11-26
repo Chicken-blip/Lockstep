@@ -52,7 +52,8 @@
         {"room": "PANTRY", "duration": 3},
         {"room": "KITCHEN", "duration": 1},
         {"room": "DINING ROOM", "duration": 1}
-      ]
+      ],
+      "bribeCost": 0
     },
     {
       "id": "p2",
@@ -63,7 +64,8 @@
         {"room": "MASTER BEDROOM", "duration": 2},
         {"room": "PRIVATE STUDY", "duration": 1},
         {"room": "LIBRARY", "duration": 1}
-      ]
+      ],
+      "bribeCost": 0
     }
   ],
   "staff": [

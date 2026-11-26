@@ -21,13 +21,14 @@ import java.util.Map;
 public class HeistView extends BorderPane {
 
     FloorPlanView mapPane;
+    HBox bottomPane;
     Game game;
     Target target;
     List<RosterEntry> entries;
     App app;
     Map<String, List<Action>> plans;
 
-    VBox executionPane;
+    VBox executionPane, bribePane;
     HBox logPane;
     ListView<String> logList;
 
@@ -59,8 +60,21 @@ public class HeistView extends BorderPane {
         this.setLeft(actionBuilderPane());
         executionPane = executeQueuePane();
         this.setRight(executionPane);
+        bottomPane = new HBox();
+
         logPane = executionLogPane();
-        this.setBottom(logPane);
+        HBox.setHgrow(logPane, Priority.ALWAYS);
+        bottomPane.getChildren().add(logPane);
+
+        //Add bribe list - remove last child from bottomPane when running - but only if there are bribable guards
+        bribePane = bribePane();
+        if (bribePane != null) bottomPane.getChildren().add(bribePane);
+
+        //Bottom Pane formatting
+        bottomPane.setMaxWidth(Double.MAX_VALUE);
+
+
+        this.setBottom(bottomPane);
         for (Node node : this.getChildren()) {
             if (node instanceof HBox h) h.setSpacing(20);
             if (node instanceof VBox v) v.setSpacing(20);
@@ -77,8 +91,48 @@ public class HeistView extends BorderPane {
         logList.setMaxWidth(Double.MAX_VALUE);
 
         pane.getChildren().add(logList);
-        pane.setAlignment(Pos.BOTTOM_CENTER);
         HBox.setHgrow(logList, Priority.ALWAYS);
+        return pane;
+    }
+
+    private VBox bribePane() {
+        VBox pane = new VBox();
+        pane.setPadding(new Insets(50, 10, 50, 10));
+
+        Label label = new Label("Bribed Guard:");
+        pane.getChildren().add(label);
+
+        ComboBox<Patrol> bribableGuards = new ComboBox<>();
+        bribableGuards.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(Patrol item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("Bribe Guard " + item.getId() + " (Cost " + item.getBribeCost() + ")");
+                }
+            }
+        });
+        bribableGuards.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(Patrol item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Do not bribe");
+                } else {
+                    setText("Bribe Guard " + item.getId() + " (Cost " + item.getBribeCost() + ")");
+                }
+            }
+        });
+        bribableGuards.getItems().addAll(target.getPatrols().stream().filter(patrol -> patrol.getBribeCost() > 0).toList());
+        if (bribableGuards.getItems().isEmpty()) {
+            return null;
+        }
+
+        pane.getChildren().add(bribableGuards);
+        pane.setAlignment(Pos.CENTER);
+        pane.setMinWidth(200);
         return pane;
     }
 
@@ -581,25 +635,34 @@ public class HeistView extends BorderPane {
         });
         Button executeBtn = new Button("Run Heist");
         executeBtn.setOnAction(e -> {
-            mapPane.reset(target);
-            returnBtn.setDisable(true);
-            executeBtn.setDisable(true);
-
             for (RosterEntry entry : entries) {
                 if (plans.get(entry.getData().getName()).isEmpty()) {
-                    System.out.println("Build a plan first!");
-                    returnBtn.setDisable(false);
-                    executeBtn.setDisable(false);
                     return;
                 }
             }
 
+            mapPane.reset(target);
+            returnBtn.setDisable(true);
+            executeBtn.setDisable(true);
+
+            //Do a check for any bribed guard, then remove the bribe selection
+            Patrol bribedGuard = bribePane != null ? ((ComboBox<Patrol>) (bribePane.getChildren().getLast())).getSelectionModel().getSelectedItem() : null;
+            if (bribedGuard != null && bribedGuard.getBribeCost() > game.getStash().getMoney()) {
+                return;
+            }
+            String bribedGuardId = bribedGuard == null ? null : bribedGuard.getId();
+            if (bribedGuard != null) {
+                mapPane.setBribedGuard(bribedGuardId);
+                game.getLog().addEvent(new Event(0, "Bribed guard " + bribedGuardId + " for " + bribedGuard.getBribeCost(), null, EventType.BRIBE));
+            }
+            bottomPane.getChildren().remove(bribePane);
 
             Map<RosterEntry, ActionQueue> map = new HashMap<>();
             for (RosterEntry entry : entries) {
                 map.put(entry, new ActionQueue(plans.get(entry.getData().getName())));
             }
-            game.runHeist(map);
+
+            game.runHeist(map, bribedGuardId);
 
             plans = new HashMap<>();
             for (RosterEntry entry : entries) {

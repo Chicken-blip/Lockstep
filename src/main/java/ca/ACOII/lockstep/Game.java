@@ -63,8 +63,8 @@ public class Game {
         campaign.currentTargetId = target.getId();
         instance = HeistGenerator.generate(target, def, campaign.seed);
     }
-    public void runHeist(Map<RosterEntry, ActionQueue> queues) {
-        HeistRunner heist = new HeistRunner(queues, instance, campaign);
+    public void runHeist(Map<RosterEntry, ActionQueue> queues, String bribedGuard) {
+        HeistRunner heist = new HeistRunner(queues, instance, campaign, bribedGuard);
         heist.run();
         campaign.settleHeist(heist, instance.getTarget().getArrestDuration());
         campaign.nextDay();

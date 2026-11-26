@@ -35,7 +35,8 @@
         {"room": "PREVIEW GALLERY", "duration": 3},
         {"room": "FOYER", "duration": 2},
         {"room": "SECURITY OFFICE", "duration": 3}
-      ]
+      ],
+      "bribeCost": 0
     }
   ],
   "staff": []

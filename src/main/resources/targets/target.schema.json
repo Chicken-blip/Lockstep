@@ -117,7 +117,7 @@
                 "type": { "const": "keycard" },
                 "keycardId": { "type": "string", "minLength": 1 }
               }
-            },
+            }
           ]
         },
         "sensor": {
@@ -152,10 +152,11 @@
     "patrol": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "patrolRoute"],
+      "required": ["id", "patrolRoute", "bribeCost"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
-        "patrolRoute": { "$ref": "#/$defs/patrolRoute" }
+        "patrolRoute": { "$ref": "#/$defs/patrolRoute" },
+        "bribeCost": { "type": "integer", "minimum": 0 }
       }
     },
     "staff": {

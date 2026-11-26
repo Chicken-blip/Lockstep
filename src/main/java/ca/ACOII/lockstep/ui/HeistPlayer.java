@@ -41,7 +41,7 @@ public class HeistPlayer {
 
     public void play() {
         timeline.stop();
-        step = 1;
+        step = 0;
         timeline.play();
     }
 
@@ -118,10 +118,12 @@ public class HeistPlayer {
                     }
                 }
             }
-            for (Patrol p : t.getPatrols()) {
-                String roomId = p.roomAt(step - 1);
-                if (!Objects.equals(plan.actorRoom(p.getId()), roomId)) {
-                    plan.moveActor(p.getId(), roomId, t);
+            if (step != 0) {
+                for (Patrol p : t.getPatrols()) {
+                    String roomId = p.roomAt(step - 1);
+                    if (!Objects.equals(plan.actorRoom(p.getId()), roomId)) {
+                        plan.moveActor(p.getId(), roomId, t);
+                    }
                 }
             }
             step++;

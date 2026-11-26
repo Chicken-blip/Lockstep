@@ -43,7 +43,7 @@ public class HeistTests {
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
         game.prepareHeist(target);
-        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)), null);
 
         for (Event e : game.getLog().getEvents()) {
             assertTrue(e.evtType() != EventType.CAUGHT && e.evtType() != EventType.GUARD_SPOTTED);
@@ -82,7 +82,7 @@ public class HeistTests {
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
         game.prepareHeist(target);
-        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)), null);
 
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.CAUGHT, e.evtType());
@@ -116,7 +116,7 @@ public class HeistTests {
         actions.add(new MoveAction("OUTSIDE", 1 ));
 
         game.prepareHeist(target);
-        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)), null);
 
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.CAUGHT, e.evtType());
@@ -153,7 +153,7 @@ public class HeistTests {
         actions.add(new MoveAction("OUTSIDE", 1));
 
         game.prepareHeist(target);
-        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)), null);
 
         assertSame(EventType.GUARD_SPOTTED, game.getLog().getEvents().get(10).evtType());
         assertSame(EventType.CAUGHT, game.getLog().getEvents().getLast().evtType());
@@ -192,7 +192,7 @@ public class HeistTests {
         queues.put(game.getRoster().getLast(), new ActionQueue(actions));
 
         game.prepareHeist(target);
-        game.runHeist(queues);
+        game.runHeist(queues, null);
         for (Event e : game.getLog().getEvents()) {
             assertNotSame(EventType.GUARD_SPOTTED, e.evtType());
         }
@@ -216,7 +216,7 @@ public class HeistTests {
         actions.add(new WaitAction(1));
 
         game.prepareHeist(target);
-        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)));
+        game.runHeist(Map.of(game.getRoster().getFirst(), new ActionQueue(actions)), null);
 
         List<EventType> eventTypes = game.getLog().getEvents().stream().map(Event::evtType).toList();
         assertTrue(eventTypes.contains(EventType.ACTION_FAILED));

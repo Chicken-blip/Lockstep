@@ -1,6 +1,5 @@
 package ca.ACOII.lockstep.campaign;
 
-import ca.ACOII.lockstep.engine.CrewMemberState;
 import ca.ACOII.lockstep.model.Target;
 
 import java.util.ArrayList;

@@ -389,4 +389,8 @@ public class FloorPlanView extends Pane {
         Circle circle = sensors.get(sensorId);
         circle.setFill(Color.GREY);
     }
+
+    public void setBribedGuard(String guardId) {
+        actors.get(guardId).setFill(Color.GREY);
+    }
 }

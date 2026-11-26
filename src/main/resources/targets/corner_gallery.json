@@ -30,7 +30,8 @@
         {"room": "OFFICE", "duration": 3},
         {"room": "LOBBY", "duration": 2},
         {"room": "OFFICE", "duration": 1}
-      ]
+      ],
+      "bribeCost": 0
     }
   ],
   "staff": []

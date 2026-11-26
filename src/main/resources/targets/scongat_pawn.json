@@ -32,7 +32,8 @@
         {"room": "WORKROOM", "duration": 3},
         {"room": "SHOWROOM", "duration": 2},
         {"room": "SAFE ROOM", "duration": 1}
-      ]
+      ],
+      "bribeCost": 0
     }
   ],
   "staff": []

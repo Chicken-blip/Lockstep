@@ -6,10 +6,12 @@ import java.util.List;
 public class Patrol {
     private String id;
     private List<PatrolEntry> patrolRoute;
+    private int bribeCost;
 
     public Patrol() {
         id = null;
         patrolRoute = new ArrayList<>();
+        bribeCost = 0;
     }
 
     public String getId() {
@@ -26,6 +28,14 @@ public class Patrol {
 
     public void setPatrolRoute(List<PatrolEntry> patrolRoute) {
         this.patrolRoute = patrolRoute;
+    }
+
+    public int getBribeCost() {
+        return bribeCost;
+    }
+
+    public void setBribeCost(int bribeCost) {
+        this.bribeCost = bribeCost;
     }
 
     public String roomAt(int index) {
