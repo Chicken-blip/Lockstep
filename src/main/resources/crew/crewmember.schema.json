@@ -3,7 +3,7 @@
   "title": "Lockstep Crew Member",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "name", "skills", "recruitFee", "dayAvailability", "hideDuration"],
+  "required": ["id", "name", "baseSalary", "skills", "recruitFee", "dayAvailability", "hideDuration"],
   "properties": {
     "id": {
       "type": "string",
@@ -12,6 +12,10 @@
     "name": {
       "type": "string",
       "minLength": 1
+    },
+    "baseSalary": {
+      "type": "integer",
+      "minimum": 1
     },
     "skills": {
       "type": "object",

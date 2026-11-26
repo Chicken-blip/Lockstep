@@ -4,8 +4,8 @@
   "entryRoom": "ENTRANCE",
   "exitRooms": ["ALLEY", "ENTRANCE"],
   "alarmCountdown": 3,
-  "availableFrom": 5,
-  "availabilityDuration": 3,
+  "availableFrom": 16,
+  "availabilityDuration": 7,
   "maxCrew": 1,
   "arrestDuration": 3,
   "rooms": [

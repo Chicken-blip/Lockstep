@@ -3,6 +3,7 @@ package ca.ACOII.lockstep.campaign;
 import ca.ACOII.lockstep.load.Definitions;
 import ca.ACOII.lockstep.model.LootItem;
 import ca.ACOII.lockstep.model.LootSet;
+import ca.ACOII.lockstep.model.Skill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,12 +12,12 @@ import java.util.Objects;
 public class Stash {
     List<LootItem> items;
     int money;
-    List<LootItem> allItems;
+    Definitions def;
 
     public Stash(Definitions x) {
         items = new ArrayList<>();
         money = 0;
-        allItems = x.lootItems;
+        def = x;
     }
 
     public void addItems(List<LootItem> items) {
@@ -31,7 +32,7 @@ public class Stash {
 
     public List<LootItem> setItems(String id) {
         List<LootItem> list = new ArrayList<>();
-        for (LootItem i : allItems) {
+        for (LootItem i : def.lootItems) {
             if (Objects.equals(i.getSet(), id)) {
                 list.add(i);
             }
@@ -100,5 +101,25 @@ public class Stash {
 
     public List<LootItem> getItems() {
         return items;
+    }
+
+    public boolean deductSalaries(List<RosterEntry> crew) {
+        for (RosterEntry e : crew) {
+            if (money < calculateSalary(e)) {
+                deductMoney(money);
+                return false;
+            } else {
+                deductMoney(calculateSalary(e));
+            }
+        }
+        return true;
+    }
+
+    public int calculateSalary(RosterEntry entry) {
+        int skillExpenses = 0;
+        for (String skill : entry.getData().getSkills().keySet()) {
+            skillExpenses += Math.max(0, entry.getData().getSkills().get(skill) - 1) * def.findSkill(skill).getSalaryExpense();
+        }
+        return entry.getData().getBaseSalary() + skillExpenses;
     }
 }

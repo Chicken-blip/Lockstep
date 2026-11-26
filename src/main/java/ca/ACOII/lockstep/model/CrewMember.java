@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class CrewMember {
     private String id, name;
-    private int recruitFee, dayAvailability, releaseDate, hideDuration;
+    private int recruitFee, baseSalary, dayAvailability, releaseDate, hideDuration;
     Map<String, Integer> skills;
 
     public CrewMember() {
@@ -15,6 +15,7 @@ public class CrewMember {
         this.id = c.id;
         this.name = c.name;
         this.recruitFee = c.recruitFee;
+        this.baseSalary = c.baseSalary;
         this.dayAvailability = c.dayAvailability;
         this.skills = new HashMap<>();
         for (String str : c.skills.keySet()) {
@@ -78,5 +79,13 @@ public class CrewMember {
 
     public void setHideDuration(int hideDuration) {
         this.hideDuration = hideDuration;
+    }
+
+    public int getBaseSalary() {
+        return baseSalary;
+    }
+
+    public void setBaseSalary(int baseSalary) {
+        this.baseSalary = baseSalary;
     }
 }

@@ -312,8 +312,6 @@ public class FloorPlanView extends Pane {
         actorsPerRoom.put(roomId, list);
 
         this.getChildren().add(c);
-        System.out.println("room " + roomId + " at (" + centerX + ", " + centerY + ")");
-        System.out.println("slot " + slot + " → (" + (centerX + offsetX[slot]) + ", " + (centerY + offsetY[slot]) + ")");
     }
 
     public void moveActor(String actorId, String newRoomId, Target target) {

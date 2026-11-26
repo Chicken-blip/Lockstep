@@ -653,7 +653,7 @@ public class HeistView extends BorderPane {
             String bribedGuardId = bribedGuard == null ? null : bribedGuard.getId();
             if (bribedGuard != null) {
                 mapPane.setBribedGuard(bribedGuardId);
-                game.getLog().addEvent(new Event(0, "Bribed guard " + bribedGuardId + " for " + bribedGuard.getBribeCost(), null, EventType.BRIBE));
+                game.getLog().addEvent(new Event(0, "Bribed guard " + bribedGuardId + " for $" + bribedGuard.getBribeCost(), null, EventType.BRIBE));
             }
             bottomPane.getChildren().remove(bribePane);
 

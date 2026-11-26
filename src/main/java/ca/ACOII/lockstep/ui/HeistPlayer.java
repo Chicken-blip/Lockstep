@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ListView;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -91,12 +92,12 @@ public class HeistPlayer {
     private void tick() {
         if (step != maxStep + 1) {
             int finalStep = step;
-            List<Event> stepEvents = log.getEvents().stream().filter(new Predicate<Event>() {
+            List<Event> stepEvents = step != 0 ? log.getEvents().stream().filter(new Predicate<Event>() {
                 @Override
                 public boolean test(Event event) {
                     return event.stepNum() == finalStep;
                 }
-            }).toList();
+            }).toList() : new ArrayList<>();
             for (Event e : stepEvents) {
                 //Check each event at this step
                 if (e != null) {

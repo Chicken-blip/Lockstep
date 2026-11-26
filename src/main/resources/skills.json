@@ -1,8 +1,8 @@
 {
   "skills": [
-    {"id": "pick", "name": "Lock Picking", "trainingCost": 40},
-    {"id": "crack", "name": "Safe Cracking", "trainingCost": 50},
-    {"id": "hack", "name": "Hacking", "trainingCost": 125},
-    {"id": "strength", "name": "Strength", "trainingCost": -1}
+    {"id": "pick", "name": "Lock Picking", "trainingCost": 40, "salaryExpense": 3},
+    {"id": "crack", "name": "Safe Cracking", "trainingCost": 50, "salaryExpense": 3},
+    {"id": "hack", "name": "Hacking", "trainingCost": 125, "salaryExpense": 10},
+    {"id": "strength", "name": "Strength", "trainingCost": -1, "salaryExpense": 0}
   ]
 }

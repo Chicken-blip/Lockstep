@@ -18,6 +18,7 @@ public class Campaign {
     public long seed;
     public String currentTargetId;
     public List<String> completedTargetIds;
+    boolean canRunHeists = true;
 
     //NOTE: Solely for HeistRunner and Timeline replay
     public int maxStep;
@@ -87,6 +88,7 @@ public class Campaign {
 
     public void nextDay() {
         calendar.nextDay();
+        canRunHeists = stash.deductSalaries(crew);
     }
     public int getDate() {
         return calendar.currentDay;
@@ -121,6 +123,16 @@ public class Campaign {
 
     public List<RosterEntry> getRoster() {
         return crew;
+    }
+
+    public boolean canRunHeists() {return canRunHeists;}
+
+    public int getTotalSalaries() {
+        int sum = 0;
+        for (RosterEntry e : crew) {
+            sum += stash.calculateSalary(e);
+        }
+        return sum;
     }
 }
 

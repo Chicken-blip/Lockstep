@@ -2,7 +2,7 @@ package ca.ACOII.lockstep.model;
 
 public class Skill {
     private String id, name;
-    private int trainingCost;
+    private int trainingCost, salaryExpense;
 
     public Skill() {
         id = null;
@@ -31,5 +31,13 @@ public class Skill {
 
     public void setTrainingCost(int trainingCost) {
         this.trainingCost = trainingCost;
+    }
+
+    public int getSalaryExpense() {
+        return salaryExpense;
+    }
+
+    public void setSalaryExpense(int salaryExpense) {
+        this.salaryExpense = salaryExpense;
     }
 }

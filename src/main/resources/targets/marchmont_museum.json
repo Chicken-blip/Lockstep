@@ -4,8 +4,8 @@
   "entryRoom": "OUTSIDE",
   "exitRooms": ["OUTSIDE"],
   "alarmCountdown": 4,
-  "availableFrom": 10,
-  "availabilityDuration": 5,
+  "availableFrom": 28,
+  "availabilityDuration": 9,
   "maxCrew": 2,
   "arrestDuration": 3,
   "rooms": [

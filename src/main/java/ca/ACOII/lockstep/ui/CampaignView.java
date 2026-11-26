@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -46,9 +47,10 @@ public class CampaignView extends BorderPane {
             }
             app.startHeist(targets.getSelectionModel().getSelectedItem(), fullCrew.getSelectionModel().getSelectedItems());
         });
+        heistBtn.setDisable(!game.getCampaign().canRunHeists());
         Button skip = new Button("Next Day");
         skip.setOnAction(e -> {
-            game.getCalendar().nextDay();
+            game.getCampaign().nextDay();
             refresh();
         });
         HBox buttonBox = new HBox(10);
@@ -138,7 +140,7 @@ public class CampaignView extends BorderPane {
     private void setBanner() {
         Label label1 = new Label("Day: " + game.getCalendar().getCurrentDay());
         label1.setMinWidth(Region.USE_PREF_SIZE);
-        Label label2 = new Label("Money: " + game.getStash().getMoney());
+        Label label2 = new Label("Money: $" + game.getStash().getMoney());
         label2.setMinWidth(Region.USE_PREF_SIZE);
         Button btn = new Button("Menu");
         btn.setOnAction(e -> {
@@ -146,10 +148,17 @@ public class CampaignView extends BorderPane {
         });
         btn.setMinWidth(Region.USE_PREF_SIZE);
 
-        Region space = new Region();
-        HBox.setHgrow(space, Priority.ALWAYS);
+        Region spaceLeft = new Region();
+        HBox.setHgrow(spaceLeft, Priority.ALWAYS);
 
-        HBox banner = new HBox(10, label1, label2, space, btn);
+        Label label3 = new Label("Daily Payroll: $" + game.getCampaign().getTotalSalaries());
+        Label label4 = new Label(game.getCampaign().canRunHeists() ? "" : "SALARIES DUE - Unable to start heists");
+        label4.setTextFill(Color.RED);
+
+        Region spaceRight = new Region();
+        HBox.setHgrow(spaceRight, Priority.ALWAYS);
+
+        HBox banner = new HBox(10, label1, label2, spaceLeft, label3, label4, spaceRight, btn);
         banner.setPadding(new Insets(20));
         setTop(banner);
     }

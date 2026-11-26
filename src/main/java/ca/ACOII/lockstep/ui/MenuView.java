@@ -11,6 +11,9 @@ import javafx.scene.layout.*;
 public class MenuView extends BorderPane {
     Game game;
     App app;
+
+    ListView<RosterEntry> entries;
+    Button trainBtn;
     public MenuView(App app) {
         this.app = app;
         this.game = app.game;
@@ -25,7 +28,7 @@ public class MenuView extends BorderPane {
     private void setBanner() {
         Label label1 = new Label("Day: " + game.getCalendar().getCurrentDay());
         label1.setMinWidth(Region.USE_PREF_SIZE);
-        Label label2 = new Label("Money: " + game.getStash().getMoney());
+        Label label2 = new Label("Money: $" + game.getStash().getMoney());
         label2.setMinWidth(Region.USE_PREF_SIZE);
         Button btn = new Button("Back to Campaign");
         btn.setOnAction(e -> {
@@ -49,9 +52,8 @@ public class MenuView extends BorderPane {
         VBox content = new VBox(10);
         HBox detailsList = new HBox(50);
 
-        ListView<RosterEntry> entries = getRosterEntryListView();
+        entries = getRosterEntryListView();
         entries.getItems().addAll(game.getRoster());
-        entries.getSelectionModel().clearSelection();
 
         TextArea entryDetails = new TextArea();
         entryDetails.setEditable(false);
@@ -66,14 +68,14 @@ public class MenuView extends BorderPane {
         }
 
         skills.getSelectionModel().selectFirst();
-        skills.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> entries.getSelectionModel().clearSelection());
+        //skills.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> entries.getSelectionModel().clearSelection());
 
-        Button train = new Button("Train Skill");
-        train.setOnAction(e -> {
+        trainBtn = new Button("Train Skill");
+        trainBtn.setOnAction(e -> {
             game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId());
             refresh();
         });
-        train.setDisable(true);
+        trainBtn.setDisable(true);
         skillBox.setAlignment(Pos.CENTER);
 
         VBox gearBox = new VBox(10);
@@ -89,23 +91,26 @@ public class MenuView extends BorderPane {
         entries.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             Skill skill = skills.getSelectionModel().getSelectedItem();
             if (newVal != null) {
-                String txt = skill.getName() + " (Cost: " + (skill.getTrainingCost()) * newVal.getData().getSkills().get(skill.getId()) + ")";
+                String txt = skill.getName() + " (Cost: $" + (skill.getTrainingCost()) * newVal.getData().getSkills().get(skill.getId()) + ")";
                 skills.getButtonCell().setText(txt);
                 entryDetails.setText(getEntryDetails(newVal));
                 buyGear.setDisable(false);
-                train.setDisable(newVal.getData().getSkills().get(skill.getId()) == 0);
+                trainBtn.setDisable(newVal.getData().getSkills().get(skill.getId()) == 0);
             } else {
-                skills.getButtonCell().setText(skill.getName());
-                entryDetails.setText("");
-                buyGear.setDisable(true);
-                train.setDisable(true);
+                    skills.getButtonCell().setText(skill.getName());
+                    entryDetails.setText("");
+                    buyGear.setDisable(true);
+                    trainBtn.setDisable(true);
             }
         } );
+
         gearBox.setAlignment(Pos.CENTER);
 
 
-        skillBox.getChildren().addAll(skills, train);
+        skillBox.getChildren().addAll(skills, trainBtn);
         gearBox.getChildren().addAll(gear, buyGear);
+
+        if (!entries.getItems().isEmpty()) entries.getSelectionModel().selectFirst();
         detailsList.getChildren().addAll(entries, entryDetails);
         actionList.getChildren().addAll(skillBox, gearBox);
         actionList.setAlignment(Pos.CENTER);
@@ -168,7 +173,7 @@ public class MenuView extends BorderPane {
                 if (empty || gear == null) {
                     setText(null);
                 } else {
-                    setText(gear.getName() + " (Price: " + gear.getPrice() + ")");
+                    setText(gear.getName() + " (Price: $" + gear.getPrice() + ")");
                 }
             }
         });
@@ -179,7 +184,7 @@ public class MenuView extends BorderPane {
                 if (empty || gear == null) {
                     setText(null);
                 } else {
-                    setText(gear.getName() + " (Price: " + gear.getPrice() + ")");
+                    setText(gear.getName() + " (Price: $" + gear.getPrice() + ")");
                 }
             }
         });
@@ -206,7 +211,16 @@ public class MenuView extends BorderPane {
                 if (empty || skill == null) {
                     setText(null);
                 } else {
-                    setText(skill.getName());
+                    RosterEntry entry = entries.getSelectionModel().getSelectedItem();
+                    if (entry != null) {
+                        String cost = entry.getData().getSkills().get(skill.getId()) > 0 ? " (Cost: $" + (skill.getTrainingCost()) * entry.
+                                getData().getSkills().get(skill.getId()) + ")" : "";
+                        String txt = skill.getName() + cost;
+                        setText(txt);
+                        trainBtn.setDisable(entry.getData().getSkills().get(skill.getId()) == 0);
+                    } else {
+                        setText(skill.getName());
+                    }
                 }
             }
         });
@@ -238,7 +252,7 @@ public class MenuView extends BorderPane {
                 if (empty || set == null) {
                     setText(null);
                 } else {
-                    setText(set.getName() + " (Worth " + set.getSetValue() + ")");
+                    setText(set.getName() + " (Worth $" + set.getSetValue() + ")");
                 }
             }
         });
@@ -286,9 +300,9 @@ public class MenuView extends BorderPane {
                 if (empty || item == null) {
                     setText(null);
                 } else if (item.getSet() == null) {
-                    setText(item.getName() + " (Worth " + item.getPieceValue() + ")");
+                    setText(item.getName() + " (Worth $" + item.getPieceValue() + ")");
                 } else {
-                    setText(item.getName() + " [" + game.getCampaign().definitions.findSet(item.getSet()).getName() + " Set] (Worth " + item.getPieceValue() + ")");
+                    setText(item.getName() + " [" + game.getCampaign().definitions.findSet(item.getSet()).getName() + " Set] (Worth $" + item.getPieceValue() + ")");
                 }
             }
         });
@@ -326,7 +340,7 @@ public class MenuView extends BorderPane {
             for (String str : newVal.getSkills().keySet()) {
                 details.appendText(str + " Level: " + newVal.getSkills().get(str) + "\n");
             }
-            details.appendText("Price: " + newVal.getRecruitFee());
+            details.appendText("Price: $" + newVal.getRecruitFee());
         });
 
         HBox nameBox = new HBox(10);
