@@ -14,6 +14,8 @@ public class MenuView extends BorderPane {
 
     ListView<RosterEntry> entries;
     Button trainBtn;
+    Label errorMessage = null;
+    String errorMessageText = null;
     public MenuView(App app) {
         this.app = app;
         this.game = app.game;
@@ -30,16 +32,20 @@ public class MenuView extends BorderPane {
         label1.setMinWidth(Region.USE_PREF_SIZE);
         Label label2 = new Label("Money: $" + game.getStash().getMoney());
         label2.setMinWidth(Region.USE_PREF_SIZE);
+        errorMessage = new Label(errorMessageText == null ? "" : errorMessageText);
+        errorMessageText = null;
         Button btn = new Button("Back to Campaign");
         btn.setOnAction(e -> {
             app.showScreen(Screen.CAMPAIGN);
         });
         btn.setMinWidth(Region.USE_PREF_SIZE);
 
-        Region space = new Region();
-        HBox.setHgrow(space, Priority.ALWAYS);
+        Region spaceLeft = new Region();
+        HBox.setHgrow(spaceLeft, Priority.ALWAYS);
+        Region spaceRight = new Region();
+        HBox.setHgrow(spaceRight, Priority.ALWAYS);
 
-        HBox banner = new HBox(10, label1, label2, space, btn);
+        HBox banner = new HBox(10, label1, label2, spaceLeft, errorMessage, spaceRight, btn);
         banner.setPadding(new Insets(20));
         setTop(banner);
     }
@@ -72,7 +78,11 @@ public class MenuView extends BorderPane {
 
         trainBtn = new Button("Train Skill");
         trainBtn.setOnAction(e -> {
-            game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId());
+            try {
+                game.train(entries.getSelectionModel().getSelectedItem(), skills.getSelectionModel().getSelectedItem().getId());
+            } catch (Exception exception) {
+                errorMessageText = exception.getMessage();
+            }
             refresh();
         });
         trainBtn.setDisable(true);
@@ -84,7 +94,11 @@ public class MenuView extends BorderPane {
         gear.getSelectionModel().selectFirst();
         Button buyGear = new Button("Buy Gear");
         buyGear.setOnAction(e -> {
-            game.buyGear(entries.getSelectionModel().getSelectedItem(), gear.getSelectionModel().getSelectedItem());
+            try {
+                game.buyGear(entries.getSelectionModel().getSelectedItem(), gear.getSelectionModel().getSelectedItem());
+            } catch (Exception exception) {
+                errorMessageText = exception.getMessage();
+            }
             refresh();
         });
         buyGear.setDisable(true);
@@ -237,7 +251,11 @@ public class MenuView extends BorderPane {
 
         Button sellItemBtn = new Button("Sell Item");
         sellItemBtn.setOnAction(e -> {
-            game.getStash().sellItem(items.getSelectionModel().getSelectedItem().getId());
+            try {
+                game.getStash().sellItem(items.getSelectionModel().getSelectedItem().getId());
+            } catch (Exception exception) {
+                errorMessageText = exception.getMessage();
+            }
             refresh();
         });
         itemSelling.getChildren().addAll(items, sellItemBtn);
@@ -274,7 +292,11 @@ public class MenuView extends BorderPane {
         sets.getSelectionModel().selectFirst();
         Button sellSetButton = new Button("Sell Set");
         sellSetButton.setOnAction(e -> {
-            game.getStash().sellSet(sets.getSelectionModel().getSelectedItem());
+            try {
+                game.getStash().sellSet(sets.getSelectionModel().getSelectedItem());
+            } catch (Exception exception) {
+                errorMessageText = exception.getMessage();
+            }
             refresh();
         });
         setSelling.getChildren().addAll(sets, setDetails, sellSetButton);
@@ -314,8 +336,13 @@ public class MenuView extends BorderPane {
 
         TextArea details = new TextArea();
         details.setEditable(false);
+        VBox detailsContainer = new VBox(10, details);
+        detailsContainer.setPadding(new Insets(50));
+        VBox.setVgrow(details, Priority.ALWAYS);
+        VBox.setVgrow(detailsContainer, Priority.ALWAYS);
 
         VBox listContainer = new VBox(10);
+        listContainer.setPadding(new Insets(20, 20, 20, 10));
         ListView<CrewMember> hireList = new ListView<>();
         hireList.setCellFactory(lv -> new ListCell<>() {
             @Override
@@ -347,15 +374,21 @@ public class MenuView extends BorderPane {
         Label label = new Label("Name: ");
         TextField field = new TextField();
         nameBox.getChildren().addAll(label, field);
+        nameBox.setAlignment(Pos.CENTER);
 
         Button recruitBtn = new Button("Hire Crew Member");
         recruitBtn.setOnAction(e -> {
-            game.recruit(hireList.getSelectionModel().getSelectedItem().getId(), field.getText());
+            try {
+                game.recruit(hireList.getSelectionModel().getSelectedItem().getId(), field.getText());
+            } catch (Exception exception) {
+                errorMessageText = exception.getMessage();
+            }
             refresh();
         });
         listContainer.getChildren().addAll(hireList, nameBox, recruitBtn);
+        listContainer.setAlignment(Pos.CENTER);
 
-        content.getChildren().addAll(listContainer, details);
+        content.getChildren().addAll(listContainer, detailsContainer);
 
         Tab tab = new Tab();
         tab.setContent(content);

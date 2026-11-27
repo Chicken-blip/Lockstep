@@ -56,12 +56,13 @@ public class HeistView extends BorderPane {
     }
 
     private void build() {
-        this.setCenter(mapPane());
-        this.setLeft(actionBuilderPane());
-        executionPane = executeQueuePane();
-        this.setRight(executionPane);
-        bottomPane = new HBox();
+        HBox topPane = new HBox(20);
 
+        executionPane = executeQueuePane();
+        topPane.getChildren().addAll(actionBuilderPane(), mapPane(), executionPane);
+        topPane.setPadding(new Insets(20));
+
+        bottomPane = new HBox();
         logPane = executionLogPane();
         HBox.setHgrow(logPane, Priority.ALWAYS);
         bottomPane.getChildren().add(logPane);
@@ -70,15 +71,15 @@ public class HeistView extends BorderPane {
         bribePane = bribePane();
         if (bribePane != null) bottomPane.getChildren().add(bribePane);
 
-        //Bottom Pane formatting
+        //Pane formatting
+        topPane.setMaxWidth(Double.MAX_VALUE);
         bottomPane.setMaxWidth(Double.MAX_VALUE);
 
 
+
+        this.setCenter(topPane);
         this.setBottom(bottomPane);
-        for (Node node : this.getChildren()) {
-            if (node instanceof HBox h) h.setSpacing(20);
-            if (node instanceof VBox v) v.setSpacing(20);
-        }
+
 
     }
 
@@ -146,6 +147,7 @@ public class HeistView extends BorderPane {
         scroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
         pane.getChildren().add(scroll);
+        VBox.setVgrow(scroll, Priority.ALWAYS);
         pane.setAlignment(Pos.CENTER);
         return pane;
     }
